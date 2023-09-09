@@ -1,28 +1,30 @@
-const express = require('express');
-const cors = require('cors');
+const express = require("express");
+const cors = require("cors");
 //const passport = require('passport');
-const morgan = require('morgan');
-const bodyParser = require('body-parser');
-const session = require('express-session');
+const morgan = require("morgan");
+const bodyParser = require("body-parser");
+const session = require("express-session");
 const app = express();
-const routes = require('./routes');
+const routes = require("./routes");
 //const {injectModel} = require('./modules/utils');
-require('dotenv').config();
+require("dotenv").config();
 const port = process.env.NODE_LOCAL_PORT || 4000;
-//const connect = require('./config/connect');
+const connect = require("./config/connect");
 //const mysqlConnect = require('./config/mysql_connect');
 //const jwtSecret = require('./config/jwtConfig');
 //const jwt = require('jsonwebtoken');
-const cookieParser = require('cookie-parser');
+const cookieParser = require("cookie-parser");
 
 //For BodyParser
-app.use(bodyParser.urlencoded({
-    extended: true
-}));
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  })
+);
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use(express.static(__dirname + '/public'));
-//app.use(morgan('combined'));
+app.use(express.static(__dirname + "/public"));
+app.use(morgan("combined"));
 //app.use(injectModel);
 app.use(cors());
 // For Passport
@@ -37,9 +39,9 @@ app.use(cors());
 COREAPP = {};
 //Sync Database
 
-// connect().then(() => {
-//   console.log('MongoDB setup complete!');
-// });
+connect().then(() => {
+  console.log("MongoDB setup complete!");
+});
 
 // mysqlConnect().then(() => {
 //const models = require("./models");
@@ -113,7 +115,7 @@ COREAPP = {};
 // });
 
 app.listen(port, () => {
-  console.log(`App listening on port ${port}`)
+  console.log(`App listening on port ${port}`);
 });
 
 module.exports = app;
