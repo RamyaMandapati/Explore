@@ -1,7 +1,9 @@
-const post = new Schema({
+const mongoose = require('mongoose');
+
+const postSchema = new Schema({
     user: {
  type: mongoose.Schema.Types.ObjectId,
- ref: 'User', // Reference to the User model for the post's author
+ ref: 'user', // Reference to the User model for the post's author
  required: true,
 },
     tripCountry: {type: String},
@@ -16,12 +18,12 @@ const post = new Schema({
     itineraryID: {type: Integer},
     likes: [{
  type: mongoose.Schema.Types.ObjectId,
- ref: 'User', // Reference to users who liked the post
+ ref: 'user', // Reference to users who liked the post
 }],
 comments: [{
  user: {
    type: mongoose.Schema.Types.ObjectId,
-   ref: 'User', // Reference to the user who made the comment
+   ref: 'user', // Reference to the user who made the comment
    required: true,
  },
  text: {
@@ -43,4 +45,4 @@ minAge : {type: Integer},
 maxAge: {type: Integer},
 });
 
-module.exports = mongoose.model('Post', postSchema);
+module.exports = mongoose.model('post', postSchema);
