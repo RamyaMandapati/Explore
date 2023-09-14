@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
@@ -11,6 +11,6 @@ const notificationSchema = new Schema({
   isRead: { type: Boolean, default: false },
 });
 
-const notification = mongoose.model("notification", notificationSchema);
+module.exports = mongoose.model("notification", notificationSchema);
 
 export default notification;

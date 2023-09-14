@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
@@ -30,20 +30,16 @@ const itinerarySchema = new Schema({
   ],
   members: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "user",
-      unique: true,
+      type: Number,
     },
   ],
-  itineraryRating: { type: Double, default: 0 },
+  itineraryRating: { type: Number, default: 0.0 },
   likeCount: { type: Number, default: 0 },
   interests: [{ type: String }],
-  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
-  createdTimestamp: { type: Date },
+  createdBy: { type: Number },
+  createdTimestamp: { type: Date, default: Date.now },
   updatedTimestamp: { type: Date, default: Date.now },
   tags: [{ type: String }],
 });
 
-const itinerary = mongoose.model("itinerary", itinerarySchema);
-
-export default itinerary;
+module.exports = mongoose.model("itinerary", itinerarySchema);
