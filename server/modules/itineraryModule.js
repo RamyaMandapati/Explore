@@ -14,13 +14,6 @@ const addItinerary = async (req, res) => {
       itineraryList,
       tags,
     } = req.body;
-    // const endDateMs = new Date(endDate).getTime();
-    // const startDateMs = new Date(startDate).getTime();
-    // const duration =
-    //   Math.ceil((endDateMs - startDateMs) / (1000 * 3600 * 24)) + 1;
-    // if (!(location && duration)) {
-    //   res.status(400).send("Mandatory fields missing");
-    // }
 
     const itineraryObject = {
       itineraryName: `Trip to ${destination}`,
@@ -61,6 +54,54 @@ const addItinerary = async (req, res) => {
   }
 };
 
+const getItineraryById = async (req, res) => {
+  try {
+    const itineraryId = req.params.id;
+    const query = { _id: itineraryId };
+
+    const itineraryData = await itinerary.findOne(query);
+    // const memberInfo = [];
+    // await Promise.all(
+    //   itineraryData.members.map(async (member) => {
+    //     const memberData = await userModel
+    //       .findOne({ _id: member })
+    //       .select("username email");
+    //     memberInfo.push(memberData);
+    //   })
+    // );
+    // const owner = await userModel
+    //   .findOne({ _id: itineraryData.createdBy })
+    //   .select("username email");
+    // itineraryData.members = memberInfo;
+    // itineraryData.createdBy = owner;
+    res.status(200).send(itineraryData);
+  } catch (e) {
+    console.log(e);
+    res.status(500).send("Unable to fetch itinerary");
+  }
+};
+
+const getItineraries = async (req, res) => {
+  try {
+    const { destination } = req.query;
+    const query = {};
+    console.log(destination);
+    if (destination) {
+      query.destination = new RegExp(destination, "i");
+    }
+    const itineraries = await itinerary
+      .find(query)
+      .sort({ likeCount: -1 })
+      .exec();
+    res.status(200).json({ data: itineraries });
+  } catch (e) {
+    console.log(e);
+    res.status(500).send("Unable to fetch itinerary");
+  }
+};
+
 module.exports = {
   addItinerary,
+  getItineraryById,
+  getItineraries,
 };
