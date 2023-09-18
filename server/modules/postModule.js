@@ -1,42 +1,16 @@
-const Post = require("../models/post");
+const Post = require("../models/post"); // Assuming you have a Post model
 
 // Create a new post
 const addPost = async (req, res) => {
   try {
-    const {
-      user,
-      tripCountry,
-      tripState,
-      locationName,
-      fromDate,
-      toDate,
-      imageUrls,
-      Title,
-      Description,
-      itineraryID,
-      tags,
-      genderPref,
-      minAge,
-      maxAge,
-    } = req.body;
-
+    const { title, content, author, tripType, tripStatus } = req.body;
     const newPost = new Post({
-      user,
-      tripCountry,
-      tripState,
-      locationName,
-      fromDate,
-      toDate,
-      imageUrls,
-      Title,
-      Description,
-      itineraryID,
-      tags,
-      genderPref,
-      minAge,
-      maxAge,
+      title,
+      content,
+      author,
+      tripType,
+      tripStatus,
     });
-
     const savedPost = await newPost.save();
     res.status(201).json(savedPost);
   } catch (error) {
@@ -59,17 +33,13 @@ const getPosts = async (req, res) => {
 // Filter posts based on criteria (e.g., trip type or status)
 const filterPosts = async (req, res) => {
   try {
-    const { tripCountry, tripState, tags } = req.query;
+    const { tripType, tripStatus } = req.query;
     const filter = {};
-
-    if (tripCountry) {
-      filter.tripCountry = tripCountry;
+    if (tripType) {
+      filter.tripType = tripType;
     }
-    if (tripState) {
-      filter.tripState = tripState;
-    }
-    if (tags) {
-      filter.tags = { $in: tags.split(",") }; // Convert comma-separated tags to an array
+    if (tripStatus) {
+      filter.tripStatus = tripStatus;
     }
 
     const filteredPosts = await Post.find(filter);
