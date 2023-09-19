@@ -30,16 +30,21 @@ const itinerarySchema = new Schema({
   ],
   members: [
     {
-      type: Number,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user",
     },
   ],
   itineraryRating: { type: Number, default: 0.0 },
   likeCount: { type: Number, default: 0 },
   interests: [{ type: String }],
-  createdBy: { type: Number },
+  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
   createdTimestamp: { type: Date, default: Date.now },
   updatedTimestamp: { type: Date, default: Date.now },
   tags: [{ type: String }],
 });
+
+// itinerarySchema.pre(/^find/, function () {
+//   this.populate("members", "-role").populate("createdBy");
+// });
 
 module.exports = mongoose.model("itinerary", itinerarySchema);
