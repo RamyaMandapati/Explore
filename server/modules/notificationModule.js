@@ -21,7 +21,7 @@ const memberNotification = async (userId, member, itineraryName, action) => {
         message = `${userDet.userName} rejected your request for trip: ${itineraryName}`;
         break;
       case "REMOVE":
-        message = `${userDet.username} removed you from trip: ${itineraryName}`;
+        message = `${userDet.userName} removed you from trip: ${itineraryName}`;
         break;
       default:
         throw new Error("Invalid action");
@@ -47,7 +47,7 @@ const itineraryNotification = async (itineraryId, userId, action) => {
   try {
     const itineraryDet = await itinerary.findById(itineraryId);
     const userDet = await user.findById(userId);
-    let message = `${userDet.username} ${action.toLowerCase()}d ${
+    let message = `${userDet.userName} ${action.toLowerCase()}d ${
       itineraryDet.itineraryName
     }`;
 
@@ -62,13 +62,73 @@ const itineraryNotification = async (itineraryId, userId, action) => {
         notificationType: "ITINERARY_NOTIFICATION",
       });
     }
+    await notification.insertMany(notificationList);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const followNotification = async (userId, member, action) => {
+  try {
+    const userDet = await user.findById(userId);
+    let message = "";
+
+    if (action === "FOLLOW") {
+      message = `${userDet.userName} is following you.`;
+    }
+
+    let notificationList = [];
+    notificationList.push({
+      senderuserId: userId,
+      receiveruserId: member,
+      message: message,
+    });
+
     await notificationModel.insertMany(notificationList);
   } catch (err) {
     console.log(err);
   }
 };
 
+const readNotification = async (req, res) => {
+  try {
+    let notificationDet = await notification.findById(req.body.notificationId);
+    notificationDet.isRead = true;
+    const updatedNotification = await notificationDet.save();
+    res.status(200).json({ data: updatedNotification });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send(err);
+  }
+};
+
+const deleteNotification = async (req, res) => {
+  try {
+    await notification.deleteOne({ _id: req.params.id });
+    res.status(200).send("Notification Deleted");
+  } catch (err) {
+    console.log(err);
+    res.status(500).send(err);
+  }
+};
+
+const getNotifications = async (req, res) => {
+  try {
+    const notifications = await notification
+      .find({ receiveruserId: req.params.id })
+      .sort({ timestamp: -1 });
+    res.status(200).json({ data: notifications });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send(err);
+  }
+};
+
 module.exports = {
   memberNotification,
   itineraryNotification,
+  followNotification,
+  readNotification,
+  deleteNotification,
+  getNotifications,
 };

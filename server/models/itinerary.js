@@ -40,9 +40,15 @@ const itinerarySchema = new Schema({
       ref: "user",
     },
   ],
-
-  itineraryRating: { type: Number, default: 0.0 },
-  likeCount: { type: Number, default: 0 },
+  itineraryRating: {
+    users: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
+    totalcount: { type: Number, default: 0 },
+    totalrating: { type: Number, default: 0 },
+  },
+  likes: {
+    users: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
+    likecount: { type: Number, default: 0 },
+  },
   interests: [{ type: String }],
   createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
   createdTimestamp: { type: Date, default: Date.now },

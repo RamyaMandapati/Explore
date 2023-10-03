@@ -36,7 +36,7 @@ const addItinerary = async (req, res) => {
     let savedItinerary;
     if (itineraryId) {
       itineraryObject.members = members;
-      itineraryObject.updatedTimestamp = Date.now;
+      itineraryObject.updatedTimestamp = Date.now();
       savedItinerary = await itinerary.findOneAndUpdate(
         { _id: itineraryId },
         { $set: itineraryObject },
@@ -48,11 +48,11 @@ const addItinerary = async (req, res) => {
       itineraryObject.members = [userId];
       const itineraryModel = new itinerary(itineraryObject);
       savedItinerary = await itineraryModel.save();
-      //   const owner = await userModel
-      //     .findOne({ _id: itineraryObject.createdBy })
-      //     .select("username email");
-      //   savedItinerary.members = [owner];
-      //   savedItinerary.createdBy = owner;
+      // const owner = await userModel
+      //   .findOne({ _id: itineraryObject.createdBy })
+      //   .select("username email");
+      // savedItinerary.members = [owner];
+      // savedItinerary.createdBy = owner;
     }
     res.status(200).send(savedItinerary);
   } catch (err) {
@@ -108,7 +108,7 @@ const getItineraries = async (req, res) => {
     }
     const itineraries = await itinerary
       .find(query, {}, { lean: true })
-      .sort({ likeCount: -1 })
+      .sort({ "likes.likecount": -1 })
       .limit(pageSize * 1)
       .skip(pageSize * (page - 1))
       .exec();
@@ -169,14 +169,15 @@ const itineraryMembers = async (req, res) => {
       itineraryDet.itineraryName,
       notificationType
     );
-    notification.findByIdAndUpdate(
+
+    const updatedNotification = await notification.findByIdAndUpdate(
       { _id: notificationId },
       {
         notificationType: `ITINERARY_${type}`,
       },
       { new: true }
     );
-
+    console.log(updatedNotification);
     await session.commitTransaction();
     session.endSession();
     res.status(200).json({ data: itineraryDetails });
@@ -269,6 +270,90 @@ const deletefavoriteItinerary = async (req, res) => {
   }
 };
 
+// itinerary likes count
+const itineraryLikeCount = async (req, res) => {
+  try {
+    const { itineraryId, userId } = req.body;
+    const updatedItinerary = await itinerary.findByIdAndUpdate(
+      itineraryId,
+      {
+        $push: { "likes.users": userId },
+        $inc: { "likes.likecount": 1 }, // Increment likecount by 1
+      },
+      { new: true }
+    );
+    // Check if the user was found and updated
+    if (updatedItinerary) {
+      res.status(200).json({ data: updatedItinerary });
+    } else {
+      res.status(404).json({ message: "user not found" });
+    }
+  } catch (e) {
+    console.log(e);
+    res.status(500).send(e);
+  }
+};
+
+// itinerary rating
+const itineraryRating = async (req, res) => {
+  const session = await mongoose.startSession();
+  session.startTransaction();
+  try {
+    const { itineraryId, userId, userRating } = req.body;
+    const itineraryDet = await itinerary.findById(itineraryId);
+
+    if (!itineraryDet) {
+      await session.abortTransaction();
+      session.endSession();
+      return res.status(404).json({ message: "Itinerary not found" });
+    }
+    // Update the itineraryRating subdocument
+    itineraryDet.itineraryRating.users.push(userId); // Add the user to the users array
+    itineraryDet.itineraryRating.totalcount += 1; // Increment totalcount
+    itineraryDet.itineraryRating.totalrating += userRating; // Add user's rating to totalrating
+
+    // Save the updated itinerary
+    const updatedItinerary = await itineraryDet.save();
+
+    await session.commitTransaction();
+    session.endSession();
+    // Calculate the new average rating based on totalcount
+    const averageRating =
+      itineraryDet.itineraryRating.totalrating /
+      itineraryDet.itineraryRating.totalcount;
+
+    res.status(200).json({ data: updatedItinerary, rating: averageRating });
+  } catch (e) {
+    await session.abortTransaction();
+    session.endSession();
+    console.log(e);
+    res.status(500).send(e);
+  }
+};
+
+// itinerary likes count
+const removeItineraryLikeCount = async (req, res) => {
+  try {
+    const { itineraryId, userId } = req.body;
+    const updatedItinerary = await itinerary.findByIdAndUpdate(
+      itineraryId,
+      {
+        $pull: { "likes.users": userId },
+        $inc: { "likes.likecount": -1 }, // decrement likecount by 1
+      },
+      { new: true }
+    );
+    // Check if the user was found and updated
+    if (updatedItinerary) {
+      res.status(200).json({ data: updatedItinerary });
+    } else {
+      res.status(404).json({ message: "user not found" });
+    }
+  } catch (e) {
+    console.log(e);
+    res.status(500).send(e);
+  }
+};
 // add members
 module.exports = {
   addItinerary,
@@ -278,4 +363,8 @@ module.exports = {
   itineraryMembers,
   favoriteItinerary,
   deletefavoriteItinerary,
+  itineraryAccessRequest,
+  itineraryLikeCount,
+  removeItineraryLikeCount,
+  itineraryRating,
 };
