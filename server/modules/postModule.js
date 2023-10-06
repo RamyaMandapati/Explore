@@ -1,15 +1,15 @@
-const Post = require("../models/post"); // Assuming you have a Post model
+const Post = require("../models/Post.js"); // Assuming you have a Post model
 
 // Create a new post
 const addPost = async (req, res) => {
   try {
-    const { title, content, author, tripType, tripStatus } = req.body;
+    const { title, description, user, tripType, tripCountry } = req.body;
     const newPost = new Post({
       title,
-      content,
-      author,
+      description,
+      user,
       tripType,
-      tripStatus,
+      tripCountry,
     });
     const savedPost = await newPost.save();
     res.status(201).json(savedPost);

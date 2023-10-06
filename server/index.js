@@ -109,11 +109,11 @@ connect().then(() => {
 
 // app.get('*', function (req, res) {
 //   res.sendFile(`${__dirname}/public/index.html`, (err) => {
-//     if (err) {
+//      if (err) {
 //       console.log(err);
-//       res.end(err.message);
-//     }
-//   });
+//        res.end(err.message);
+//      }
+//    });
 // });
 
 app.listen(port, () => {

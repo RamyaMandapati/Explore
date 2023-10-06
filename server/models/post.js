@@ -16,9 +16,9 @@ const postSchema = new Schema({
       type: String,
     },
   ],
-  Title: { type: String },
-  Description: { type: String },
-  itineraryID: { type: Integer },
+  title: { type: String },
+  description: { type: String },
+  itineraryID: { type: Number },
   likes: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -48,8 +48,8 @@ const postSchema = new Schema({
     default: Date.now,
   },
   genderPref: { type: String },
-  minAge: { type: Integer },
-  maxAge: { type: Integer },
+  minAge: { type: Number },
+  maxAge: { type: Number },
 });
 
 module.exports = mongoose.model("post", postSchema);
