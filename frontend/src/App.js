@@ -15,6 +15,7 @@ import AlertTemplate from "react-alert-template-basic";
 import { useSelector } from "react-redux";
 import ItinerarySelection from "./components/itinerary/itinerarySelection";
 import ItineraryCreation from "./components/itinerary/itineraryCreation";
+import Navbar from "./components/Navbar/Navbar";
 
 // import Footer from "./components/layout/Footer";
 // if(localStorage.token){
@@ -40,6 +41,7 @@ const App = () => {
       <Fragment>
         <Route exact path="/" component={ItinerarySelection}></Route>
         <Route exact path="/itinerary" component={ItineraryCreation}></Route>
+        <Route exact path="/navbar" component={Navbar}></Route>
 
         {/* <ProtectedRoute exact path="/EditUser" component={EditUser} />
         <section className="container">

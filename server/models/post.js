@@ -4,7 +4,7 @@ const postSchema = new Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "user", // Reference to the User model for the post's author
-    required: true,
+    required:true,
   },
   tripCountry: { type: String },
   tripState: { type: String },
