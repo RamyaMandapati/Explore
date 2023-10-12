@@ -81,18 +81,21 @@ input {
   display: block;
   cursor: pointer;
   min-width: 56px;
-  margin-top: 48px;
-  margin-left: auto;
-  margin-right: auto;
   border-style: solid;
   min-height: 30px;
   background-color: #f75940;
   padding: 12px 24px;
-  border-radius: 100px;
   border: none;
   color: #fff;
   font-weight: 700;
   font-size: 1rem;
+  border-radius: 100px;
+}
+
+.planbutton1 {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 48px;
 }
 
 h1 {
@@ -108,11 +111,15 @@ h2 {
   line-height: 1 !important;
   letter-spacing: -0.03em;
 }
-.planbutton:hover {
+.planbutton1:hover {
   background-color: #de503a;
   transition: background-color 0.3s;
 }
 
+.planbutton2:hover {
+  background-color: #de503a;
+  transition: background-color 0.3s;
+}
 .suggestions {
   list-style-type: none;
   padding: 0;
@@ -183,6 +190,13 @@ h2 {
   font-size: 14px;
 }
 
+.btn-link {
+  background-color: inherit;
+  color: #6c757d;
+}
+.btn-link:hover {
+  color: #1828a4;
+}
 .btn-1 {
   background-color: rgba(33, 37, 41, 0.502);
   position: absolute;
@@ -430,7 +444,7 @@ h2 {
 } */
 
 .search_input {
-  width: 540px;
+  width: 580px;
   background: transparent;
   font-weight: 700;
   display: block;
@@ -453,6 +467,7 @@ h2 {
 }
 
 .itinerary-plan-box {
+  min-width: 580px;
   min-height: 48px;
   background: #f3f4f5;
   border-radius: 8px;
@@ -685,4 +700,8 @@ h2 {
 .InsertSectionSpacer__dividerInner {
   border-top: 1px solid #dee2e6;
   height: 2px;
+}
+
+.mb-1 {
+  margin-bottom: 4px;
 }

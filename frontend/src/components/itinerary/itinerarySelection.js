@@ -106,7 +106,7 @@ export const ItinerarySelection = ({ history }) => {
     (itineraryplandet && itineraryplandet.startDate) || today
   );
   const [endDate, setEndDate] = useState(
-    (itineraryplandet && itineraryplandet.endDate) || ""
+    (itineraryplandet && itineraryplandet.endDate) || today
   );
   const [budget, setBudget] = useState(
     (itineraryplandet && itineraryplandet.budget) || ""
@@ -256,7 +256,11 @@ export const ItinerarySelection = ({ history }) => {
           ) : (
             <p />
           )}
-          <button type="button" className="planbutton" onClick={handleClick}>
+          <button
+            type="button"
+            className="planbutton planbutton1"
+            onClick={handleClick}
+          >
             Start Planning
           </button>
         </div>

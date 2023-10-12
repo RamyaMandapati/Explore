@@ -1,6 +1,34 @@
 import "./itineraryTime.css";
+import React, { useState } from "react";
 
-export const ItineraryTime = ({ setisTime }) => {
+export const ItineraryTime = ({ onSave, onCancel }) => {
+  const [selectedOption, setSelectedOption] = useState("");
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
+
+  const handleOptionSelect = (option) => {
+    if (!startTime) {
+      setStartTime(option);
+    } else {
+      setEndTime(option);
+    }
+  };
+
+  const handleSave = () => {
+    onSave(startTime, endTime);
+    // Clear the selected option, start time, and end time
+    setSelectedOption("");
+    setStartTime("");
+    setEndTime("");
+  };
+
+  const handleClear = () => {
+    // Clear the selected option, start time, and end time
+    setSelectedOption("");
+    setStartTime("");
+    setEndTime("");
+  };
+
   return (
     <div className="drop-down-menu">
       <form class="p-3 Deselect__doNotDeselect">
@@ -13,7 +41,9 @@ export const ItineraryTime = ({ setisTime }) => {
             </div>
             <input
               class="smartlook-show form-control Input__input w-100 Input__small form-control-gray StartEndTimePickerInner__input focus"
-              value="iswarya"
+              value={startTime}
+              onChange={(e) => setStartTime(e.target.value)}
+              placeholder="Start time"
             />
           </div>
           <div class="StartEndTimePickerInner__dash mx-2"></div>
@@ -25,13 +55,21 @@ export const ItineraryTime = ({ setisTime }) => {
             </div>
             <input
               class="smartlook-show form-control Input__input w-100 Input__small form-control-gray StartEndTimePickerInner__input"
-              value="12:30AM"
+              value={endTime}
+              onChange={(e) => setEndTime(e.target.value)}
               placeholder="End time"
             />
           </div>
         </div>
         <div class="d-none d-sm-flex justify-content-center pb-2">
-          <select size="8" class="StartEndTimePickerInner__select w-100 Select">
+          <select
+            size="8"
+            class="StartEndTimePickerInner__select w-100 Select"
+            onChange={(e) => {
+              handleOptionSelect(e.target.value);
+            }}
+            value={selectedOption}
+          >
             <option value="12:00 AM" class="px-3 py-2 Select__option">
               12:00 AM
             </option>
@@ -184,7 +222,7 @@ export const ItineraryTime = ({ setisTime }) => {
             type="button"
             tabindex="0"
             class="Button Button__light-gray Button__md Button__shape__pill overflow-hidden Button__withLabel mr-2"
-            onClick={() => setisTime(false)}
+            onClick={handleClear}
           >
             <div class="flex-grow-1 flex-shrink-1 minw-0">
               <div class="Button__label flex-shrink-1 minw-0">
@@ -198,7 +236,7 @@ export const ItineraryTime = ({ setisTime }) => {
             type="submit"
             tabindex="0"
             class="Button Button__brand Button__md Button__shape__pill overflow-hidden Button__withLabel"
-            onClick={() => setisTime(false)}
+            onClick={handleSave}
           >
             <div class="flex-grow-1 flex-shrink-1 minw-0">
               <div class="Button__label flex-shrink-1 minw-0">
