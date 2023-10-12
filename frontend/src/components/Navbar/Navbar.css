@@ -1,0 +1,93 @@
+/* Navbar.css */
+
+/* Main Navbar container */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff; /* Facebook blue */
+    padding: 10px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+  }
+  
+  /* Logo styles */
+  .logo {
+    width: 200px;
+    height: 60px;
+    margin-right: 10px;
+  }
+  
+  /* Search bar styles */
+  .navbar-center input[type="text"] {
+    border: 3px solid #aeb6f3; 
+    padding: 8px 12px;
+    font-size: 16px;
+    border-radius: 20px;
+    width: 700px;
+    height : 40px;
+    background-color: #f0f2f5; /* Facebook search bar background */
+  }
+  
+  /* Messenger icon styles */
+  .messenger-icon {
+    color: #5b5d5ff3;
+    font-size: 35px;
+    cursor: pointer;
+    margin-right: 20px;
+    margin-left : 40px;
+    margin-top : 10px;
+    transition: transform 0.2s;
+  }
+  
+  /* Profile image styles */
+  .profile-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-right: 30px;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  
+  /* Dropdown styles */
+  .dropdown {
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    display: none;
+  }
+  
+  .dropdown ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .dropdown li {
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  /* Show dropdown when profile image is clicked */
+  .profile:hover .dropdown {
+    display: block;
+  }
+  
+  /* Hover effects for profile image and messenger icon */
+  .profile:hover .profile-image,
+  .messenger-icon:hover {
+    transform: scale(1.1);
+  }
+  .message{
+    display:flex;
+    
+  }
+  

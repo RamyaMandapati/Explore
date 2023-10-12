@@ -20,6 +20,7 @@ const {
   deleteNotification,
   getNotifications,
 } = require("./modules/notificationModule");
+const { addPost,getPosts,filterPosts } = require("./modules/postModule");
 
 // itinerary related routes
 router.post("/itinerary", addItinerary);
@@ -39,5 +40,11 @@ router.put("/users/delfavitinerary", deletefavoriteItinerary);
 router.put("/notification", readNotification);
 router.delete("/notification/:id", deleteNotification);
 router.get("/notification/:id", getNotifications);
+
+//Post routes
+router.post("/addPost",addPost);
+router.get("/getPosts",getPosts);
+router.get("/filterPosts",filterPosts);
+
 
 module.exports = router;

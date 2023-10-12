@@ -16,7 +16,6 @@ import { useSelector } from "react-redux";
 import ItinerarySelection from "./components/itinerary/itinerarySelection";
 import ItineraryCreation from "./components/itinerary/itineraryCreation";
 import ItineraryCalendarPage from "./components/itinerary/itineraryCalendarPage";
-import Navbar from "./components/Navbar/Navbar";
 
 // import Footer from "./components/layout/Footer";
 // if(localStorage.token){
@@ -47,7 +46,6 @@ const App = () => {
           path="/itinerary/detail"
           component={ItineraryCalendarPage}
         ></Route>
-        <Route exact path="/navbar" component={Navbar}></Route>
 
         {/* <ProtectedRoute exact path="/EditUser" component={EditUser} />
         <section className="container">
