@@ -3,6 +3,7 @@ import logo from "./logo.svg";
 import "./App.css";
 import React from "react";
 //import Reactdom from 'reactdom';
+
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import { Fragment, useEffect } from "react";
@@ -16,6 +17,8 @@ import { useSelector } from "react-redux";
 import ItinerarySelection from "./components/itinerary/itinerarySelection";
 import ItineraryCreation from "./components/itinerary/itineraryCreation";
 import Navbar from "./components/Navbar/Navbar";
+import Travelfeed from "./components/dashboard/Travelfeed";
+
 
 // import Footer from "./components/layout/Footer";
 // if(localStorage.token){
@@ -42,6 +45,7 @@ const App = () => {
         <Route exact path="/" component={ItinerarySelection}></Route>
         <Route exact path="/itinerary" component={ItineraryCreation}></Route>
         <Route exact path="/navbar" component={Navbar}></Route>
+        <Route exact path="/travelFeed" component={Travelfeed}></Route>
 
         {/* <ProtectedRoute exact path="/EditUser" component={EditUser} />
         <section className="container">
