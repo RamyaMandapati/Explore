@@ -1,0 +1,49 @@
+.user-post {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    width: 790px
+ }
+  
+  .user-info {
+    display: flex;
+    align-items: center;
+  }
+  
+  .profile-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 20px;
+  }
+  
+  .user-preferences p {
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #888;
+  }
+  
+  .post-content {
+    margin-top: 20px;
+  }
+  .post-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    /* Add other styles as needed */
+  }
+  
+  .post-images {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px,250px)); /* Adjust 150px to the minimum size you want for images */
+    gap: 10px; /* Adjust space between images */
+  }
+  
+  .post-images img {
+    width: 200px;
+    height: auto;
+    border-radius: 8px; /* Optional: rounded corners for images */
+  }
+  
+  

@@ -1,7 +1,10 @@
 /* Dashboard.css */
 
 .dashboard {
-  font-family: Arial, sans-serif;
+  
+    background-color: #f4f4f4; /* Grey color */
+    min-height: 100vh; /* Ensures the background covers the full viewport height */
+    padding: 20px; /* Optional: Add some padding around the content */
 }
 
 .container {
@@ -18,6 +21,7 @@
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* subtle shadow */
   margin-right: 20px; /* space between filters and the main content */
+  margin-top: 60px;
 }
 
 .main-content {
@@ -25,11 +29,5 @@
   padding: 10px 20px;
 }
 
-.itineraries {
-  margin-bottom: 20px;
-  /* styling for itineraries section */
-}
 
-.userposts {
-  /* styling for user posts section */
-}
+

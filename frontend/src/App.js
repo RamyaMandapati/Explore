@@ -18,7 +18,8 @@ import ItinerarySelection from "./components/itinerary/itinerarySelection";
 import ItineraryCreation from "./components/itinerary/itineraryCreation";
 import Navbar from "./components/Navbar/Navbar";
 import Travelfeed from "./components/dashboard/Travelfeed";
-
+import ItinerariesComponent from "./components/ItinariesComponent/ItinariesComponent.js";
+import Newpost from "./components/Newpost/Newpost.js";
 
 // import Footer from "./components/layout/Footer";
 // if(localStorage.token){
@@ -46,7 +47,8 @@ const App = () => {
         <Route exact path="/itinerary" component={ItineraryCreation}></Route>
         <Route exact path="/navbar" component={Navbar}></Route>
         <Route exact path="/travelFeed" component={Travelfeed}></Route>
-
+        <Route exact path="/itineraries" component={ItinerariesComponent}></Route>
+        <Route exact path="/newPost" component={Newpost}></Route>
         {/* <ProtectedRoute exact path="/EditUser" component={EditUser} />
         <section className="container">
           <Alert />

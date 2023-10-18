@@ -4,8 +4,9 @@ import Filters from './Filters';
 import PopularItineraries from './Popularitineraries';
 import Navbar from '../Navbar/Navbar';
 import './Travelfeed.css';
+import UserPosts from './Userpost';
+import Contacts from './contacts.js';
 
-import UserPost from './Userpost';
 
 function Travelfeed() {
   return (
@@ -22,7 +23,9 @@ function Travelfeed() {
                 </div>
                 <div className="userposts">
                   <UserPosts />
+                  
                 </div>
+                 <Contacts/>
               </div>
           </div>
       </div>
