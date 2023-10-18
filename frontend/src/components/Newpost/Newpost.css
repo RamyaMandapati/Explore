@@ -1,0 +1,76 @@
+/* CreatePostComponent.css */
+
+.create-post-container {
+    background-color: #F9F9F9;
+    padding: 20px;
+    width: 600px;
+    margin: 0 auto;
+    border: 1px solid #DADADA;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    margin-top:30px;
+    border-radius: 10px;
+
+  }
+  
+  .create-post-container h2 {
+    color: #FF6347;
+    font-family: 'Arial', sans-serif;
+    margin-bottom: 20px;
+  }
+  
+  .create-post-container label {
+    display: block;
+    margin: 10px 0;
+    color: #666;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .create-post-container input[type="text"],
+  .create-post-container input[type="number"],
+  .create-post-container input[type="date"],
+  .create-post-container select {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #DADADA;
+    font-size: 16px;
+    border-radius: 10px;
+    min-height: 30px;
+  }
+  
+  
+  
+  .file-list {
+    margin-top: 10px;
+  }
+  
+  .file-list span {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .create-post-container button {
+    display: block;
+    margin-top: 20px;
+    background-color: #FF6347;
+    color: #FFF;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    font-family: 'Arial', sans-serif;
+    border-radius: 20px;
+   
+  }
+  
+  .create-post-container button:hover {
+    background-color: #FF7F50;
+  }
+  input[type="file"] {
+    opacity: 1;
+    display: inline-block;
+    background-color: #f8f8f8; /* you can adjust this */
+    color: black;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    height: fit-content;
+}

@@ -40,6 +40,12 @@ const PopularItineraries = () => {
               personImage: placeImage,
               placeImage: personImage
             },
+            {
+              id: 7,
+              name: 'Kierra Gentry',
+              personImage: placeImage,
+              placeImage: personImage
+            },
     // ... you can add more items here
   ];
 

@@ -1,5 +1,9 @@
 .popular-itineraries {
   display: flex;
+   /* Center the cards horizontally */
+  overflow-x: auto;
+  padding: 20px 0; /* Optional padding to give some space top and bottom */
+  margin-top: 80px;
   justify-content: center; /* Center the cards horizontally */
   overflow-x: auto;
   padding: 20px 0; /* Optional padding to give some space top and bottom */
