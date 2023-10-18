@@ -9,16 +9,26 @@ import UserPost from './Userpost';
 
 function Travelfeed() {
   return (
-    <div className="dashboard">
-      {/* <Filters /> */}
-      <Navbar/>
-      <PopularItineraries />
- 
-      {/* <UserPost /> */}
-      {/* Add other components as needed */}
-    </div>
+      <div className="dashboard">
+          <Navbar />
+
+          <div className="container">
+            <div className="filters">
+              <Filters />
+            </div>
+              <div className="main-content">
+                <div className="itineraries">
+                  <PopularItineraries />
+                </div>
+                <div className="userposts">
+                  <UserPosts />
+                </div>
+              </div>
+          </div>
+      </div>
   );
 }
+
 
 export default Travelfeed;
 

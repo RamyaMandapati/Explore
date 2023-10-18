@@ -1,0 +1,28 @@
+/* Dashboard.css (continued) */
+
+/* ... previous styles ... */
+
+.filters {
+    flex: 1; /* for layout purposes, to occupy a portion of the container width */
+    padding: 10px 20px;
+    border-right: 1px solid #ddd; /* light gray border */
+    max-width: 250px; /* or set to a preferred width */
+    background-color: #f9f9f9; /* light gray background */
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* subtle shadow */
+    margin-right: 20px; /* space between filters and the main content */
+}
+
+.filters label {
+    display: block; /* display each label on a new line */
+    margin-bottom: 10px;
+    font-weight: 600; /* bold font weight for labels */
+}
+
+.filters input {
+    width: 100%; /* take the full width of the parent container */
+    padding: 8px; /* inner space for the input field */
+    border: 1px solid #ccc; /* light border */
+    border-radius: 5px; /* rounded corners */
+    margin-bottom: 20px; /* space between input fields */
+}

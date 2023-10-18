@@ -1,20 +1,35 @@
-.dashboard {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  
-  /* Style for Navbar (assuming you have a class or element selector) */
-  .navbar {
-    
-    padding: 10px;
-    text-align: center;
-  }
-  
-  /* Style for PopularItineraries component (assuming you have a class or element selector) */
-  .popular-itineraries {
+/* Dashboard.css */
 
-    /* Your styles for popular itineraries go here */
-  }
-  
+.dashboard {
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  display: flex;
+  margin-top: 20px;
+}
+
+.filters {
+  flex: 1; /* for layout purposes, to occupy a portion of the container width */
+  padding: 10px 20px;
+  border-right: 1px solid #ddd; /* light gray border */
+  max-width: 250px; /* or set to a preferred width */
+  background-color: #f9f9f9; /* light gray background */
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* subtle shadow */
+  margin-right: 20px; /* space between filters and the main content */
+}
+
+.main-content {
+  flex: 3;
+  padding: 10px 20px;
+}
+
+.itineraries {
+  margin-bottom: 20px;
+  /* styling for itineraries section */
+}
+
+.userposts {
+  /* styling for user posts section */
+}
