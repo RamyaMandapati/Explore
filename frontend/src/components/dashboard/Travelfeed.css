@@ -31,3 +31,24 @@
 
 
 
+=======
+.dashboard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  
+  /* Style for Navbar (assuming you have a class or element selector) */
+  .navbar {
+    
+    padding: 10px;
+    text-align: center;
+  }
+  
+  /* Style for PopularItineraries component (assuming you have a class or element selector) */
+  .popular-itineraries {
+
+    /* Your styles for popular itineraries go here */
+  }
+  

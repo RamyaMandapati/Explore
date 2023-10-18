@@ -1,0 +1,146 @@
+.itinerary-page-container {
+  margin: 60px auto;
+  max-width: 1100px;
+  font-family: "Rubik", sans-serif;
+  font-weight: 400;
+  color: #212529;
+  font-size: 14px;
+  line-height: 1.5;
+  background-color: #f3f4f5;
+  padding-bottom: 24px;
+}
+.itinerary-rating {
+  margin: 0px auto;
+  margin-top: 40px;
+
+  max-width: 1000px;
+}
+.calendar-container {
+  margin: 40px auto;
+  max-width: 1000px;
+  display: grid;
+  grid-template-columns: 1fr;
+  background-color: #f3f4f5;
+}
+
+.time-header {
+  display: grid;
+  grid-template-columns: repeat(25, 1fr);
+  font-size: 12px;
+  font-weight: 700;
+  border: 1px solid #d3d2d2;
+  border-radius: 8px;
+}
+
+.hour {
+  text-align: left;
+  padding: 5px 0;
+  border-right: 1px solid #d3d2d2;
+}
+.hour-not {
+  width: 100px;
+}
+.day-container {
+  display: grid;
+  grid-template-columns: repeat(25, 1fr);
+  position: relative;
+  border: 1px solid #d3d2d2;
+  border-radius: 8px;
+  min-height: 64px;
+  grid-template-rows: 1fr;
+}
+
+.day-header {
+  grid-column: 1;
+  font-weight: bold;
+  padding: 0.5rem;
+  width: 100px;
+  border-right: 1px solid #d3d2d2;
+  font-size: 12px;
+  /* text-align: center; */
+}
+
+.place-card {
+  background-color: #d5deda;
+  border-radius: 4px;
+  padding: 5px;
+  /* text-align: center; */
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  border: 1px solid #b4d5ff;
+  min-height: 56px;
+  font-size: 12px;
+  position: relative;
+}
+
+.card-flex {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.column-flex {
+  display: flex;
+  flex-direction: column;
+}
+
+.cost-card {
+  position: absolute;
+  bottom: 5px;
+  right: 10px;
+  background-color: #feefed;
+  padding: 1px 8px;
+  border-radius: 8px;
+  font-size: 12px;
+  min-width: 44px;
+  text-align: center;
+}
+.planbutton3 {
+  background-color: #feefed;
+  font-size: 12px;
+  border-radius: 16px;
+  padding: 8px 8px;
+  color: #f75940;
+}
+
+.itinerary-info {
+  position: absolute;
+  bottom: 0;
+  height: 150px;
+  padding: 16px 16px;
+  left: 20px;
+  color: #fff;
+  font-weight: 700;
+}
+
+.w-6 {
+  width: 20px;
+}
+.h-6 {
+  height: 20px;
+}
+
+.star-icon {
+  /* color: #f75940; */
+  fill: #f75940;
+  stroke: none;
+}
+
+.star-icon-color {
+  fill: #f3f4f5;
+  stroke: none;
+}
+
+.fill-color {
+  stroke: #f75940;
+}
+
+.height-icon {
+  height: 32px;
+  width: 32px;
+}
+
+.planbutton2 {
+  border-radius: 16px;
+}

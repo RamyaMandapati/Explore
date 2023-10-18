@@ -33,6 +33,22 @@ function Travelfeed() {
 }
 
 
+
+import UserPost from './Userpost';
+
+function Travelfeed() {
+  return (
+    <div className="dashboard">
+      {/* <Filters /> */}
+      <Navbar/>
+      <PopularItineraries />
+ 
+      {/* <UserPost /> */}
+      {/* Add other components as needed */}
+    </div>
+  );
+}
+
 export default Travelfeed;
 
 // Filters.js
