@@ -1,3 +1,5 @@
+import React, { useState } from "react";
+
 import "./itineraryCalendar.css";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -35,7 +37,7 @@ export const ItineraryCalendarPage = ({ history }) => {
           lat: 37.8085771,
           lng: -122.4125282,
           startTime: "10:00 AM",
-          endTime: "3:00 PM",
+          endTime: "4:00 PM",
           cost: "200",
           desc: "Beach Day",
         },
@@ -100,11 +102,17 @@ export const ItineraryCalendarPage = ({ history }) => {
   const timeSpanToGridColumns = (startTime, endTime) => {
     return timeToGridColumn(endTime) - timeToGridColumn(startTime) + 1;
   };
+  const [rating, setRating] = useState(0);
+  const handleStarClick = (starIndex) => {
+    // Set the rating to the clicked star index + 1
+    setRating(starIndex + 1);
+  };
+
   const containerStyle = {
     backgroundImage: `linear-gradient(
       rgba(0, 0, 0, 0.4),
       rgba(0, 0, 0, 0.4)
-    ), url(https://pixabay.com/get/g7c8760f4a9af9e60398c9db3dada3a60e07b375b7fba71d86ed362df4e7a7c4d9b615022f8f3ac3e46d5e2f97d5c35c9a86921aa9fddd1748afbfe7ceabb56bb_640.jpg)`, // Set the dynamic image URL
+    ), url(https://pixabay.com/get/g0c8ba0ca58046f3c8f36a9720898d39496edd4621ea7d3eedd2ffe88642c862ed0a6632ceeae77c505bb9d87d65955b85ece32baeef7d605427c62c50ee15744_640.jpg)`, // Set the dynamic image URL
     backgroundSize: "cover", // Adjust as needed
     backgroundRepeat: "no-repeat", // Adjust as needed
     width: "100%", // Set dimensions and other styles
@@ -199,7 +207,7 @@ export const ItineraryCalendarPage = ({ history }) => {
             </h2>
             <div className="add-flex">
               <img
-                src="https://pixabay.com/get/g976243b86e50d1758819fb7695c655280a4a8fdae1fbd4cfa00b36f9671837138363a334782781431c1fbd8c5f722d51fd12270746ec9d38e7767ab7fbd0e8b7_640.jpg"
+                src="https://pixabay.com/get/gfbd29a27f23109c436971bf48a279f93df9f7fecee5b9d78ca653480e9ad583a22f8d23b18603f12c0b118093d22ea17a1ef177985085217473b74e3502c39f3_640.jpg"
                 style={{ height: "52px", width: "52px", borderRadius: "50%" }}
               ></img>
               <div className="add-flex ml-2">
@@ -207,12 +215,18 @@ export const ItineraryCalendarPage = ({ history }) => {
                   .fill()
                   .map((_, index) => (
                     <svg
+                      key={index}
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke-width="1.5"
                       stroke="currentColor"
-                      class="w-6 h-6 star-icon-color fill-color"
+                      class={
+                        index < rating
+                          ? "w-6 h-6 star-icon fill-color"
+                          : "w-6 h-6 star-icon-color fill-color"
+                      }
+                      onClick={() => handleStarClick(index)}
                     >
                       <path
                         stroke-linecap="round"
@@ -298,7 +312,7 @@ export const ItineraryCalendarPage = ({ history }) => {
                         >
                           <div className="card-flex">
                             <img
-                              src="https://pixabay.com/get/g71e87d8fe33409bc4a2881323dab396a8a8ccb9e41c9955998f8898f5f669dddd4ccfdd6913e56bf853dc221161a5d10c0fe03abceb2e3f6f6aed154e911e3dc_640.jpg"
+                              src="https://pixabay.com/get/g0c8ba0ca58046f3c8f36a9720898d39496edd4621ea7d3eedd2ffe88642c862ed0a6632ceeae77c505bb9d87d65955b85ece32baeef7d605427c62c50ee15744_640.jpg"
                               style={{
                                 height: "52px",
                                 width: "52px",

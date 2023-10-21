@@ -155,6 +155,7 @@ export const ItinerarySelection = ({ history }) => {
           id="plan-location-input"
           label="Where to?"
           type="text"
+          // InputProps={{ sx: { height: 45 } }}
           required
           // autoComplete=""
           inputRef={autoCompleteRef}
@@ -221,6 +222,7 @@ export const ItinerarySelection = ({ history }) => {
               value={interests}
               label="intersts"
               onChange={handleChange}
+              InputProps={{ sx: { height: 45 } }}
               input={<OutlinedInput label="Interests" />}
               renderValue={(selected) => selected.join(", ")}
               sx={{ width: 540 }}

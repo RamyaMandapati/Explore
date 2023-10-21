@@ -17,6 +17,9 @@ import ItinerarySelection from "./components/itinerary/itinerarySelection";
 import ItineraryCreation from "./components/itinerary/itineraryCreation";
 import ItineraryCalendarPage from "./components/itinerary/itineraryCalendarPage";
 import Navbar from "./components/Navbar/Navbar";
+import Register from "./components/auth/Register";
+import Preferences from "./components/auth/preferences";
+import Login from "./components/auth/Login";
 
 // import Footer from "./components/layout/Footer";
 // if(localStorage.token){
@@ -38,24 +41,32 @@ const App = () => {
   //   </div>
   // );
   return (
-    <Router>
-      <Fragment>
-        <Route exact path="/" component={ItinerarySelection}></Route>
-        <Route exact path="/itinerary" component={ItineraryCreation}></Route>
-        <Route
-          exact
-          path="/itinerary/detail"
-          component={ItineraryCalendarPage}
-        ></Route>
-        <Route exact path="/navbar" component={Navbar}></Route>
+    <>
+      <Router>
+        {/* <Navbar /> */}
 
-        {/* <ProtectedRoute exact path="/EditUser" component={EditUser} />
-        <section className="container">
-          <Alert />
-          <Switch></Switch>
-        </section> */}
-      </Fragment>
-    </Router>
+        <Fragment>
+          <Route exact path="/" component={ItinerarySelection}></Route>
+          <Route exact path="/itinerary" component={ItineraryCreation}></Route>
+          <Route
+            exact
+            path="/itinerary/detail"
+            component={ItineraryCalendarPage}
+          ></Route>
+          <Route exact path="/register" component={Register}></Route>
+          <Route exact path="/preference" component={Preferences}></Route>
+          <Route exact path="/login" component={Login}></Route>
+
+          <Route exact path="/navbar" component={Navbar}></Route>
+
+          {/* <ProtectedRoute exact path="/EditUser" component={EditUser} />
+    <section className="container">
+      <Alert />
+      <Switch></Switch>
+    </section> */}
+        </Fragment>
+      </Router>
+    </>
   );
 };
 export default App;

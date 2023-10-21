@@ -7,7 +7,7 @@
 .itineraryselection,
 .itinerarycreation {
   max-width: 1000px;
-  margin: 100px auto;
+  margin: 120px auto;
   font-family: "Rubik", sans-serif;
   font-weight: 400;
   color: #212529;
@@ -17,7 +17,7 @@
 
 .itinerarycreation {
   max-width: 1200px;
-  margin: 64px auto;
+  margin: 90px auto;
   display: flex;
   /* align-items: flex-start;
   justify-content: center; */
@@ -152,6 +152,8 @@ h2 {
 
 .itinerarymap {
   max-width: 460px;
+  position: fixed;
+  right: 31px;
 }
 .itineraryimage {
   max-width: 740px;
