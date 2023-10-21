@@ -1,0 +1,57 @@
+.popular-itineraries {
+  display: flex;
+   /* Center the cards horizontally */
+  overflow-x: auto;
+  padding: 20px 0; /* Optional padding to give some space top and bottom */
+  margin-top: 80px;
+  justify-content: center; /* Center the cards horizontally */
+  overflow-x: auto;
+  padding: 20px 0; /* Optional padding to give some space top and bottom */
+  margin-top: 100px;
+}
+
+.itinerary-card {
+  position: relative;
+  width: 100px; /* Further reduced width */
+  height: 150px; /* Further reduced height */
+  margin-right: 15px; /* Reduced spacing between cards */
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.itinerary-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 1;
+}
+
+.itinerary-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.itinerary-card img.profile-image {
+  position: absolute;
+  width: 35px; /* Further reduced size */
+  height: 35px; /* Further reduced size */
+  border: 2px solid white; /* Reduced border */
+  border-radius: 50%;
+  bottom: 12px; /* Adjusted position */
+  left: 12px; /* Adjusted position */
+  z-index: 2;
+}
+
+.itinerary-card .name {
+  position: absolute;
+  bottom: 15px; /* Adjusted position */
+  left: 50px; /* Adjusted position */
+  color: white;
+  font-weight: bold;
+  z-index: 2;
+}

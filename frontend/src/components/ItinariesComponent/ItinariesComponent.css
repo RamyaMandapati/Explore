@@ -1,0 +1,75 @@
+/* ItinerariesComponent.css */
+
+.itineraries-main {
+  font-family: Arial, sans-serif;
+  background-color: #f8f8f8;
+  padding: 20px;
+  margin-top: 60px;
+}
+
+.header {
+  display: flex;
+  justify-content: flex-start; /* Adjusted to start the content on the left side */
+  
+}
+
+.title {
+  font-size: 24px;
+  color: #333;
+}
+
+.subtitle {
+  font-size: 20px;
+  color: #777;
+}
+
+.search-section {
+  margin-left: 20px; /* This adds a margin to the left of the search bar, so it's not right next to the title */
+  margin-top: 30px;
+  border-radius: 20px;
+  width: fit-content;
+}
+
+input[type="text"] {
+  width: 300px;
+  
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  color: #888;
+  box-shadow: inset 0px 1px 5px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+  outline: none;
+  min-height: 50px;
+}
+
+.itineraries-section {
+  margin-top: 20px;
+}
+
+.card {
+  display: inline-block;
+  margin-right: 20px;
+  margin-top: 20px;
+  width: 200px;
+  height:200px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.card img {
+  width: 100%;
+}
+
+.card-info {
+  padding: 10px;
+  background-color: #fff;
+}
+
+.location, .date {
+  font-size: 12px;
+  margin: 5px 0;
+}
+
+/* Any other additional styles can go here */
