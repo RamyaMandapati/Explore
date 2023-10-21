@@ -15,8 +15,29 @@ import ItineraryCost from "./itineraryCost";
 
 import { useSelector } from "react-redux";
 import moment from "moment";
+import Autocomplete from "@mui/material/Autocomplete";
+import { Modal, Box, TextField } from "@mui/material";
+import Typography from "@mui/material/Typography";
+import styled from "styled-components";
+import SearchBox from "./searchBox";
 
 const libraries = ["drawing", "places", "geometry"];
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+`;
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 550,
+  bgcolor: "background.paper",
+  // border: "2px solid ",
+  boxShadow: 24,
+  borderRadius: "8px",
+  p: 4,
+};
 
 export const ItineraryCreation = ({ history }) => {
   const [image, setImage] = useState(
@@ -66,9 +87,9 @@ export const ItineraryCreation = ({ history }) => {
     Array(dateArray.length).fill(false)
   );
 
-  const [searchLocations, setSearchLocations] = useState(
-    dateArray.map(() => "")
-  );
+  // const [searchLocations, setSearchLocations] = useState(
+  //   dateArray.map(() => "")
+  // );
   const toggleButton = (index) => {
     const updatedButtonStates = [...buttonStates];
     updatedButtonStates[index] = !updatedButtonStates[index];
@@ -111,8 +132,16 @@ export const ItineraryCreation = ({ history }) => {
     dateIndex: null,
     placeIndex: null,
   });
+
+  const [openSearchBoxIndices, setOpenSearchBoxIndices] = useState({
+    dateIndex: null,
+    placeIndex: null,
+  });
   const toggleBoxVisibility = (dateIndex, placeIndex) => {
     setOpenBoxIndices({ dateIndex, placeIndex });
+  };
+  const toggleSearchBoxVisibility = (dateIndex, placeIndex) => {
+    setOpenSearchBoxIndices({ dateIndex, placeIndex });
   };
   const updateItineraryCost = (dateIndex, placeIndex, cost) => {
     const updatedItinerary = [...itinerary];
@@ -149,7 +178,7 @@ export const ItineraryCreation = ({ history }) => {
         bounds.extend(position);
       });
       map.fitBounds(bounds);
-      // map.setZoom(13);
+      // map.setZoom(12);
     } else {
       // If no marker positions, set the center and zoom to your default values
       map.setCenter(center);
@@ -198,12 +227,32 @@ export const ItineraryCreation = ({ history }) => {
       cost: "",
       desc: "",
     };
-    await setSearchLocations((prevSearchLocations) => {
-      const updatedSearchValues = [...prevSearchLocations];
-      updatedSearchValues[dateIndex] = "";
-      return updatedSearchValues;
-    });
+    // await setSearchLocations((prevSearchLocations) => {
+    //   const updatedSearchValues = [...prevSearchLocations];
+    //   updatedSearchValues[dateIndex] = "";
+    //   return updatedSearchValues;
+    // });
     await handleSelectedLocation(selectedLocation, dateIndex);
+  };
+
+  const [addMember, setAddMember] = React.useState(false);
+  const handleAddMemberOpen = () => setAddMember(true);
+  const handleAddMemberClose = () => setAddMember(false);
+  const handleMember = async (e) => {
+    e.preventDefault();
+    // try {
+    //   await fetch(`http://localhost:3001/group/editmember`, {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json'
+    //     },
+    //     body: JSON.stringify({ itineraryId: id, userId: user._id, members })
+    //   });
+    handleAddMemberClose();
+    //   window.location.reload();
+    // } catch (e) {
+    //   console.log(e);
+    // }
   };
 
   const handleSelectedLocation = async (
@@ -229,19 +278,35 @@ export const ItineraryCreation = ({ history }) => {
       }
       return updatedItinerary;
     });
-    await addMarkerPosition(selectedLocation);
+    const positions = await calculateMarkerPositions(itinerary);
+    setMarkerPositions(positions);
   };
 
-  const addMarkerPosition = (selectedLocation) => {
-    const newMarkerPosition = {
-      lat: selectedLocation.lat,
-      lng: selectedLocation.lng,
-    };
-    setMarkerPositions((prevPositions) => [
-      ...prevPositions,
-      newMarkerPosition,
-    ]);
+  const updateSelectedLocation = async (place, dateIndex, placeIndex) => {
+    setItinerary((prevItinerary) => {
+      const updatedItinerary = [...prevItinerary];
+      updatedItinerary[dateIndex].places[placeIndex].location = place.name;
+      updatedItinerary[dateIndex].places[placeIndex].lat =
+        place.geometry.location.lat();
+      updatedItinerary[0].places[placeIndex].lng =
+        place.geometry.location.lng();
+      return updatedItinerary;
+    });
+    setOpenSearchBoxIndices({ dateIndex: null, placeIndex: null });
+    const positions = await calculateMarkerPositions(itinerary);
+    setMarkerPositions(positions);
   };
+
+  // const addMarkerPosition = (selectedLocation) => {
+  //   const newMarkerPosition = {
+  //     lat: selectedLocation.lat,
+  //     lng: selectedLocation.lng,
+  //   };
+  //   setMarkerPositions((prevPositions) => [
+  //     ...prevPositions,
+  //     newMarkerPosition,
+  //   ]);
+  // };
   // const placeClicked = (e) => {
   //   // console.log(e);
   //   const geocoder = new window.google.maps.Geocoder();
@@ -269,11 +334,11 @@ export const ItineraryCreation = ({ history }) => {
   //   console.log("completed recent location");
   // };
 
-  const handleSearchChange = (index, value) => {
-    const updatedSearchLocations = [...searchLocations];
-    updatedSearchLocations[index] = value;
-    setSearchLocations(updatedSearchLocations);
-  };
+  // const handleSearchChange = (index, value) => {
+  //   const updatedSearchLocations = [...searchLocations];
+  //   updatedSearchLocations[index] = value;
+  //   setSearchLocations(updatedSearchLocations);
+  // };
 
   async function getImage() {
     const url = `https://pixabay.com/api/?key=35714305-8294bdfc234a78b237b91a723&q=chicago&image_type=photo&per_page=10&safesearch=True&category=places&editors_choice=True`;
@@ -404,7 +469,7 @@ export const ItineraryCreation = ({ history }) => {
                 >
                   I
                 </button>
-                <button className="btn btn-3">
+                <button className="btn btn-3" onClick={handleAddMemberOpen}>
                   <svg
                     aria-hidden="true"
                     focusable="false"
@@ -422,6 +487,78 @@ export const ItineraryCreation = ({ history }) => {
                     ></path>
                   </svg>
                 </button>
+                <Modal
+                  open={addMember}
+                  onClose={handleAddMemberClose}
+                  aria-describedby="modal-modal-description"
+                >
+                  <Box sx={style}>
+                    <Form>
+                      <label className="edit__label">Manage Members</label>
+                      <Autocomplete
+                        multiple
+                        id="tags-filled"
+                        options={[]}
+                        freeSolo
+                        // onChange={async (event, newValue, reason, details) => {
+                        //   const response = await fetch(
+                        //     `http://localhost:3001/user/email`,
+                        //     {
+                        //       method: "POST",
+                        //       headers: {
+                        //         "Content-Type": "application/json",
+                        //       },
+                        //       body: JSON.stringify({ email: details.option }),
+                        //     }
+                        //   );
+                        //   const responseData = await response.json();
+                        //   let finalMemberList;
+                        //   if (reason === "createOption") {
+                        //     finalMemberList = [...members, responseData._id];
+                        //   } else if (reason === "removeOption") {
+                        //     finalMemberList = [...members];
+                        //     members.map((mem) => {
+                        //       if (mem === responseData._id) {
+                        //         finalMemberList.splice(
+                        //           finalMemberList.indexOf(mem),
+                        //           1
+                        //         );
+                        //       }
+                        //     });
+                        //   }
+                        //   setMembers(finalMemberList);
+                        // }}
+                        // renderTags={(mems, getTagProps) =>
+                        //   mems.map((option, index) => (
+                        //     <Chip
+                        //       label={option}
+                        //       {...getTagProps({ index })}
+                        //       disabled={
+                        //         option === itineraryOwner ? true : false
+                        //       }
+                        //       // onDelete={handleDelete(option)}
+                        //     />
+                        //   ))
+                        // }
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            variant="filled"
+                            label=""
+                            placeholder="Enter email address"
+                          />
+                        )}
+                      />
+                      <Typography sx={{ marginTop: 2 }} color="text.secondary">
+                        Enter a valid email address and press Enter to add a
+                        member.
+                      </Typography>
+                      <button onClick={handleMember} className="planbutton">
+                        Update
+                      </button>
+                    </Form>
+                  </Box>
+                </Modal>
               </div>
             </div>
           </div>
@@ -547,326 +684,319 @@ export const ItineraryCreation = ({ history }) => {
                     <div>
                       {itinerary[index]?.places.map((place, placeIndex) => (
                         <>
-                          <div
-                            style={{ display: "flex", marginRight: "-40px" }}
-                          >
+                          {openSearchBoxIndices.dateIndex === index &&
+                          openSearchBoxIndices.placeIndex === placeIndex ? (
+                            isLoaded ? (
+                              <SearchBox
+                                onPlacesChange={(place) =>
+                                  updateSelectedLocation(
+                                    place,
+                                    index,
+                                    placeIndex
+                                  )
+                                }
+                              />
+                            ) : (
+                              ""
+                            )
+                          ) : (
                             <div
-                              className="itinerary-plan-box"
-                              onClick={() =>
-                                toggleBoxVisibility(index, placeIndex)
-                              }
+                              style={{ display: "flex", marginRight: "-40px" }}
                             >
-                              <div class="BlockLeftIconContainer BlockLeftIconContainer__absolute py-2">
-                                <span
-                                  class="MarkerIconWithColor"
-                                  style={{ fontSize: "2rem" }}
-                                >
-                                  <span class="MarkerIconWithColor__label MarkerIconWithColor__labelLarge">
-                                    {placeIndex + 1}
-                                  </span>
+                              <div
+                                className="itinerary-plan-box"
+                                onClick={() =>
+                                  toggleBoxVisibility(index, placeIndex)
+                                }
+                              >
+                                <div class="BlockLeftIconContainer BlockLeftIconContainer__absolute py-2">
                                   <span
-                                    class="MarkerIconWithColor__outlined"
-                                    style={{
-                                      color: colors[index],
-                                      stroke: "#d2d6f8",
-                                      strokeWidth: "40",
-                                    }}
+                                    class="MarkerIconWithColor"
+                                    style={{ fontSize: "2rem" }}
                                   >
-                                    <svg
-                                      aria-hidden="true"
-                                      focusable="false"
-                                      data-prefix="fas"
-                                      data-icon="location-pin"
-                                      class="svg-inline--fa  svg-inline--fa-icon fa-location-pin fa-w-12 "
-                                      role="img"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      viewBox="0 0 384 512"
+                                    <span class="MarkerIconWithColor__label MarkerIconWithColor__labelLarge">
+                                      {placeIndex + 1}
+                                    </span>
+                                    <span
+                                      class="MarkerIconWithColor__outlined"
+                                      style={{
+                                        color: colors[index],
+                                        stroke: "#d2d6f8",
+                                        strokeWidth: "40",
+                                      }}
                                     >
-                                      <path
-                                        fill="currentColor"
-                                        d="M384 192c0 87.4-117 243-168.3 307.2c-12.3 15.3-35.1 15.3-47.4 0C117 435 0 279.4 0 192C0 86 86 0 192 0S384 86 384 192z"
-                                      ></path>
-                                    </svg>
-                                  </span>
-                                </span>
-                              </div>
-                              <div className="add-flex-column pl-2">
-                                <button className="plan__button">
-                                  <span>{place.location}</span>
-                                  {openBoxIndices.dateIndex === index &&
-                                    openBoxIndices.placeIndex ===
-                                      placeIndex && (
                                       <svg
-                                        aria-labelledby="svg-inline--fa-title-lnKUevjzaCSO"
+                                        aria-hidden="true"
+                                        focusable="false"
                                         data-prefix="fas"
-                                        data-icon="pen"
-                                        class="svg-inline--fa svg-inline--fa-medium fa-pen fa-w-16 fa-xs ml-2"
+                                        data-icon="location-pin"
+                                        class="svg-inline--fa  svg-inline--fa-icon fa-location-pin fa-w-12 "
                                         role="img"
                                         xmlns="http://www.w3.org/2000/svg"
-                                        viewBox="0 0 512 512"
+                                        viewBox="0 0 384 512"
                                       >
-                                        {/* <title id="svg-inline--fa-title-lnKUevjzaCSO">Edit</title> */}
                                         <path
                                           fill="currentColor"
-                                          d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z"
+                                          d="M384 192c0 87.4-117 243-168.3 307.2c-12.3 15.3-35.1 15.3-47.4 0C117 435 0 279.4 0 192C0 86 86 0 192 0S384 86 384 192z"
                                         ></path>
                                       </svg>
-                                    )}
-                                </button>
+                                    </span>
+                                  </span>
+                                </div>
+                                <div className="add-flex-column pl-2">
+                                  <button className="plan__button">
+                                    <span>{place.location}</span>
+                                    {openBoxIndices.dateIndex === index &&
+                                      openBoxIndices.placeIndex ===
+                                        placeIndex && (
+                                        <svg
+                                          aria-labelledby="svg-inline--fa-title-lnKUevjzaCSO"
+                                          data-prefix="fas"
+                                          data-icon="pen"
+                                          class="svg-inline--fa svg-inline--fa-medium fa-pen fa-w-16 fa-xs ml-2"
+                                          role="img"
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          viewBox="0 0 512 512"
+                                          onClick={() =>
+                                            toggleSearchBoxVisibility(
+                                              index,
+                                              placeIndex
+                                            )
+                                          }
+                                        >
+                                          {/* <title id="svg-inline--fa-title-lnKUevjzaCSO">Edit</title> */}
+                                          <path
+                                            fill="currentColor"
+                                            d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z"
+                                          ></path>
+                                        </svg>
+                                      )}
+                                  </button>
 
-                                <div className="mb-2 input_item_plan">
+                                  <div className="mb-2 input_item_plan">
+                                    {(openBoxIndices.dateIndex === index &&
+                                      openBoxIndices.placeIndex ===
+                                        placeIndex) ||
+                                    place.desc !== "" ? (
+                                      <input
+                                        type="text"
+                                        value={place.desc}
+                                        className="desc_input_plan"
+                                        placeholder="Add description here"
+                                        onChange={(e) => {
+                                          const newValue = e.target.value;
+                                          handleDescChange(
+                                            index,
+                                            placeIndex,
+                                            newValue
+                                          );
+                                        }}
+                                      />
+                                    ) : (
+                                      ""
+                                    )}
+                                  </div>
                                   {(openBoxIndices.dateIndex === index &&
                                     openBoxIndices.placeIndex === placeIndex) ||
-                                  place.desc !== "" ? (
-                                    <input
-                                      type="text"
-                                      value={place.desc}
-                                      className="desc_input_plan"
-                                      placeholder="Add description here"
-                                      onChange={(e) => {
-                                        const newValue = e.target.value;
-                                        handleDescChange(
-                                          index,
-                                          placeIndex,
-                                          newValue
-                                        );
-                                      }}
-                                    />
+                                  place.startTime !== "" ||
+                                  place.cost !== "" ? (
+                                    <div className="add-flex mb-2">
+                                      <div
+                                        className={
+                                          place.startTime === "" ||
+                                          place.cost === ""
+                                            ? "mt-n3 mb-n2"
+                                            : ""
+                                        }
+                                      >
+                                        <button
+                                          type="button"
+                                          className={
+                                            place.startTime === ""
+                                              ? "btn-date btn-date1"
+                                              : "btn-date btn-date1 btn-time-cost"
+                                          }
+                                          style={{ position: "relative" }}
+                                          onClick={() =>
+                                            handleAddTime(index, placeIndex)
+                                          }
+                                        >
+                                          {place.startTime === "" ? (
+                                            openBoxIndices.dateIndex ===
+                                              index &&
+                                            openBoxIndices.placeIndex ===
+                                              placeIndex && (
+                                              <>
+                                                <svg
+                                                  aria-hidden="true"
+                                                  focusable="false"
+                                                  data-prefix="far"
+                                                  data-icon="clock"
+                                                  class="svg-inline--fa fa-clock fa-w-16 fa-fw fa-sm h-n3"
+                                                  role="img"
+                                                  xmlns="http://www.w3.org/2000/svg"
+                                                  viewBox="0 0 512 512"
+                                                >
+                                                  <path
+                                                    fill="currentColor"
+                                                    d="M464 256A208 208 0 1 1 48 256a208 208 0 1 1 416 0zM0 256a256 256 0 1 0 512 0A256 256 0 1 0 0 256zM232 120V256c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2V120c0-13.3-10.7-24-24-24s-24 10.7-24 24z"
+                                                  ></path>
+                                                </svg>
+                                                <span className="ml-2">
+                                                  Add time
+                                                </span>
+                                              </>
+                                            )
+                                          ) : (
+                                            <span
+                                              style={{
+                                                padding: "0 8px",
+                                                fontSize: "12px",
+                                              }}
+                                            >
+                                              {place.startTime} to{" "}
+                                              {place.endTime}
+                                            </span>
+                                          )}
+                                        </button>
+                                        {selectedTime &&
+                                          selectedTime.dateIndex === index &&
+                                          selectedTime.placeIndex ===
+                                            placeIndex && (
+                                            <ItineraryTime
+                                              onSave={(startTime, endTime) =>
+                                                updateItineraryTime(
+                                                  index,
+                                                  placeIndex,
+                                                  startTime,
+                                                  endTime
+                                                )
+                                              }
+                                              onCancel={() =>
+                                                setSelectedTime(null)
+                                              }
+                                            />
+                                          )}
+                                      </div>
+                                      <div
+                                        className={
+                                          place.startTime === "" ||
+                                          place.cost === ""
+                                            ? "mt-n3 mb-n2 ml-2"
+                                            : "ml-2"
+                                        }
+                                      >
+                                        <button
+                                          type="button"
+                                          className={
+                                            place.cost === ""
+                                              ? "btn-date btn-date1"
+                                              : "btn-date btn-date1 btn-time-cost"
+                                          }
+                                          style={{
+                                            position: "relative",
+                                          }}
+                                          onClick={() =>
+                                            handleAddCost(index, placeIndex)
+                                          }
+                                        >
+                                          {place.cost === "" ? (
+                                            openBoxIndices.dateIndex ===
+                                              index &&
+                                            openBoxIndices.placeIndex ===
+                                              placeIndex && (
+                                              <>
+                                                <svg
+                                                  aria-hidden="true"
+                                                  focusable="false"
+                                                  data-prefix="fas"
+                                                  data-icon="dollar-sign"
+                                                  class="svg-inline--fa fa-dollar-sign fa-w-16 fa-fw fa-sm h-n3"
+                                                  role="img"
+                                                  xmlns="http://www.w3.org/2000/svg"
+                                                  viewBox="0 0 320 512"
+                                                >
+                                                  <path
+                                                    fill="currentColor"
+                                                    d="M146 0c17.7 0 32 14.3 32 32V67.7c1.6 .2 3.1 .4 4.7 .7c.4 .1 .7 .1 1.1 .2l48 8.8c17.4 3.2 28.9 19.9 25.7 37.2s-19.9 28.9-37.2 25.7l-47.5-8.7c-31.3-4.6-58.9-1.5-78.3 6.2s-27.2 18.3-29 28.1c-2 10.7-.5 16.7 1.2 20.4c1.8 3.9 5.5 8.3 12.8 13.2c16.3 10.7 41.3 17.7 73.7 26.3l2.9 .8c28.6 7.6 63.6 16.8 89.6 33.8c14.2 9.3 27.6 21.9 35.9 39.5c8.5 17.9 10.3 37.9 6.4 59.2c-6.9 38-33.1 63.4-65.6 76.7c-13.7 5.6-28.6 9.2-44.4 11V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V445.1c-.4-.1-.9-.1-1.3-.2l-.2 0 0 0c-24.4-3.8-64.5-14.3-91.5-26.3C4.9 411.4-2.4 392.5 4.8 376.3s26.1-23.4 42.2-16.2c20.9 9.3 55.3 18.5 75.2 21.6c31.9 4.7 58.2 2 76-5.3c16.9-6.9 24.6-16.9 26.8-28.9c1.9-10.6 .4-16.7-1.3-20.4c-1.9-4-5.6-8.4-13-13.3c-16.4-10.7-41.5-17.7-74-26.3l-2.8-.7 0 0C105.4 279.3 70.4 270 44.4 253c-14.2-9.3-27.5-22-35.8-39.6C.3 195.4-1.4 175.4 2.5 154.1C9.7 116 38.3 91.2 70.8 78.3c13.3-5.3 27.9-8.9 43.2-11V32c0-17.7 14.3-32 32-32z"
+                                                  ></path>
+                                                </svg>
+                                                <span>Add cost</span>
+                                              </>
+                                            )
+                                          ) : (
+                                            <span
+                                              style={{
+                                                padding: "0 8px",
+                                                fontSize: "12px",
+                                              }}
+                                            >
+                                              $ {place.cost}
+                                            </span>
+                                          )}
+                                        </button>
+                                        {selectedCost &&
+                                          selectedCost.dateIndex === index &&
+                                          selectedCost.placeIndex ===
+                                            placeIndex && (
+                                            <ItineraryCost
+                                              onSave={(cost) =>
+                                                updateItineraryCost(
+                                                  index,
+                                                  placeIndex,
+                                                  cost
+                                                )
+                                              }
+                                              onCancel={() =>
+                                                setSelectedCost(null)
+                                              }
+                                            />
+                                          )}
+                                      </div>
+                                    </div>
                                   ) : (
                                     ""
                                   )}
                                 </div>
-                                {(openBoxIndices.dateIndex === index &&
-                                  openBoxIndices.placeIndex === placeIndex) ||
-                                place.startTime !== "" ||
-                                place.cost !== "" ? (
-                                  <div className="add-flex mb-2">
-                                    <div
-                                      className={
-                                        place.startTime === "" ||
-                                        place.cost === ""
-                                          ? "mt-n3 mb-n2"
-                                          : ""
+                              </div>
+                              <div>
+                                {openBoxIndices.dateIndex === index &&
+                                  openBoxIndices.placeIndex === placeIndex && (
+                                    <button
+                                      class="btn btn-link"
+                                      type="button"
+                                      onClick={() =>
+                                        handleRemovePlace(index, placeIndex)
                                       }
                                     >
-                                      <button
-                                        type="button"
-                                        className={
-                                          place.startTime === ""
-                                            ? "btn-date btn-date1"
-                                            : "btn-date btn-date1 btn-time-cost"
-                                        }
-                                        style={{ position: "relative" }}
-                                        onClick={() =>
-                                          handleAddTime(index, placeIndex)
-                                        }
+                                      <svg
+                                        aria-hidden="true"
+                                        focusable="false"
+                                        data-prefix="far"
+                                        data-icon="trash-can"
+                                        class="svg-inline--fa fa-trash-can fa-w-14 "
+                                        role="img"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 448 512"
                                       >
-                                        {place.startTime === "" ? (
-                                          openBoxIndices.dateIndex === index &&
-                                          openBoxIndices.placeIndex ===
-                                            placeIndex && (
-                                            <>
-                                              <svg
-                                                aria-hidden="true"
-                                                focusable="false"
-                                                data-prefix="far"
-                                                data-icon="clock"
-                                                class="svg-inline--fa fa-clock fa-w-16 fa-fw fa-sm h-n3"
-                                                role="img"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                viewBox="0 0 512 512"
-                                              >
-                                                <path
-                                                  fill="currentColor"
-                                                  d="M464 256A208 208 0 1 1 48 256a208 208 0 1 1 416 0zM0 256a256 256 0 1 0 512 0A256 256 0 1 0 0 256zM232 120V256c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2V120c0-13.3-10.7-24-24-24s-24 10.7-24 24z"
-                                                ></path>
-                                              </svg>
-                                              <span className="ml-2">
-                                                Add time
-                                              </span>
-                                            </>
-                                          )
-                                        ) : (
-                                          <span
-                                            style={{
-                                              padding: "0 8px",
-                                              fontSize: "12px",
-                                            }}
-                                          >
-                                            {place.startTime} to {place.endTime}
-                                          </span>
-                                        )}
-                                      </button>
-                                      {selectedTime &&
-                                        selectedTime.dateIndex === index &&
-                                        selectedTime.placeIndex ===
-                                          placeIndex && (
-                                          <ItineraryTime
-                                            onSave={(startTime, endTime) =>
-                                              updateItineraryTime(
-                                                index,
-                                                placeIndex,
-                                                startTime,
-                                                endTime
-                                              )
-                                            }
-                                            onCancel={() =>
-                                              setSelectedTime(null)
-                                            }
-                                          />
-                                        )}
-                                    </div>
-                                    <div
-                                      className={
-                                        place.startTime === "" ||
-                                        place.cost === ""
-                                          ? "mt-n3 mb-n2 ml-2"
-                                          : "ml-2"
-                                      }
-                                    >
-                                      <button
-                                        type="button"
-                                        className={
-                                          place.cost === ""
-                                            ? "btn-date btn-date1"
-                                            : "btn-date btn-date1 btn-time-cost"
-                                        }
-                                        style={{
-                                          position: "relative",
-                                        }}
-                                        onClick={() =>
-                                          handleAddCost(index, placeIndex)
-                                        }
-                                      >
-                                        {place.cost === "" ? (
-                                          openBoxIndices.dateIndex === index &&
-                                          openBoxIndices.placeIndex ===
-                                            placeIndex && (
-                                            <>
-                                              <svg
-                                                aria-hidden="true"
-                                                focusable="false"
-                                                data-prefix="fas"
-                                                data-icon="dollar-sign"
-                                                class="svg-inline--fa fa-dollar-sign fa-w-16 fa-fw fa-sm h-n3"
-                                                role="img"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                viewBox="0 0 320 512"
-                                              >
-                                                <path
-                                                  fill="currentColor"
-                                                  d="M146 0c17.7 0 32 14.3 32 32V67.7c1.6 .2 3.1 .4 4.7 .7c.4 .1 .7 .1 1.1 .2l48 8.8c17.4 3.2 28.9 19.9 25.7 37.2s-19.9 28.9-37.2 25.7l-47.5-8.7c-31.3-4.6-58.9-1.5-78.3 6.2s-27.2 18.3-29 28.1c-2 10.7-.5 16.7 1.2 20.4c1.8 3.9 5.5 8.3 12.8 13.2c16.3 10.7 41.3 17.7 73.7 26.3l2.9 .8c28.6 7.6 63.6 16.8 89.6 33.8c14.2 9.3 27.6 21.9 35.9 39.5c8.5 17.9 10.3 37.9 6.4 59.2c-6.9 38-33.1 63.4-65.6 76.7c-13.7 5.6-28.6 9.2-44.4 11V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V445.1c-.4-.1-.9-.1-1.3-.2l-.2 0 0 0c-24.4-3.8-64.5-14.3-91.5-26.3C4.9 411.4-2.4 392.5 4.8 376.3s26.1-23.4 42.2-16.2c20.9 9.3 55.3 18.5 75.2 21.6c31.9 4.7 58.2 2 76-5.3c16.9-6.9 24.6-16.9 26.8-28.9c1.9-10.6 .4-16.7-1.3-20.4c-1.9-4-5.6-8.4-13-13.3c-16.4-10.7-41.5-17.7-74-26.3l-2.8-.7 0 0C105.4 279.3 70.4 270 44.4 253c-14.2-9.3-27.5-22-35.8-39.6C.3 195.4-1.4 175.4 2.5 154.1C9.7 116 38.3 91.2 70.8 78.3c13.3-5.3 27.9-8.9 43.2-11V32c0-17.7 14.3-32 32-32z"
-                                                ></path>
-                                              </svg>
-                                              <span>Add cost</span>
-                                            </>
-                                          )
-                                        ) : (
-                                          <span
-                                            style={{
-                                              padding: "0 8px",
-                                              fontSize: "12px",
-                                            }}
-                                          >
-                                            $ {place.cost}
-                                          </span>
-                                        )}
-                                      </button>
-                                      {selectedCost &&
-                                        selectedCost.dateIndex === index &&
-                                        selectedCost.placeIndex ===
-                                          placeIndex && (
-                                          <ItineraryCost
-                                            onSave={(cost) =>
-                                              updateItineraryCost(
-                                                index,
-                                                placeIndex,
-                                                cost
-                                              )
-                                            }
-                                            onCancel={() =>
-                                              setSelectedCost(null)
-                                            }
-                                          />
-                                        )}
-                                    </div>
-                                  </div>
-                                ) : (
-                                  ""
-                                )}
+                                        <path
+                                          fill="currentColor"
+                                          d="M170.5 51.6L151.5 80h145l-19-28.4c-1.5-2.2-4-3.6-6.7-3.6H177.1c-2.7 0-5.2 1.3-6.7 3.6zm147-26.6L354.2 80H368h48 8c13.3 0 24 10.7 24 24s-10.7 24-24 24h-8V432c0 44.2-35.8 80-80 80H112c-44.2 0-80-35.8-80-80V128H24c-13.3 0-24-10.7-24-24S10.7 80 24 80h8H80 93.8l36.7-55.1C140.9 9.4 158.4 0 177.1 0h93.7c18.7 0 36.2 9.4 46.6 24.9zM80 128V432c0 17.7 14.3 32 32 32H336c17.7 0 32-14.3 32-32V128H80zm80 64V400c0 8.8-7.2 16-16 16s-16-7.2-16-16V192c0-8.8 7.2-16 16-16s16 7.2 16 16zm80 0V400c0 8.8-7.2 16-16 16s-16-7.2-16-16V192c0-8.8 7.2-16 16-16s16 7.2 16 16zm80 0V400c0 8.8-7.2 16-16 16s-16-7.2-16-16V192c0-8.8 7.2-16 16-16s16 7.2 16 16z"
+                                        ></path>
+                                      </svg>
+                                    </button>
+                                  )}
                               </div>
                             </div>
-                            <div>
-                              {openBoxIndices.dateIndex === index &&
-                                openBoxIndices.placeIndex === placeIndex && (
-                                  <button
-                                    class="btn btn-link"
-                                    type="button"
-                                    onClick={() =>
-                                      handleRemovePlace(index, placeIndex)
-                                    }
-                                  >
-                                    <svg
-                                      aria-hidden="true"
-                                      focusable="false"
-                                      data-prefix="far"
-                                      data-icon="trash-can"
-                                      class="svg-inline--fa fa-trash-can fa-w-14 "
-                                      role="img"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      viewBox="0 0 448 512"
-                                    >
-                                      <path
-                                        fill="currentColor"
-                                        d="M170.5 51.6L151.5 80h145l-19-28.4c-1.5-2.2-4-3.6-6.7-3.6H177.1c-2.7 0-5.2 1.3-6.7 3.6zm147-26.6L354.2 80H368h48 8c13.3 0 24 10.7 24 24s-10.7 24-24 24h-8V432c0 44.2-35.8 80-80 80H112c-44.2 0-80-35.8-80-80V128H24c-13.3 0-24-10.7-24-24S10.7 80 24 80h8H80 93.8l36.7-55.1C140.9 9.4 158.4 0 177.1 0h93.7c18.7 0 36.2 9.4 46.6 24.9zM80 128V432c0 17.7 14.3 32 32 32H336c17.7 0 32-14.3 32-32V128H80zm80 64V400c0 8.8-7.2 16-16 16s-16-7.2-16-16V192c0-8.8 7.2-16 16-16s16 7.2 16 16zm80 0V400c0 8.8-7.2 16-16 16s-16-7.2-16-16V192c0-8.8 7.2-16 16-16s16 7.2 16 16zm80 0V400c0 8.8-7.2 16-16 16s-16-7.2-16-16V192c0-8.8 7.2-16 16-16s16 7.2 16 16z"
-                                      ></path>
-                                    </svg>
-                                  </button>
-                                )}
-                            </div>
-                          </div>
+                          )}
                         </>
                       ))}
                       {isLoaded ? (
-                        <div className="searchbox">
-                          <StandaloneSearchBox
-                            onLoad={(ref) => {
-                              ref.addListener("places_changed", () => {
-                                const places = ref.getPlaces();
-                                if (places.length > 0) {
-                                  onPlacesChanged(places[0], index);
-                                }
-                              });
-                            }}
-                          >
-                            <input
-                              className="search_input"
-                              type="search"
-                              placeholder="Add a place"
-                              value={searchLocations[index]}
-                              onChange={(e) =>
-                                handleSearchChange(index, e.target.value)
-                              }
-                            />
-                          </StandaloneSearchBox>
-                          <div class="InputIconWrapper__left text-muted">
-                            <svg
-                              aria-hidden="true"
-                              focusable="false"
-                              data-prefix="fas"
-                              data-icon="location-dot"
-                              class="svg-inline--fa fa-location-dot fa-w-14 fa-w-12 fa-fw "
-                              role="img"
-                              xmlns="http://www.w3.org/2000/svg"
-                              viewBox="0 0 384 512"
-                            >
-                              <path
-                                fill="currentColor"
-                                d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"
-                              ></path>
-                            </svg>
-                          </div>
-                        </div>
+                        <SearchBox
+                          onPlacesChange={(place) =>
+                            onPlacesChanged(place, index)
+                          }
+                        />
                       ) : (
                         ""
                       )}
@@ -952,5 +1082,21 @@ export const ItineraryCreation = ({ history }) => {
     </div>
   );
 };
+
+function calculateMarkerPositions(itineraryData) {
+  const positions = [];
+
+  if (itineraryData) {
+    itineraryData.forEach((day) => {
+      day.places.forEach((place) => {
+        if (place.lat && place.lng) {
+          positions.push(new window.google.maps.LatLng(place.lat, place.lng));
+        }
+      });
+    });
+  }
+
+  return positions;
+}
 
 export default ItineraryCreation;

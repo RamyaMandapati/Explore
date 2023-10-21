@@ -3,7 +3,6 @@ import logo from "./logo.svg";
 import "./App.css";
 import React from "react";
 //import Reactdom from 'reactdom';
-
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import { Fragment, useEffect } from "react";
@@ -18,6 +17,9 @@ import ItinerarySelection from "./components/itinerary/itinerarySelection";
 import ItineraryCreation from "./components/itinerary/itineraryCreation";
 import ItineraryCalendarPage from "./components/itinerary/itineraryCalendarPage";
 import Navbar from "./components/Navbar/Navbar";
+import Register from "./components/auth/Register";
+import Preferences from "./components/auth/preferences";
+import Login from "./components/auth/Login";
 import Travelfeed from "./components/dashboard/Travelfeed";
 import ItinerariesComponent from "./components/ItinariesComponent/ItinariesComponent.js";
 import Newpost from "./components/Newpost/Newpost.js";
@@ -41,27 +43,39 @@ const App = () => {
   //   </div>
   // );
   return (
-    <Router>
-      <Fragment>
-        <Route exact path="/" component={ItinerarySelection}></Route>
-        <Route exact path="/itinerary" component={ItineraryCreation}></Route>
-        <Route
-          exact
-          path="/itinerary/detail"
-          component={ItineraryCalendarPage}
-        ></Route>
-        <Route exact path="/navbar" component={Navbar}></Route>
-        <Route exact path="/travelFeed" component={Travelfeed}></Route>
-        <Route exact path="/itineraries" component={ItinerariesComponent}></Route>
-        <Route exact path="/newPost" component={Newpost}></Route>
+    <>
+      <Router>
+        {/* <Navbar /> */}
 
-        {/* <ProtectedRoute exact path="/EditUser" component={EditUser} />
-        <section className="container">
-          <Alert />
-          <Switch></Switch>
-        </section> */}
-      </Fragment>
-    </Router>
+        <Fragment>
+          <Route exact path="/" component={ItinerarySelection}></Route>
+          <Route exact path="/itinerary" component={ItineraryCreation}></Route>
+          <Route
+            exact
+            path="/itinerary/detail"
+            component={ItineraryCalendarPage}
+          ></Route>
+          <Route exact path="/register" component={Register}></Route>
+          <Route exact path="/preference" component={Preferences}></Route>
+          <Route exact path="/login" component={Login}></Route>
+
+          <Route exact path="/navbar" component={Navbar}></Route>
+          <Route exact path="/travelFeed" component={Travelfeed}></Route>
+          <Route
+            exact
+            path="/itineraries"
+            component={ItinerariesComponent}
+          ></Route>
+          <Route exact path="/newPost" component={Newpost}></Route>
+
+          {/* <ProtectedRoute exact path="/EditUser" component={EditUser} />
+    <section className="container">
+      <Alert />
+      <Switch></Switch>
+    </section> */}
+        </Fragment>
+      </Router>
+    </>
   );
 };
 export default App;
