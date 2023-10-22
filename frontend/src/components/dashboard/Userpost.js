@@ -1,8 +1,8 @@
-import React from 'react';
-import person1 from './person1.jpeg';
-import person2 from './person2.jpeg';
-import './Userpost.css';
-import './Travelfeed.css';
+import React from "react";
+import person1 from "./person1.jpeg";
+import person2 from "./person2.jpeg";
+import "./Userpost.css";
+import "./Travelfeed.css";
 const UserPost = () => {
   // Static data
   const userData = {
@@ -14,29 +14,36 @@ const UserPost = () => {
     genderPref: "Any",
     budget: "$1000 - $2000",
     profileImage: person1,
-    postContent: "Wanting to explore the main attractions of LA and New York and see what it’s known for. Would also love to do activities (walks, hikes) and find the best cafes.",
-    
+    postContent:
+      "Wanting to explore the main attractions of LA and New York and see what it’s known for. Would also love to do activities (walks, hikes) and find the best cafes.",
   };
-  const postImages = [
-    person1,
-    person2,
-  ];
+  const postImages = [person1, person2];
 
   return (
-    <div className="user-post" >
+    <div className="user-post">
       <div className="user-info">
-        <img src={userData.profileImage} alt={`${userData.userName}'s profile`} className="profile-image" />
+        <img
+          src={userData.profileImage}
+          alt={`${userData.userName}'s profile`}
+          className="profile-image"
+        />
         <div>
           <h3>{userData.userName}</h3>
-          <p><span role="img" aria-label="location">📍</span> {userData.location}</p>
-          <p>📅 {userData.fromDate} - {userData.toDate}</p>
+          <p>
+            <span role="img" aria-label="location">
+              📍
+            </span>{" "}
+            {userData.location}
+          </p>
+          <p>
+            📅 {userData.fromDate} - {userData.toDate}
+          </p>
         </div>
       </div>
       <div className="user-preferences">
         <p>Age Preference: {userData.agePref}</p>
         <p>Gender Preference: {userData.genderPref}</p>
         <p>Budget: {userData.budget}</p>
-        
       </div>
       <div className="post-content">
         <p>{userData.postContent}</p>
@@ -49,6 +56,5 @@ const UserPost = () => {
     </div>
   );
 };
-
 
 export default UserPost;

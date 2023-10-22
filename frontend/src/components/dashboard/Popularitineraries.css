@@ -8,7 +8,6 @@
   justify-content: flex-start; /* Starts the cards from the beginning */
 }
 
-
 .itinerary-card {
   position: relative;
   width: 100px; /* Further reduced width */
@@ -16,16 +15,11 @@
   margin-right: 15px; /* Reduced spacing between cards */
   border-radius: 15px;
   overflow: hidden;
-  
-
-   
-  
   /* Remove margin-right from the first card so it aligns correctly */
   .itinerary-card:first-child {
     margin-left: 0;
   }
 }
-
 
 .itinerary-card::before {
   content: "";
@@ -60,6 +54,5 @@
   bottom: 15px; /* Adjusted position */
   left: 50px; /* Adjusted position */
   color: white;
- 
   z-index: 2;
 }

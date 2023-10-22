@@ -1,40 +1,35 @@
 /* Filters Container */
 .filters {
-    font-family: 'Arial', sans-serif; /* This is a common font, you may need to adjust if using a different one */
-    padding: 20px;
-    
-    background-color: #ffffff; /* This assumes a white background */
-    border-radius: 10px; /* For rounded edges */
-     /* Approximated width */
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* Soft shadow for depth */
+  font-family: "Arial", sans-serif; /* This is a common font, you may need to adjust if using a different one */
+  padding: 20px;
+  background-color: #ffffff; /* This assumes a white background */
+  border-radius: 10px; /* For rounded edges */
+  /* Approximated width */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
 }
 
 /* Filters Header */
 .filters h2 {
-    font-size: 10px; /* Approximated size */
-    /* margin-bottom: 20px; Spacing between title and first filter */
-    font-weight: bold;
-    color: #333; /* Dark gray text color */
+  font-size: 10px; /* Approximated size */
+  /* margin-bottom: 20px; Spacing between title and first filter */
+  font-weight: bold;
+  color: #333; /* Dark gray text color */
 }
 
 /* Individual Filter Label */
 .filters label {
-    
-    font-size: 16px;
-    /* margin-bottom: 10px; */
-    font-weight: 500; /* Semi-bold */
-    color: #555; /* Gray text color */
-    font-weight: bold;
+  font-size: 16px;
+  /* margin-bottom: 10px; */
+  font-weight: 500; /* Semi-bold */
+  color: #555; /* Gray text color */
+  font-weight: bold;
 }
-
 /* Individual Filter Input */
 .filters input {
-     
-    padding: 10px; /* Spacing inside the input */
-    margin-bottom: 15px; /* Spacing between filter items */
-    border: 1px solid #ddd; /* Light gray border */
-    border-radius: 5px; /* Slightly rounded edges */
-    font-size: 16px;
-    color: #555; /* Gray text color */
-    
+  padding: 10px; /* Spacing inside the input */
+  margin-bottom: 15px; /* Spacing between filter items */
+  border: 1px solid #ddd; /* Light gray border */
+  border-radius: 5px; /* Slightly rounded edges */
+  font-size: 16px;
+  color: #555; /* Gray text color */
 }

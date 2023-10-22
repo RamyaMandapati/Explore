@@ -2,27 +2,21 @@
   display: flex;
   /* justify-content: space-between; Add space between main content and filters */
   width: 100%; /* Use full width */
-  
 }
 .filters {
   flex-basis: 15%; /* Adjust based on how wide you want the filters to be */
-  
 }
 .main-content {
   flex-basis: 80%; /* Adjust based on desired width */
   display: flex;
-  padding:10px;
+  padding: 10px;
   flex-direction: column;
-  
   gap: 10px; /*For spacing between components, adjust as necessary*/
 }
 .navbar {
   width: 100%;
   /* Other navbar styles */
 }
-.contacts{
+.contacts {
   flex-basis: 15%;
 }
-
-
-  
