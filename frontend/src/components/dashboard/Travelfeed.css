@@ -1,46 +1,22 @@
-/* Dashboard.css */
-
-.dashboard {
-  background-color: #f4f4f4; /* Grey color */
-  min-height: 100vh; /* Ensures the background covers the full viewport height */
-  padding: 20px; /* Optional: Add some padding around the content */
-}
-
 .container {
   display: flex;
-  margin-top: 20px;
+  /* justify-content: space-between; Add space between main content and filters */
+  width: 100%; /* Use full width */
 }
-
 .filters {
-  flex: 1; /* for layout purposes, to occupy a portion of the container width */
-  padding: 10px 20px;
-  border-right: 1px solid #ddd; /* light gray border */
-  max-width: 250px; /* or set to a preferred width */
-  background-color: #f9f9f9; /* light gray background */
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* subtle shadow */
-  margin-right: 20px; /* space between filters and the main content */
-  margin-top: 60px;
+  flex-basis: 15%; /* Adjust based on how wide you want the filters to be */
 }
-
 .main-content {
-  flex: 3;
-  padding: 10px 20px;
-}
-
-.dashboard {
+  flex-basis: 80%; /* Adjust based on desired width */
   display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-/* Style for Navbar (assuming you have a class or element selector) */
-.navbar {
   padding: 10px;
-  text-align: center;
+  flex-direction: column;
+  gap: 10px; /*For spacing between components, adjust as necessary*/
 }
-
-/* Style for PopularItineraries component (assuming you have a class or element selector) */
-.popular-itineraries {
-  /* Your styles for popular itineraries go here */
+.navbar {
+  width: 100%;
+  /* Other navbar styles */
+}
+.contacts {
+  flex-basis: 15%;
 }

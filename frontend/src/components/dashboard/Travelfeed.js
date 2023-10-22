@@ -23,27 +23,14 @@ function Travelfeed() {
           <div className="userposts">
             <UserPosts />
           </div>
-          <Contacts />
+          <div className="userposts">
+            <Contacts />
+          </div>
         </div>
       </div>
     </div>
   );
 }
-
-// import UserPost from './Userpost';
-
-// function Travelfeed() {
-//   return (
-//     <div className="dashboard">
-//       {/* <Filters /> */}
-//       <Navbar/>
-//       <PopularItineraries />
-
-//       {/* <UserPost /> */}
-//       {/* Add other components as needed */}
-//     </div>
-//   );
-// }
 
 export default Travelfeed;
 
