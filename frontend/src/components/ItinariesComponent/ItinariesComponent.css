@@ -10,7 +10,6 @@
 .header {
   display: flex;
   justify-content: flex-start; /* Adjusted to start the content on the left side */
-  
 }
 
 .title {
@@ -30,7 +29,7 @@
   width: fit-content;
 }
 
-input[type="text"] {
+/* input[type="text"] {
   width: 300px;
   
   border: none;
@@ -41,7 +40,7 @@ input[type="text"] {
   transition: background-color 0.3s ease;
   outline: none;
   min-height: 50px;
-}
+} */
 
 .itineraries-section {
   margin-top: 20px;
@@ -52,7 +51,7 @@ input[type="text"] {
   margin-right: 20px;
   margin-top: 20px;
   width: 200px;
-  height:200px;
+  height: 200px;
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
@@ -67,7 +66,8 @@ input[type="text"] {
   background-color: #fff;
 }
 
-.location, .date {
+.location,
+.date {
   font-size: 12px;
   margin: 5px 0;
 }

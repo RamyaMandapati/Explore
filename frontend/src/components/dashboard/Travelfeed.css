@@ -1,10 +1,9 @@
 /* Dashboard.css */
 
 .dashboard {
-  
-    background-color: #f4f4f4; /* Grey color */
-    min-height: 100vh; /* Ensures the background covers the full viewport height */
-    padding: 20px; /* Optional: Add some padding around the content */
+  background-color: #f4f4f4; /* Grey color */
+  min-height: 100vh; /* Ensures the background covers the full viewport height */
+  padding: 20px; /* Optional: Add some padding around the content */
 }
 
 .container {
@@ -29,26 +28,19 @@
   padding: 10px 20px;
 }
 
-
-
-=======
 .dashboard {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  
-  /* Style for Navbar (assuming you have a class or element selector) */
-  .navbar {
-    
-    padding: 10px;
-    text-align: center;
-  }
-  
-  /* Style for PopularItineraries component (assuming you have a class or element selector) */
-  .popular-itineraries {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-    /* Your styles for popular itineraries go here */
-  }
-  
+/* Style for Navbar (assuming you have a class or element selector) */
+.navbar {
+  padding: 10px;
+  text-align: center;
+}
+
+/* Style for PopularItineraries component (assuming you have a class or element selector) */
+.popular-itineraries {
+  /* Your styles for popular itineraries go here */
+}
