@@ -1,10 +1,13 @@
 .popular-itineraries {
+  flex: 1; /* This will make it grow and take up all available space beside filters */
   display: flex;
-   /* Center the cards horizontally */
+  flex-wrap: nowrap; /* Prevents the cards from wrapping to the next line */
   overflow-x: auto;
-  padding: 20px 0; /* Optional padding to give some space top and bottom */
+  padding: 20px 0;
   margin-top: 80px;
+  justify-content: flex-start; /* Starts the cards from the beginning */
 }
+
 
 .itinerary-card {
   position: relative;
@@ -13,7 +16,16 @@
   margin-right: 15px; /* Reduced spacing between cards */
   border-radius: 15px;
   overflow: hidden;
+  
+
+   
+  
+  /* Remove margin-right from the first card so it aligns correctly */
+  .itinerary-card:first-child {
+    margin-left: 0;
+  }
 }
+
 
 .itinerary-card::before {
   content: "";
@@ -48,6 +60,6 @@
   bottom: 15px; /* Adjusted position */
   left: 50px; /* Adjusted position */
   color: white;
-  font-weight: bold;
+ 
   z-index: 2;
 }

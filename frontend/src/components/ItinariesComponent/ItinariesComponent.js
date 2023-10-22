@@ -5,6 +5,7 @@ import './ItinariesComponent.css';
 import person1 from '../dashboard/person1.jpeg';
 import person2 from '../dashboard/person2.jpeg';
 import Navbar from '../Navbar/Navbar.js';
+import './ItinariesComponent.css';
 
 const ItinerariesComponent = () => {
   const itineraries = [
@@ -32,7 +33,7 @@ const ItinerariesComponent = () => {
       <Navbar/>
       <section className="search-section">
         
-        <input type="text" placeholder="Search for Itineraries" />
+        <input type="text" className="search-input"placeholder="Search for Itineraries" />
       </section>
       <section className="itineraries-section">
         <h3>Itineraries</h3>

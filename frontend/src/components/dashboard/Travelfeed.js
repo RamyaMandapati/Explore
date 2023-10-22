@@ -25,8 +25,11 @@ function Travelfeed() {
                   <UserPosts />
                   
                 </div>
-                 <Contacts/>
+                <div className="userposts">
+                  <Contacts/>
+                </div>
               </div>
+              
           </div>
       </div>
   );
