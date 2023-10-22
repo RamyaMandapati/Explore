@@ -7,9 +7,9 @@
    
     /* ... other styles ... */
     position: absolute;
-    top: 80px;  /* Assuming your navbar height is around 60px */
+    top: 60px;  /* Assuming your navbar height is around 60px */
     right: 20px;
-    margin-top: 70px;
+    margin-top: 50px;
 
       
   }

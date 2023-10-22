@@ -1,5 +1,6 @@
 import React from 'react';
 import './Travelfeed.css';
+import './Filters.css';
 
 function Filter() {
     return (
