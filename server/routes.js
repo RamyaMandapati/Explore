@@ -20,7 +20,8 @@ const {
   deleteNotification,
   getNotifications,
 } = require("./modules/notificationModule");
-const { addPost,getPosts,filterPosts } = require("./modules/postModule");
+const { addPost, getPosts, filterPosts } = require("./modules/postModule");
+const { updateUserPreference } = require("./modules/userModule");
 
 // itinerary related routes
 router.post("/itinerary", addItinerary);
@@ -42,9 +43,45 @@ router.delete("/notification/:id", deleteNotification);
 router.get("/notification/:id", getNotifications);
 
 //Post routes
-router.post("/addPost",addPost);
-router.get("/getPosts",getPosts);
-router.get("/filterPosts",filterPosts);
+router.post("/addPost", addPost);
+router.get("/getPosts", getPosts);
+router.get("/filterPosts", filterPosts);
 
+//user Router
+router.put("/pref", updateUserPreference);
+
+router.get("/session", isLoggedIn, async (req, res, next) => {
+  if (req.user) {
+    const { user } = req;
+    res.json({
+      success: true,
+      isAuthenticated: true,
+      user: user,
+    });
+  } else {
+    res.status(401).json({ message: "Not authorized", success: false });
+  }
+});
+
+async function isLoggedIn(req, res, next) {
+  const { dc_token } = req.cookies;
+
+  req.headers.authorization = `Bearer ${dc_token}`;
+  return passport.authenticate("jwt", { session: false }, async (err, user) => {
+    if (process.env.NODE_ENV === "test") {
+      // for testing only
+      return next();
+    }
+    console.log(user);
+    if (user && user.id) {
+      req.user = user;
+      return next();
+    }
+    res.status(401).json({
+      message: "Not authorized to see this page. Please login!",
+      status: 401,
+    });
+  })(req, res, next);
+}
 
 module.exports = router;

@@ -1,4 +1,8 @@
-import { ITINERARY_PLAN_DETAILS } from "../actions/types";
+import {
+  ITINERARY_PLAN_DETAILS,
+  ITINERARY_SAVE_SUCCESS,
+  ITINERARY_DETAIL,
+} from "../actions/types";
 
 export const itineraryplanReducer = (state = {}, action) => {
   switch (action.type) {
@@ -6,6 +10,16 @@ export const itineraryplanReducer = (state = {}, action) => {
       return {
         ...state,
         itineraryplandet: action.payload,
+      };
+    case ITINERARY_SAVE_SUCCESS:
+      return {
+        ...state,
+        itinerarysavedet: action.payload,
+      };
+    case ITINERARY_DETAIL:
+      return {
+        ...state,
+        itinerarydet: action.payload,
       };
     default:
       return state;

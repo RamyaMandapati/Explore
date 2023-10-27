@@ -11,19 +11,18 @@ const itinerarySchema = new Schema({
   imageUrl: { type: String },
   itineraryList: [
     {
-      Day: { type: String },
-      Places: [
+      day: { type: Number },
+      places: [
         {
-          placeId: { type: Number },
           placeName: { type: String },
-          Latitude: { type: Number },
-          Longitude: { type: Number },
+          lat: { type: Number },
+          lng: { type: Number },
           placeImage: { type: String },
-          startTime: { type: Date },
-          endTime: { type: Date },
-          Description: { type: String },
-          Category: { type: String },
-          Cost: { type: Number },
+          startTime: { type: String },
+          endTime: { type: String },
+          description: { type: String },
+          category: { type: String },
+          cost: { type: Number },
         },
       ],
     },

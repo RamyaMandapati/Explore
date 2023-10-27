@@ -1,13 +1,15 @@
-// import {
-//   REGISTER_SUCCESS,
-//   REGISTER_FAIL,
-//   USER_LOADED,
-//   AUTH_ERROR,
-// } from "../actions/types";
+import {
+  REGISTER_SUCCESS,
+  REGISTER_FAIL,
+  LOGIN_SUCCESS,
+  LOGIN_FAIL,
+  USER_LOADED,
+  AUTH_ERROR,
+  LOGOUT,
+} from "../actions/types";
 // const jwt_decode = require("jwt-decode");
 
 const initialState = {
-  token: localStorage.getItem("token"),
   isAuthenticated: false,
   loading: true,
   user: [],
@@ -15,52 +17,48 @@ const initialState = {
 
 export const authReducer = (state = initialState, action) => {
   const { type, payload } = action;
-  // switch (action.type) {
-  //   case USER_LOADED:
-  //     return {
-  //       ...state,
-  //       isAuthenticated: true,
-  //       loading: false,
-  //       user: action.payload,
-  //     };
-  //   case REGISTER_SUCCESS:
-  //     return {
-  //       ...state,
-  //       user: action.payload,
-  //       isAuthenticated: false,
-  //       loading: false,
-  //     };
-  //   case LOGIN_SUCCESS:
-  //     localStorage.setItem("token", action.payload1);
-  //     //var decoded = jwt_decode(action.payload1.split(' ')[1]);
-  //     //localStorage.setItem("username", decoded.email);
-  //     return {
-  //       ...state,
-  //       user: action.payload,
-  //       token: action.payload1,
-  //       isAuthenticated: true,
-  //       loading: false,
-  //     };
-  //   case REGISTER_FAIL:
-  //   case LOGOUT:
-  //     localStorage.removeItem("token");
-  //     return {
-  //       loading: false,
-  //       user: null,
-  //       isAuthenticated: false,
-  //     };
-  //   case AUTH_ERROR:
-  //   case LOGIN_FAIL:
-  //     localStorage.removeItem("token");
-  //     return {
-  //       ...state,
-  //       user: action.payload,
-  //       token: null,
-  //       isAuthenticated: false,
-  //       loading: false,
-  //     };
-  // default:
-  return state;
+  switch (action.type) {
+    case USER_LOADED:
+      return {
+        ...state,
+        isAuthenticated: true,
+        loading: false,
+        user: action.payload,
+      };
+    case REGISTER_SUCCESS:
+      return {
+        ...state,
+        user: action.payload,
+        isAuthenticated: true,
+        loading: false,
+      };
+    case LOGIN_SUCCESS:
+      //var decoded = jwt_decode(action.payload1.split(' ')[1]);
+      //localStorage.setItem("username", decoded.email);
+      return {
+        ...state,
+        user: action.payload,
+        isAuthenticated: true,
+        loading: false,
+      };
+    case REGISTER_FAIL:
+    case LOGOUT:
+      return {
+        loading: false,
+        user: null,
+        isAuthenticated: false,
+      };
+    case AUTH_ERROR:
+    case LOGIN_FAIL:
+      return {
+        ...state,
+        user: action.payload,
+        isAuthenticated: false,
+        loading: false,
+      };
+    default:
+      return state;
+  }
 };
 
 // export const profileReducer = (state = {}, action) => {
