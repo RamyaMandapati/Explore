@@ -27,7 +27,7 @@ h4 {
 }
 
 .pref-button {
-  width: 800px;
+  width: 1000px;
   margin: 40px auto;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
@@ -38,6 +38,7 @@ h4 {
   display: block;
   cursor: pointer;
   border-style: solid;
+  width: 180px;
   min-height: 30px;
   background-color: #fff;
   padding: 12px 24px;
@@ -49,6 +50,11 @@ h4 {
   border-radius: 100px;
 }
 
+.pref-button-select{
+  background-color: #f75940;
+  color: #fff;
+
+}
 .pref-button-Next {
   display: block;
   /* text-align: right; */

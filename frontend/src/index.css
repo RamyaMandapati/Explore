@@ -5,6 +5,11 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-family: "Rubik", sans-serif;
+  font-weight: 400;
+  color: #212529;
+  font-size: 14px;
+  line-height: 1.5;
 }
 
 code {

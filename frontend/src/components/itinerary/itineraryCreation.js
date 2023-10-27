@@ -13,13 +13,15 @@ import "./itinerary.css";
 import ItineraryTime from "./itineraryTime";
 import ItineraryCost from "./itineraryCost";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
 import Autocomplete from "@mui/material/Autocomplete";
 import { Modal, Box, TextField } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import styled from "styled-components";
 import SearchBox from "./searchBox";
+import ItineraryCategory from "./itineraryCategory";
+import { itinerarySave } from "../../actions/itinerary";
 
 const libraries = ["drawing", "places", "geometry"];
 const Form = styled.form`
@@ -40,15 +42,14 @@ const style = {
 };
 
 export const ItineraryCreation = ({ history }) => {
+  const dispatch = useDispatch();
+
   const [image, setImage] = useState(
     "https://media.timeout.com/images/105770969/1372/772/image.jpg"
   );
-  const [lat, setLat] = useState("");
-  const [lng, setLng] = useState("");
-  const [address, setAddress] = useState("");
+
   const [map, setMap] = React.useState(null);
 
-  const [isTime, setisTime] = React.useState(false);
   const [isCost, setisCost] = React.useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [itinerary, setItinerary] = useState([]);
@@ -57,6 +58,8 @@ export const ItineraryCreation = ({ history }) => {
   const itineraryplandet = useSelector(
     (state) => state.itinerary.itineraryplandet
   );
+  const { user } = useSelector((state) => state.auth);
+
   const itineraryLocation = `Trip to ${
     itineraryplandet && itineraryplandet.location.split(",")[0].trim()
   }`;
@@ -108,12 +111,17 @@ export const ItineraryCreation = ({ history }) => {
   const [zoom, setZoom] = useState(12);
   const [selectedTime, setSelectedTime] = useState(null);
   const [selectedCost, setSelectedCost] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const handleAddTime = (dateIndex, placeIndex) => {
     setSelectedTime({ dateIndex, placeIndex });
   };
 
   const handleAddCost = (dateIndex, placeIndex) => {
     setSelectedCost({ dateIndex, placeIndex });
+  };
+
+  const handleAddCategory = (dateIndex, placeIndex) => {
+    setSelectedCategory({ dateIndex, placeIndex });
   };
 
   const updateItineraryTime = (dateIndex, placeIndex, startTime, endTime) => {
@@ -126,6 +134,17 @@ export const ItineraryCreation = ({ history }) => {
     // Set the updated itinerary
     setItinerary(updatedItinerary);
     setSelectedTime(null);
+  };
+
+  const updateItineraryCategory = (dateIndex, placeIndex, category) => {
+    const updatedItinerary = [...itinerary];
+
+    // Update the start and end times for the specified place
+    updatedItinerary[dateIndex].places[placeIndex].category = category;
+
+    // Set the updated itinerary
+    setItinerary(updatedItinerary);
+    setSelectedCategory(null);
   };
 
   const [openBoxIndices, setOpenBoxIndices] = useState({
@@ -152,6 +171,38 @@ export const ItineraryCreation = ({ history }) => {
     // Set the updated itinerary
     setItinerary(updatedItinerary);
     setSelectedCost(null);
+  };
+  const itinerarysavedet = useSelector(
+    (state) => state.itinerary.itinerarysavedet
+  );
+
+  useEffect(() => {
+    if (itinerarysavedet && itinerarysavedet._id) {
+      history.push(`/itinerary/${itinerarysavedet && itinerarysavedet._id}`);
+    }
+  }, [itinerarysavedet]);
+  const onSubmit = () => {
+    const data = {
+      itineraryName: tripName,
+      destination:
+        itineraryplandet && itineraryplandet.location.split(",")[0].trim(),
+      startDate: moment(itineraryplandet && itineraryplandet.startDate.$d),
+      endDate: moment(itineraryplandet && itineraryplandet.endDate.$d),
+      budget: itineraryplandet && itineraryplandet.budget,
+      itineraryList: itinerary,
+      interests: itineraryplandet && itineraryplandet.interests,
+      userId: user && user._id,
+    };
+    axios
+      .post("/api/itinerary", data)
+      .then((response) => {
+        if (response.data.success) {
+          dispatch(itinerarySave(response.data.itinerary));
+        }
+      })
+      .catch((error) => {
+        alert(error.response.data.message);
+      });
   };
 
   useEffect(() => {
@@ -219,13 +270,14 @@ export const ItineraryCreation = ({ history }) => {
     const lat = place.geometry.location.lat();
     const lng = place.geometry.location.lng();
     const selectedLocation = {
-      location: placeName,
+      placeName: placeName,
       lat: lat,
       lng: lng,
       startTime: "",
       endTime: "",
       cost: "",
-      desc: "",
+      description: "",
+      category: "",
     };
     // await setSearchLocations((prevSearchLocations) => {
     //   const updatedSearchValues = [...prevSearchLocations];
@@ -276,16 +328,40 @@ export const ItineraryCreation = ({ history }) => {
           ],
         };
       }
+
       return updatedItinerary;
     });
-    const positions = await calculateMarkerPositions(itinerary);
-    setMarkerPositions(positions);
+
+    // const positions = calculateMarkerPositions(itinerary);
+    // setMarkerPositions(positions);
   };
+
+  function calculateMarkerPositions(itineraryData) {
+    const positions = [];
+    if (itineraryData) {
+      itineraryData.forEach((day) => {
+        day.places.forEach((place) => {
+          if (place.lat && place.lng) {
+            positions.push(new window.google.maps.LatLng(place.lat, place.lng));
+          }
+        });
+      });
+    }
+
+    return positions;
+  }
+
+  useEffect(() => {
+    if (itinerary) {
+      const positions = calculateMarkerPositions(itinerary);
+      setMarkerPositions(positions);
+    }
+  }, [itinerary]);
 
   const updateSelectedLocation = async (place, dateIndex, placeIndex) => {
     setItinerary((prevItinerary) => {
       const updatedItinerary = [...prevItinerary];
-      updatedItinerary[dateIndex].places[placeIndex].location = place.name;
+      updatedItinerary[dateIndex].places[placeIndex].placeName = place.name;
       updatedItinerary[dateIndex].places[placeIndex].lat =
         place.geometry.location.lat();
       updatedItinerary[0].places[placeIndex].lng =
@@ -293,8 +369,8 @@ export const ItineraryCreation = ({ history }) => {
       return updatedItinerary;
     });
     setOpenSearchBoxIndices({ dateIndex: null, placeIndex: null });
-    const positions = await calculateMarkerPositions(itinerary);
-    setMarkerPositions(positions);
+    // const positions = await calculateMarkerPositions(itinerary);
+    // setMarkerPositions(positions);
   };
 
   // const addMarkerPosition = (selectedLocation) => {
@@ -343,7 +419,6 @@ export const ItineraryCreation = ({ history }) => {
   async function getImage() {
     const url = `https://pixabay.com/api/?key=35714305-8294bdfc234a78b237b91a723&q=chicago&image_type=photo&per_page=10&safesearch=True&category=places&editors_choice=True`;
     const res = await axios.get(url);
-    console.log(res);
     const ind = Math.floor(Math.random() * 10);
     setImage(res.data.hits[ind].webformatURL);
   }
@@ -371,17 +446,17 @@ export const ItineraryCreation = ({ history }) => {
     document.getElementById("fileInput").click();
   };
 
-  // Load data from local storage when the component mounts
-  useEffect(() => {
-    const savedItinerary = localStorage.getItem("itinerary");
-    if (savedItinerary) {
-      setItinerary(JSON.parse(savedItinerary));
-    }
-  }, []);
+  // // Load data from local storage when the component mounts
+  // useEffect(() => {
+  //   const savedItinerary = localStorage.getItem("itinerary");
+  //   if (savedItinerary) {
+  //     setItinerary(JSON.parse(savedItinerary));
+  //   }
+  // }, []);
 
-  useEffect(() => {
-    localStorage.setItem("itinerary", JSON.stringify(itinerary));
-  }, [itinerary]);
+  // useEffect(() => {
+  //   localStorage.setItem("itinerary", JSON.stringify(itinerary));
+  // }, [itinerary]);
 
   // useEffect(() => {
   //   setZoom(14);
@@ -389,7 +464,7 @@ export const ItineraryCreation = ({ history }) => {
   const handleDescChange = (itineraryIndex, placeIndex, newValue) => {
     const updatedItinerary = [...itinerary];
 
-    updatedItinerary[itineraryIndex].places[placeIndex].desc = newValue;
+    updatedItinerary[itineraryIndex].places[placeIndex].description = newValue;
 
     setItinerary(updatedItinerary);
   };
@@ -745,7 +820,7 @@ export const ItineraryCreation = ({ history }) => {
                                 </div>
                                 <div className="add-flex-column pl-2">
                                   <button className="plan__button">
-                                    <span>{place.location}</span>
+                                    <span>{place.placeName}</span>
                                     {openBoxIndices.dateIndex === index &&
                                       openBoxIndices.placeIndex ===
                                         placeIndex && (
@@ -777,10 +852,10 @@ export const ItineraryCreation = ({ history }) => {
                                     {(openBoxIndices.dateIndex === index &&
                                       openBoxIndices.placeIndex ===
                                         placeIndex) ||
-                                    place.desc !== "" ? (
+                                    place.description !== "" ? (
                                       <input
                                         type="text"
-                                        value={place.desc}
+                                        value={place.description}
                                         className="desc_input_plan"
                                         placeholder="Add description here"
                                         onChange={(e) => {
@@ -799,7 +874,8 @@ export const ItineraryCreation = ({ history }) => {
                                   {(openBoxIndices.dateIndex === index &&
                                     openBoxIndices.placeIndex === placeIndex) ||
                                   place.startTime !== "" ||
-                                  place.cost !== "" ? (
+                                  place.cost !== "" ||
+                                  place.category !== "" ? (
                                     <div className="add-flex mb-2">
                                       <div
                                         className={
@@ -953,6 +1029,83 @@ export const ItineraryCreation = ({ history }) => {
                                             />
                                           )}
                                       </div>
+                                      <div
+                                        className={
+                                          place.startTime === "" ||
+                                          place.cost === "" ||
+                                          place.category === ""
+                                            ? "mt-n3 mb-n2 ml-2"
+                                            : "ml-2"
+                                        }
+                                      >
+                                        <button
+                                          type="button"
+                                          className={
+                                            place.category === ""
+                                              ? "btn-date btn-date1"
+                                              : "btn-date btn-date1 btn-time-cost"
+                                          }
+                                          style={{
+                                            position: "relative",
+                                          }}
+                                          onClick={() =>
+                                            handleAddCategory(index, placeIndex)
+                                          }
+                                        >
+                                          {place.category === "" ? (
+                                            openBoxIndices.dateIndex ===
+                                              index &&
+                                            openBoxIndices.placeIndex ===
+                                              placeIndex && (
+                                              <>
+                                                <svg
+                                                  aria-hidden="true"
+                                                  focusable="false"
+                                                  data-prefix="fas"
+                                                  data-icon="dollar-sign"
+                                                  class="svg-inline--fa fa-dollar-sign fa-w-16 fa-fw fa-sm h-n3"
+                                                  role="img"
+                                                  xmlns="http://www.w3.org/2000/svg"
+                                                  viewBox="0 0 320 512"
+                                                >
+                                                  <path
+                                                    fill="currentColor"
+                                                    d="M146 0c17.7 0 32 14.3 32 32V67.7c1.6 .2 3.1 .4 4.7 .7c.4 .1 .7 .1 1.1 .2l48 8.8c17.4 3.2 28.9 19.9 25.7 37.2s-19.9 28.9-37.2 25.7l-47.5-8.7c-31.3-4.6-58.9-1.5-78.3 6.2s-27.2 18.3-29 28.1c-2 10.7-.5 16.7 1.2 20.4c1.8 3.9 5.5 8.3 12.8 13.2c16.3 10.7 41.3 17.7 73.7 26.3l2.9 .8c28.6 7.6 63.6 16.8 89.6 33.8c14.2 9.3 27.6 21.9 35.9 39.5c8.5 17.9 10.3 37.9 6.4 59.2c-6.9 38-33.1 63.4-65.6 76.7c-13.7 5.6-28.6 9.2-44.4 11V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V445.1c-.4-.1-.9-.1-1.3-.2l-.2 0 0 0c-24.4-3.8-64.5-14.3-91.5-26.3C4.9 411.4-2.4 392.5 4.8 376.3s26.1-23.4 42.2-16.2c20.9 9.3 55.3 18.5 75.2 21.6c31.9 4.7 58.2 2 76-5.3c16.9-6.9 24.6-16.9 26.8-28.9c1.9-10.6 .4-16.7-1.3-20.4c-1.9-4-5.6-8.4-13-13.3c-16.4-10.7-41.5-17.7-74-26.3l-2.8-.7 0 0C105.4 279.3 70.4 270 44.4 253c-14.2-9.3-27.5-22-35.8-39.6C.3 195.4-1.4 175.4 2.5 154.1C9.7 116 38.3 91.2 70.8 78.3c13.3-5.3 27.9-8.9 43.2-11V32c0-17.7 14.3-32 32-32z"
+                                                  ></path>
+                                                </svg>
+                                                <span>Tag category</span>
+                                              </>
+                                            )
+                                          ) : (
+                                            <span
+                                              style={{
+                                                padding: "0 8px",
+                                                fontSize: "12px",
+                                              }}
+                                            >
+                                              {place.category}
+                                            </span>
+                                          )}
+                                        </button>
+                                        {selectedCategory &&
+                                          selectedCategory.dateIndex ===
+                                            index &&
+                                          selectedCategory.placeIndex ===
+                                            placeIndex && (
+                                            <ItineraryCategory
+                                              onSave={(category) =>
+                                                updateItineraryCategory(
+                                                  index,
+                                                  placeIndex,
+                                                  category
+                                                )
+                                              }
+                                              onCancel={() =>
+                                                setSelectedCategory(null)
+                                              }
+                                            />
+                                          )}
+                                      </div>
                                     </div>
                                   ) : (
                                     ""
@@ -1016,6 +1169,7 @@ export const ItineraryCreation = ({ history }) => {
             type="button"
             className="planbutton planbutton1"
             style={{ marginTop: "0px" }}
+            onClick={() => onSubmit()}
           >
             Submit Plan
           </button>
@@ -1082,21 +1236,5 @@ export const ItineraryCreation = ({ history }) => {
     </div>
   );
 };
-
-function calculateMarkerPositions(itineraryData) {
-  const positions = [];
-
-  if (itineraryData) {
-    itineraryData.forEach((day) => {
-      day.places.forEach((place) => {
-        if (place.lat && place.lng) {
-          positions.push(new window.google.maps.LatLng(place.lat, place.lng));
-        }
-      });
-    });
-  }
-
-  return positions;
-}
 
 export default ItineraryCreation;

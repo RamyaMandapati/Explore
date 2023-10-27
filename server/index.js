@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-//const passport = require('passport');
+const passport = require("passport");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const session = require("express-session");
@@ -11,8 +11,8 @@ require("dotenv").config();
 const port = process.env.NODE_LOCAL_PORT || 4000;
 const connect = require("./config/connect");
 //const mysqlConnect = require('./config/mysql_connect');
-//const jwtSecret = require('./config/jwtConfig');
-//const jwt = require('jsonwebtoken');
+const jwtSecret = require("./config/jwtConfig");
+const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 
 //For BodyParser
@@ -35,77 +35,111 @@ app.use(
     saveUninitialized: true,
   })
 ); // session secret
-// app.use(passport.initialize());
-// app.use(passport.session()); // persistent login sessions
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
 app.use("/api", routes);
 COREAPP = {};
 //Sync Database
 
 connect().then(() => {
   console.log("MongoDB setup complete!");
+  require("./config/passport.js")(passport);
 });
 
 // mysqlConnect().then(() => {
-//const models = require("./models");
-//COREAPP.models = models;
-//load passport strategies
-//require('./config/passport.js')(passport, models.user);
+// const models = require("./models");
+// COREAPP.models = models;
+// // load passport strategies
+// require("./config/passport.js")(passport, models.user);
 // models.sequelize.sync().then(function() {
 //   console.log('MySQL setup complete!');
 // }).catch(function(err) {
 //   console.log(err, "Something went wrong with the MySQL Database Update!")
 // });
 
-// app.post('/signin', (req, res, next) => {
-//   passport.authenticate('local-signin', {session: false}, (err, user, info) => {
-//     if (err) {
-//       console.log('err -> ', err);
-//       res.json({success: false, message: err});
-//       next();
-//       return;
-//     }
-//     if (!user) {
-//       res.json({ success: false, isAuthenticated: false, ...info });
-//     } else {
-//       req.login(user, error => {
-//         if (error) return next(error);
-//         const userObj = {email: user.email, id: user.id, name: user.name, username: user.username, role: user.role, imageurl: user.imageurl, status: user.status};
-//         const token = jwt.sign(userObj, jwtSecret.secret);
-//         res.cookie('dc_token', token, { httpOnly: true });
-//         res.json({ info, success: true, isAuthenticated: true, user: userObj, token });
-//         return;
-//       });
-//     }
-//     next();
-//   })(req, res, next);
-// });
+app.post("/signin", (req, res, next) => {
+  passport.authenticate(
+    "local-signin",
+    { session: false },
+    (err, user, info) => {
+      if (err) {
+        console.log("err -> ", err);
+        return res.status(500).json({ success: false, message: err }); // Send an error response and return to avoid further execution
+      }
+      if (!user) {
+        return res
+          .status(401)
+          .json({ success: false, isAuthenticated: false, ...info }); // Send an error response and return to avoid further execution
+      }
 
-// app.post('/signup', (req, res, next) => {
-//   passport.authenticate('local-signup', (err, user, info) => {
-//     if (err) {
-//       console.log('err -> ', err);
-//       res.json({success: false, message: err});
-//       next();
-//       return;
-//     }
-//     if (!user) {
-//       res.json({ success: false, isAuthenticated: false, data: info });
-//       return next();
-//     }
-//     res.json({ success: true, isAuthenticated: true, user: {email: user.email, id: user._id, username: user.username} });
-//     next();
-//   })(req, res, next);
-// });
+      req.login(user, (error) => {
+        if (error) {
+          console.log("error -> ", error);
+          return res
+            .status(500)
+            .json({ success: false, message: "Error during login" }); // Send an error response and return
+        }
+        const payload = { id: user.id, email: user.email };
+        const token = jwt.sign(payload, jwtSecret.secret, {
+          expiresIn: 10080000,
+        });
+        res.cookie("dc_token", token, { httpOnly: true });
+        res.json({
+          info,
+          success: true,
+          isAuthenticated: true,
+          user: user,
+          token,
+        });
+      });
+    }
+  )(req, res, next);
+});
 
-// app.post('/logout', (req, res) => {
-//   // req.logOut();
-//   req.session.destroy(()=>{
-//     // destroy session data
-//     req.session = null;
-//     res.clearCookie("dc_token");
-//     res.json({success: true});
-//   });
-// });
+app.post("/signup", (req, res, next) => {
+  passport.authenticate("local-signup", (err, user, info) => {
+    if (err) {
+      console.log("err -> ", err);
+      res.json({ success: false, message: err });
+      next();
+      return;
+    }
+    if (!user) {
+      res.json({ success: false, isAuthenticated: false, data: info });
+      return next();
+    }
+    req.login(user, (error) => {
+      if (error) {
+        console.log("error -> ", error);
+        return res
+          .status(500)
+          .json({ success: false, message: "Error during signup" }); // Send an error response and return
+      }
+      const payload = { id: user.id, email: user.email };
+      const token = jwt.sign(payload, jwtSecret.secret, {
+        expiresIn: 10080000,
+      });
+      res.cookie("dc_token", token, { httpOnly: true });
+      res.json({
+        info,
+        success: true,
+        isAuthenticated: true,
+        user: user,
+        token,
+      });
+    });
+  })(req, res, next);
+});
+
+app.post("/logout", (req, res) => {
+  // req.logOut();
+  req.session.destroy(() => {
+    // destroy session data
+    req.session = null;
+    res.clearCookie("dc_token");
+    res.json({ success: true });
+  });
+});
 
 // app.get('*', function (req, res) {
 //   res.sendFile(`${__dirname}/public/index.html`, (err) => {

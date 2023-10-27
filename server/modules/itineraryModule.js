@@ -12,6 +12,7 @@ const addItinerary = async (req, res) => {
   try {
     const {
       startDate,
+      itineraryName,
       endDate,
       destination,
       interests,
@@ -24,7 +25,7 @@ const addItinerary = async (req, res) => {
     } = req.body;
 
     const itineraryObject = {
-      itineraryName: `Trip to ${destination}`,
+      itineraryName: itineraryName,
       destination: destination,
       startDate: startDate,
       endDate: endDate,
@@ -48,13 +49,13 @@ const addItinerary = async (req, res) => {
       itineraryObject.members = [userId];
       const itineraryModel = new itinerary(itineraryObject);
       savedItinerary = await itineraryModel.save();
-      // const owner = await userModel
-      //   .findOne({ _id: itineraryObject.createdBy })
-      //   .select("username email");
-      // savedItinerary.members = [owner];
-      // savedItinerary.createdBy = owner;
     }
-    res.status(200).send(savedItinerary);
+    const owner = await user
+      .findOne({ _id: itineraryObject.createdBy })
+      .select("userName email");
+    savedItinerary.members = [owner];
+    savedItinerary.createdBy = owner;
+    res.status(200).json({ itinerary: savedItinerary, success: true });
   } catch (err) {
     console.log(err);
     res
@@ -69,22 +70,22 @@ const getItineraryById = async (req, res) => {
     const itineraryId = req.params.id;
     const query = { _id: itineraryId };
 
-    const itineraryData = await itinerary.findOne(query);
-    // const memberInfo = [];
-    // await Promise.all(
-    //   itineraryData.members.map(async (member) => {
-    //     const memberData = await userModel
-    //       .findOne({ _id: member })
-    //       .select("username email");
-    //     memberInfo.push(memberData);
-    //   })
-    // );
-    // const owner = await userModel
-    //   .findOne({ _id: itineraryData.createdBy })
-    //   .select("username email");
-    // itineraryData.members = memberInfo;
-    // itineraryData.createdBy = owner;
-    res.status(200).send(itineraryData);
+    const itineraryData = await itinerary.findOne(query, {}, { lean: true });
+    const memberInfo = [];
+    await Promise.all(
+      itineraryData.members.map(async (member) => {
+        const memberData = await user
+          .findOne({ _id: member })
+          .select("userName email");
+        memberInfo.push(memberData);
+      })
+    );
+    const owner = await user
+      .findOne({ _id: itineraryData.createdBy })
+      .select("userName email");
+    itineraryData.members = memberInfo;
+    itineraryData.createdBy = owner;
+    res.status(200).json({ success: true, itinerary: itineraryData });
   } catch (e) {
     console.log(e);
     res.status(500).send("Unable to fetch itinerary");

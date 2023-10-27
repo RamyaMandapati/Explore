@@ -23,19 +23,20 @@ import Login from "./components/auth/Login";
 import Travelfeed from "./components/dashboard/Travelfeed";
 import ItinerariesComponent from "./components/ItinariesComponent/ItinariesComponent.js";
 import Newpost from "./components/Newpost/Newpost.js";
+import { loadUser } from "./actions/auth";
+
 // import Footer from "./components/layout/Footer";
 // if(localStorage.token){
 //   setAuthToken(localStorage.token);
 // }
 
 const App = () => {
-  // const { isAuthenticated, user } = useSelector((state) => state.auth);
+  const { isAuthenticated } = useSelector((state) => state.auth);
+
   // const userid = user && user._id;
-  // useEffect(() => {
-  //   store
-  //     .dispatch(loadUser())
-  //     .then(() => store.dispatch(getfarmdetails(userid)));
-  // }, [userid]);
+  useEffect(() => {
+    store.dispatch(loadUser());
+  }, []);
 
   // return (
   //   <div className="App">
@@ -45,19 +46,19 @@ const App = () => {
   return (
     <>
       <Router>
-        {/* <Navbar /> */}
+        {isAuthenticated && <Navbar />}
 
         <Fragment>
-          <Route exact path="/" component={ItinerarySelection}></Route>
+          <Route exact path="/plan" component={ItinerarySelection}></Route>
           <Route exact path="/itinerary" component={ItineraryCreation}></Route>
           <Route
             exact
-            path="/itinerary/detail"
+            path="/itinerary/:itineraryId"
             component={ItineraryCalendarPage}
           ></Route>
           <Route exact path="/register" component={Register}></Route>
           <Route exact path="/preference" component={Preferences}></Route>
-          <Route exact path="/login" component={Login}></Route>
+          <Route exact path="/" component={Login}></Route>
 
           <Route exact path="/navbar" component={Navbar}></Route>
           <Route exact path="/travelFeed" component={Travelfeed}></Route>

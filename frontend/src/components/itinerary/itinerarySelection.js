@@ -19,6 +19,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import styled from "styled-components";
 import { ITINERARY_PLAN_DETAILS } from "../../actions/types";
 import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
 
 let autoComplete;
 
@@ -62,7 +63,7 @@ async function handlePlaceSelect(updateQuery) {
 export const ItinerarySelection = ({ history }) => {
   const names = [
     "Hiking",
-    "Nightlife",
+    "Nigtlife",
     "Museum",
     "Park",
     "Bridge",
@@ -72,6 +73,15 @@ export const ItinerarySelection = ({ history }) => {
     "Beach",
     "Amusement Park",
     "Restaurant",
+    "Fishing",
+    "Music",
+    "Diving",
+    "Dancing",
+    "Mountain Biking",
+    "Rafting",
+    "Surfing",
+    "Sailing",
+    "Camping",
   ];
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
