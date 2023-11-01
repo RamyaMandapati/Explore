@@ -1,31 +1,53 @@
 // ItinerariesComponent.jsx
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';  // Import axios
 import './ItinariesComponent.css';
-import person1 from '../dashboard/person1.jpeg';
-import person2 from '../dashboard/person2.jpeg';
 import Navbar from '../Navbar/Navbar.js';
 import './ItinariesComponent.css';
 
 const ItinerariesComponent = () => {
-  const itineraries = [
-    {
-      image: person1,
-      location: 'California, California, USA',
-      date: 'Apr 20, 2023 - Apr 27, 2023'
-    },
-    {
-      image: person2,
-      location: 'San Jose, California, USA',
-      date: 'Apr 20, 2023 - Apr 27, 2023'
-    },
-    {
-      image: person1,
-      location: 'Los Angeles, California, USA',
-      date: 'Apr 20, 2023 - Apr 27, 2023'
-    },
-    // ... add more itineraries as needed
-  ];
+  const [itineraries, setItineraries] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+
+
+  useEffect(() => {
+    // Use axios to fetch data
+    axios.get('http://localhost:4000/api/itinerary')
+      .then(response => {
+        if (Array.isArray(response.data.data)) {
+          setItineraries(response.data.data);
+        }
+        console.log(response.data.data);
+        
+        
+      })
+      .catch(error => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
+  const handleInputChange = (event) => {
+    const value = event.target.value;
+    setSearchTerm(value);
+    // You can call other functions here or do further processing based on the value
+    searchItineraries(value);
+};
+
+const searchItineraries = (term) => {
+    // Search the itineraries or make an API call based on the term
+    axios.get('http://localhost:4000/api/itinerary?destination='+term)
+      .then(response => {
+        if (Array.isArray(response.data.data)) {
+          setItineraries(response.data.data);
+        }
+        console.log(response.data.data);
+        
+        
+      })
+      .catch(error => {
+        console.error("Error fetching data:", error);
+      });
+};
 
   return (
     <div className="itineraries-main">
@@ -33,16 +55,22 @@ const ItinerariesComponent = () => {
       <Navbar/>
       <section className="search-section">
         
-        <input type="text" className="search-input"placeholder="Search for Itineraries" />
+      <input 
+      type="text" 
+      className="search-input"
+      placeholder="Search for Itineraries" 
+      value={searchTerm}
+      onChange={handleInputChange}
+/>
       </section>
       <section className="itineraries-section">
         <h3>Itineraries</h3>
         {itineraries.map((itinerary, index) => (
           <div key={index} className="card">
-            <img src={itinerary.image} alt="Itinerary" />
+            <img src={itinerary.imageUrl} alt="Itinerary" />
             <div className="card-info">
-              <p className="location"><span role="img" aria-label="pin">📍</span> {itinerary.location}</p>
-              <p className="date"><span role="img" aria-label="calendar">📅</span> {itinerary.date}</p>
+              <p className="location"><span role="img" aria-label="pin">📍</span> {itinerary.destination}</p>
+              <p className="date"><span role="img" aria-label="calendar">📅</span> {itinerary.startDate}</p>
             </div>
           </div>
         ))}
