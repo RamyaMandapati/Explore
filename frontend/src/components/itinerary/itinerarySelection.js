@@ -178,22 +178,6 @@ export const ItinerarySelection = ({ history }) => {
       </div>
       <>
         <div className="itinerarybox1">
-          {/* <span className="message">Dates (optional)</span> */}
-          {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DemoContainer components={["DateRangePicker"]}>
-              <DateRangePicker
-                localeText={{ start: "Start Date", end: "End Date" }}
-                slotProps={{
-                  fieldSeparator: { children: "to" },
-                }}
-                startProps={{
-                  textField: {
-                    InputProps: { endAdornment: <Calendar /> },
-                  },
-                }}
-              />
-            </DemoContainer>
-          </LocalizationProvider> */}
           <Stack direction="row" spacing={6}>
             {/* <DatePicker label="Basic date picker" /> */}
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -279,86 +263,6 @@ export const ItinerarySelection = ({ history }) => {
       </>
     </div>
   );
-
-  //   function Search() {
-  //     const {
-  //       ready,
-  //       value,
-  //       suggestions: { data },
-  //       setValue,
-  //       clearSuggestions,
-  //     } = usePlacesAutocomplete();
-
-  //     const [selectedSuggestion, setSelectedSuggestion] = useState(null);
-
-  //     const [isOpen, setIsOpen] = useState(false);
-
-  //     const handleInput = (e) => {
-  //       const inputValue = e.target.value;
-  //       setValue(inputValue);
-  //       setIsOpen(true);
-  //     };
-  //     const handlePopoverClose = () => {
-  //       setIsOpen(false);
-  //     };
-  //     const handleSelect = async (suggestion) => {
-  //       setValue(suggestion.description, false);
-  //       setIsOpen(false);
-  //       console.log(suggestion);
-  //       clearSuggestions();
-  //     };
-
-  //     return (
-  //       <div className="input-container">
-  //         <input
-  //           id="input"
-  //           value={value}
-  //           onChange={handleInput}
-  //           disabled={!ready}
-  //           placeholder="E.g., New York, NY"
-  //         />
-  //         {isOpen && (
-  //           <Popover
-  //             isOpen={isOpen}
-  //             onClose={handlePopoverClose}
-  //             content={() => (
-  //               <div className="suggestions">
-  //                 {data && data.length > 0 && (
-  //                   <ul>
-  //                     {data.map((suggestion) => (
-  //                       <li
-  //                         key={suggestion.id}
-  //                         onClick={() => handleSelect(suggestion)}
-  //                       >
-  //                         {suggestion.description} city
-  //                       </li>
-  //                     ))}
-  //                   </ul>
-  //                 )}
-  //               </div>
-  //             )}
-  //           />
-  //         )}
-  //       </div>
-  //       //     <div className="suggestions">
-  //       //       {data && data.length > 0 && (
-  //       //         <ul>
-  //       //           {data.map((suggestion) => (
-  //       //             <li
-  //       //               key={suggestion.id}
-  //       //               onClick={() => handleSelect(suggestion)}
-  //       //             >
-  //       //               {suggestion.description} city
-  //       //             </li>
-  //       //           ))}
-  //       //         </ul>
-  //       //       )}
-  //       //     </div>
-  //       //   </Popover>
-  //       // </div>
-  //     );
-  //   }
-  // };
 };
 
 export default ItinerarySelection;

@@ -6,6 +6,7 @@ const {
 } = require("./notificationModule.js");
 const mongoose = require("mongoose");
 const notification = require("../models/notification");
+const { update } = require("tar");
 
 // save the itinerary
 const addItinerary = async (req, res) => {
@@ -21,6 +22,7 @@ const addItinerary = async (req, res) => {
       itineraryId,
       members,
       itineraryList,
+      nonmembers,
       tags,
     } = req.body;
 
@@ -37,6 +39,7 @@ const addItinerary = async (req, res) => {
     let savedItinerary;
     if (itineraryId) {
       itineraryObject.members = members;
+      itineraryObject.nonmembers = nonmembers;
       itineraryObject.updatedTimestamp = Date.now();
       savedItinerary = await itinerary.findOneAndUpdate(
         { _id: itineraryId },
@@ -46,7 +49,9 @@ const addItinerary = async (req, res) => {
       await itineraryNotification(itineraryId, userId, "UPDATE");
     } else {
       itineraryObject.createdBy = userId;
-      itineraryObject.members = [userId];
+      members.push(userId);
+      itineraryObject.members = members;
+      itineraryObject.nonmembers = nonmembers;
       const itineraryModel = new itinerary(itineraryObject);
       savedItinerary = await itineraryModel.save();
     }
@@ -85,6 +90,13 @@ const getItineraryById = async (req, res) => {
       .select("userName email");
     itineraryData.members = memberInfo;
     itineraryData.createdBy = owner;
+    const userId = req.user._id;
+    itineraryData.userRated = itineraryData.itineraryRating.users.some((user) =>
+      user.equals(userId)
+    );
+    itineraryData.userLike = itineraryData.likes.users.some((user) =>
+      user.equals(userId)
+    );
     res.status(200).json({ success: true, itinerary: itineraryData });
   } catch (e) {
     console.log(e);
@@ -283,9 +295,15 @@ const itineraryLikeCount = async (req, res) => {
       },
       { new: true }
     );
-    // Check if the user was found and updated
+
     if (updatedItinerary) {
-      res.status(200).json({ data: updatedItinerary });
+      const itineraryObject = updatedItinerary.toObject();
+
+      itineraryObject.userLike = true;
+      itineraryObject.userRated = itineraryObject.itineraryRating.users.some(
+        (user) => user.equals(userId)
+      );
+      res.status(200).json({ success: true, itinerary: itineraryObject });
     } else {
       res.status(404).json({ message: "user not found" });
     }
@@ -312,6 +330,11 @@ const itineraryRating = async (req, res) => {
     itineraryDet.itineraryRating.users.push(userId); // Add the user to the users array
     itineraryDet.itineraryRating.totalcount += 1; // Increment totalcount
     itineraryDet.itineraryRating.totalrating += userRating; // Add user's rating to totalrating
+    const averageRating =
+      itineraryDet.itineraryRating.totalrating /
+      itineraryDet.itineraryRating.totalcount;
+
+    itineraryDet.itineraryAvgRating = averageRating;
 
     // Save the updated itinerary
     const updatedItinerary = await itineraryDet.save();
@@ -319,11 +342,7 @@ const itineraryRating = async (req, res) => {
     await session.commitTransaction();
     session.endSession();
     // Calculate the new average rating based on totalcount
-    const averageRating =
-      itineraryDet.itineraryRating.totalrating /
-      itineraryDet.itineraryRating.totalcount;
-
-    res.status(200).json({ data: updatedItinerary, rating: averageRating });
+    res.status(200).json({ itinerary: updatedItinerary, success: true });
   } catch (e) {
     await session.abortTransaction();
     session.endSession();
@@ -344,9 +363,16 @@ const removeItineraryLikeCount = async (req, res) => {
       },
       { new: true }
     );
-    // Check if the user was found and updated
+
     if (updatedItinerary) {
-      res.status(200).json({ data: updatedItinerary });
+      const itineraryObject = updatedItinerary.toObject();
+
+      itineraryObject.userLike = false;
+      itineraryObject.userRated = itineraryObject.itineraryRating.users.some(
+        (user) => user.equals(userId)
+      );
+
+      res.status(200).json({ success: true, itinerary: itineraryObject });
     } else {
       res.status(404).json({ message: "user not found" });
     }

@@ -22,6 +22,7 @@ import styled from "styled-components";
 import SearchBox from "./searchBox";
 import ItineraryCategory from "./itineraryCategory";
 import { itinerarySave } from "../../actions/itinerary";
+import Chip from "@mui/material/Chip";
 
 const libraries = ["drawing", "places", "geometry"];
 const Form = styled.form`
@@ -67,6 +68,8 @@ export const ItineraryCreation = ({ history }) => {
   const endDate = moment(itineraryplandet && itineraryplandet.endDate.$d);
   const tripStartDate = startDate.format("MM/DD");
   const tripEndDate = endDate.format("MM/DD");
+  const [members, setMembers] = useState([]);
+  const [nonmembers, setNonMembers] = useState([]);
 
   const dateArray = [];
 
@@ -192,6 +195,8 @@ export const ItineraryCreation = ({ history }) => {
       itineraryList: itinerary,
       interests: itineraryplandet && itineraryplandet.interests,
       userId: user && user._id,
+      members: members,
+      nonmembers: nonmembers,
     };
     axios
       .post("/api/itinerary", data)
@@ -292,19 +297,7 @@ export const ItineraryCreation = ({ history }) => {
   const handleAddMemberClose = () => setAddMember(false);
   const handleMember = async (e) => {
     e.preventDefault();
-    // try {
-    //   await fetch(`http://localhost:3001/group/editmember`, {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify({ itineraryId: id, userId: user._id, members })
-    //   });
     handleAddMemberClose();
-    //   window.location.reload();
-    // } catch (e) {
-    //   console.log(e);
-    // }
   };
 
   const handleSelectedLocation = async (
@@ -575,46 +568,52 @@ export const ItineraryCreation = ({ history }) => {
                         id="tags-filled"
                         options={[]}
                         freeSolo
-                        // onChange={async (event, newValue, reason, details) => {
-                        //   const response = await fetch(
-                        //     `http://localhost:3001/user/email`,
-                        //     {
-                        //       method: "POST",
-                        //       headers: {
-                        //         "Content-Type": "application/json",
-                        //       },
-                        //       body: JSON.stringify({ email: details.option }),
-                        //     }
-                        //   );
-                        //   const responseData = await response.json();
-                        //   let finalMemberList;
-                        //   if (reason === "createOption") {
-                        //     finalMemberList = [...members, responseData._id];
-                        //   } else if (reason === "removeOption") {
-                        //     finalMemberList = [...members];
-                        //     members.map((mem) => {
-                        //       if (mem === responseData._id) {
-                        //         finalMemberList.splice(
-                        //           finalMemberList.indexOf(mem),
-                        //           1
-                        //         );
-                        //       }
-                        //     });
-                        //   }
-                        //   setMembers(finalMemberList);
-                        // }}
-                        // renderTags={(mems, getTagProps) =>
-                        //   mems.map((option, index) => (
-                        //     <Chip
-                        //       label={option}
-                        //       {...getTagProps({ index })}
-                        //       disabled={
-                        //         option === itineraryOwner ? true : false
-                        //       }
-                        //       // onDelete={handleDelete(option)}
-                        //     />
-                        //   ))
-                        // }
+                        onChange={async (event, newValue, reason, details) => {
+                          const response = await fetch(`/api/user/email`, {
+                            method: "POST",
+                            headers: {
+                              "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({ email: details.option }),
+                          });
+                          if (response.status === 200) {
+                            const responseData = await response.json();
+                            let finalMemberList;
+
+                            if (reason === "createOption") {
+                              finalMemberList = [...members, responseData._id];
+                            } else if (reason === "removeOption") {
+                              finalMemberList = [...members];
+                              members.map((mem) => {
+                                if (mem === responseData._id) {
+                                  finalMemberList.splice(
+                                    finalMemberList.indexOf(mem),
+                                    1
+                                  );
+                                }
+                              });
+                            }
+                            setMembers(finalMemberList);
+                          } else {
+                            if (reason === "createOption") {
+                              alert(
+                                "Email address not found or an error occurred."
+                              );
+                            }
+                          }
+                        }}
+                        renderTags={(mems, getTagProps) =>
+                          mems.map((option, index) => (
+                            <Chip
+                              label={option}
+                              {...getTagProps({ index })}
+                              // disabled={
+                              //   option === itineraryOwner ? true : false
+                              // }
+                              // onDelete={handleDelete(option)}
+                            />
+                          ))
+                        }
                         renderInput={(params) => (
                           <TextField
                             {...params}
@@ -624,11 +623,67 @@ export const ItineraryCreation = ({ history }) => {
                           />
                         )}
                       />
-                      <Typography sx={{ marginTop: 2 }} color="text.secondary">
+                      <Typography
+                        sx={{ marginTop: 2, marginBottom: 2 }}
+                        color="text.secondary"
+                      >
                         Enter a valid email address and press Enter to add a
                         member.
                       </Typography>
-                      <button onClick={handleMember} className="planbutton">
+
+                      <Autocomplete
+                        multiple
+                        id="tags-filled"
+                        options={[]}
+                        freeSolo
+                        onChange={async (event, newValue, reason, details) => {
+                          const responseData = details.option;
+                          let finalMemberList;
+                          if (reason === "createOption") {
+                            finalMemberList = [...nonmembers, responseData];
+                          } else if (reason === "removeOption") {
+                            finalMemberList = [...nonmembers];
+                            nonmembers.map((mem) => {
+                              if (mem === responseData) {
+                                finalMemberList.splice(
+                                  finalMemberList.indexOf(mem),
+                                  1
+                                );
+                              }
+                            });
+                          }
+                          setNonMembers(finalMemberList);
+                          console.log(nonmembers);
+                        }}
+                        renderTags={(mems, getTagProps) =>
+                          mems.map((option, index) => (
+                            <Chip
+                              label={option}
+                              {...getTagProps({ index })}
+                              // disabled={
+                              //   option === itineraryOwner ? true : false
+                              // }
+                              // onDelete={handleDelete(option)}
+                            />
+                          ))
+                        }
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            variant="filled"
+                            label=""
+                            placeholder="Enter non-guests names"
+                          />
+                        )}
+                      />
+                      <Typography sx={{ marginTop: 2 }} color="text.secondary">
+                        Add guests names and press Enter to add a member.
+                      </Typography>
+
+                      <button
+                        onClick={handleMember}
+                        className="planbutton updatebutton"
+                      >
                         Update
                       </button>
                     </Form>
