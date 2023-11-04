@@ -92,6 +92,9 @@ input {
   border-radius: 100px;
 }
 
+.updatebutton{
+  margin-top: 20px;
+}
 .planbutton1 {
   margin-left: auto;
   margin-right: auto;
@@ -117,6 +120,11 @@ h2 {
 }
 
 .planbutton2:hover {
+  background-color: #de503a;
+  transition: background-color 0.3s;
+}
+
+.updatebutton:hover {
   background-color: #de503a;
   transition: background-color 0.3s;
 }
@@ -208,6 +216,23 @@ h2 {
 .btn-1:hover {
   background-color: rgba(33, 37, 41, 0.702);
   transition: background-color 0.2s;
+}
+
+.btn-d {
+  height: 32px;
+  width: 32px;
+  position: absolute;
+  top: 16px;
+  right: 64px;
+}
+.btn-d:hover {
+  background-color: rgba(254, 255, 255, 0.658);
+  transition: background-color 0.2s;
+}
+
+.btn-e{
+  top: 16px;
+  right: 16px;
 }
 
 .itineary-container {
@@ -711,4 +736,11 @@ h2 {
 
 .mb-1 {
   margin-bottom: 4px;
+}
+
+.edit__label{
+  text-align: center;
+  margin-bottom: 15px;
+  font-size: 25px;
+  font-weight: 500;
 }

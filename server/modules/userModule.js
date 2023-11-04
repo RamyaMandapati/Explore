@@ -28,6 +28,22 @@ const updateUserPreference = async (req, res) => {
   }
 };
 
+const findUserByEmail = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const userDetail = await user.findOne({ email });
+    if (!userDetail) {
+      return res.status(400).send({
+        error: "No user with this email has account with Trippy",
+      });
+    }
+    return res.status(200).send(userDetail);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send(err);
+  }
+};
 module.exports = {
   updateUserPreference,
+  findUserByEmail,
 };

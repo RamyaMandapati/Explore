@@ -21,11 +21,14 @@ const {
   getNotifications,
 } = require("./modules/notificationModule");
 const { addPost, getPosts, filterPosts } = require("./modules/postModule");
-const { updateUserPreference } = require("./modules/userModule");
+const {
+  updateUserPreference,
+  findUserByEmail,
+} = require("./modules/userModule");
 
 // itinerary related routes
 router.post("/itinerary", addItinerary);
-router.get("/itinerary/:id", getItineraryById);
+router.get("/itinerary/:id", isLoggedIn, getItineraryById);
 router.get("/itinerary", getItineraries);
 router.get("/itinerary/user/:id", getItineraryByUserId);
 router.put("/itinerary/members", itineraryMembers);
@@ -49,6 +52,7 @@ router.get("/filterPosts", filterPosts);
 
 //user Router
 router.put("/pref", updateUserPreference);
+router.post("/user/email", findUserByEmail);
 
 router.get("/session", isLoggedIn, async (req, res, next) => {
   if (req.user) {

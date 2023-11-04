@@ -33,6 +33,11 @@ const itinerarySchema = new Schema({
       ref: "user",
     },
   ],
+  nonmembers: [
+    {
+      type: String,
+    },
+  ],
   requestedMembers: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -43,6 +48,10 @@ const itinerarySchema = new Schema({
     users: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
     totalcount: { type: Number, default: 0 },
     totalrating: { type: Number, default: 0 },
+  },
+  itineraryAvgRating: {
+    type: Number,
+    default: 0.0,
   },
   likes: {
     users: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],

@@ -8,7 +8,7 @@ export const Preferences = ({ history }) => {
 
   const preference = [
     "Hiking",
-    "Nigtlife",
+    "Nightlife",
     "Museum",
     "Park",
     "Bridge",

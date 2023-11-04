@@ -24,6 +24,7 @@ import Travelfeed from "./components/dashboard/Travelfeed";
 import ItinerariesComponent from "./components/ItinariesComponent/ItinariesComponent.js";
 import Newpost from "./components/Newpost/Newpost.js";
 import { loadUser } from "./actions/auth";
+import ItineraryPlanEdit from "./components/itinerary/itineraryPlanEdit";
 
 // import Footer from "./components/layout/Footer";
 // if(localStorage.token){
@@ -55,6 +56,11 @@ const App = () => {
             exact
             path="/itinerary/:itineraryId"
             component={ItineraryCalendarPage}
+          ></Route>
+          <Route
+            exact
+            path="/itineraryedit/:itineraryId"
+            component={ItineraryPlanEdit}
           ></Route>
           <Route exact path="/register" component={Register}></Route>
           <Route exact path="/preference" component={Preferences}></Route>
