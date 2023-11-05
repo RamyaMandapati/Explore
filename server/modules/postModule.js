@@ -3,6 +3,7 @@ const Post = require("../models/Post.js"); // Assuming you have a Post model
 // Create a new post
 const addPost = async (req, res) => {
   try {
+    console.log(req.body);
     const { title, description, user, genderPref, tripCountry, imageUrls, tripState, locationName, fromDate, toDate, iteneraryId, tags, minAge, maxAge} = req.body;
     const newPost = new Post({
       title,

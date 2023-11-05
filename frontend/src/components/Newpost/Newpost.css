@@ -37,7 +37,9 @@
     border-radius: 10px;
     min-height: 30px;
   }
-  
+  .description{
+    height: 50px;
+  }
   
   
   .file-list {
@@ -62,6 +64,7 @@
    
   }
   
+  
   .create-post-container button:hover {
     background-color: #FF7F50;
   }
@@ -73,4 +76,25 @@
     border: 1px solid #ccc;
     padding: 5px 10px;
     height: fit-content;
+}
+.close-modal {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: none;
+  background: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+.create-post-container {
+  position: relative; /* Add this line */
+  background-color: #F9F9F9;
+  padding: 20px;
+  width: 600px;
+  margin: 0 auto;
+  border: 1px solid #DADADA;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+  margin-top: 30px;
+  border-radius: 10px;
+  /* ... rest of your styles */
 }
