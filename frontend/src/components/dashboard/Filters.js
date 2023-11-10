@@ -2,24 +2,44 @@ import React from 'react';
 import './Travelfeed.css';
 import './Filters.css';
 
-function Filter() {
+// Filters.js
+function Filter({ onGenderFilterChange, onAgeFilterChange, onCountryFilterChange, genderFilter, ageFilter, countryFilter }) {
     return (
-        <div className="filters">
-            <label style={{marginBottom:"20px"}}>Filters</label>
-            <div className="filter-item">
-                <label>Gender:</label>
-                <input type="text" placeholder="..." />
-            </div>
-            <div className="filter-item">
-                <label>Age:</label>
-                <input type="text" placeholder="..." />
-            </div>
-            <div className="filter-item">
-                <label>Country:</label>
-                <input type="text" placeholder="..." />
-            </div>
+      <div className="filters">
+        {/* ... */}
+        <div className="filter-item">
+          <label>Gender:</label>
+          <input
+            type="text"
+            placeholder="..."
+            value={genderFilter}
+            onChange={(e) => onGenderFilterChange(e.target.value)}
+          />
         </div>
+        <div className="filter-item">
+          <label>Age:</label>
+          <input
+            type="text"
+            placeholder="..."
+            value={ageFilter}
+            onChange={(e) => onAgeFilterChange(e.target.value)}
+          />
+        </div>
+        <div className="filter-item">
+          <label>Country:</label>
+          <input
+            type="text"
+            placeholder="..."
+            value={countryFilter}
+            onChange={(e) => onCountryFilterChange(e.target.value)}
+          />
+        </div>
+        {/* ... */}
+      </div>
     );
-}
+  }
+  
+  export default Filter;
+  
 
-export default Filter;
+
