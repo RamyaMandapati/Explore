@@ -2,12 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import './Userpost.css';
 
-import './Filters.css';
-const UserPost = () => {
+const UserPost = ({ genderFilter, ageFilter, countryFilter }) => {
   const [posts, setPosts] = useState([]);
-  const [genderFilter, setGenderFilter] = useState('');
-  const [ageFilter, setAgeFilter] = useState('');
-  const [countryFilter, setCountryFilter] = useState('');
+ 
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -22,56 +19,18 @@ const UserPost = () => {
     fetchPosts();
   }, []);
 
-  // const applyFilters = () => {
-  //   return posts.filter(post => {
-  //     const matchesGender = genderFilter ? post.genderPref.toLowerCase() === genderFilter.toLowerCase() : true;
-  //     const age = parseInt(ageFilter, 10);
-  //     const matchesAge = ageFilter ? age >= post.minAge && age <= post.maxAge : true;
-  //     const matchesCountry = countryFilter ? post.location.toLowerCase().includes(countryFilter.toLowerCase()) : true;
-      
-  //     return matchesGender && matchesAge && matchesCountry;
-  //   });
-  // };
-
-  // const filteredPosts = applyFilters();
+  const filteredPosts = posts.filter(post => {
+    // Apply gender, age, and country filters
+    // You'll need to adjust the logic based on how the age filter is supposed to work
+    return (genderFilter ? post.genderPref === genderFilter : true) &&
+           (ageFilter ? post.minAge===ageFilter : true) &&
+           (countryFilter ? post.location.includes(countryFilter) : true);
+  });
 
   return (
-    // <div className="layout">
-    //   <div className="sidebar">
-    //     <div className="filters">
-    //       <label style={{ marginBottom: "20px" }}>Filters</label>
-    //       <div className="filter-item">
-    //         <label>Gender:</label>
-    //         <input
-    //           type="text"
-    //           value={genderFilter}
-    //           onChange={(e) => setGenderFilter(e.target.value)}
-    //           placeholder="Gender filter..."
-    //         />
-    //       </div>
-    //       <div className="filter-item">
-    //         <label>Age:</label>
-    //         <input
-    //           type="text"
-    //           value={ageFilter}
-    //           onChange={(e) => setAgeFilter(e.target.value)}
-    //           placeholder="Age filter..."
-    //         />
-    //       </div>
-         
-    //       <div className="filter-item">
-    //         <label>Country:</label>
-    //         <input
-    //           type="text"
-    //           value={countryFilter}
-    //           onChange={(e) => setCountryFilter(e.target.value)}
-    //           placeholder="Country filter..."
-    //         />
-    //       </div>
-    //     </div>
-    //   </div>
+    
       <div className="main-content">
-      {posts.map((post, index) => (
+      {filteredPosts.map((post, index) => (
         <div key={index} className="user-post">
           <div className="user-info">
             <img
