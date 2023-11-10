@@ -9,6 +9,10 @@ const notificationSchema = new Schema({
   notificationType: { type: String },
   timestamp: { type: Date, default: Date.now },
   isRead: { type: Boolean, default: false },
+  itineraryId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "itinerary",
+  },
 });
 
 module.exports = mongoose.model("notification", notificationSchema);
