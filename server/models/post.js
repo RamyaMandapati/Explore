@@ -50,6 +50,7 @@ const postSchema = new Schema({
   genderPref: { type: String },
   minAge: { type: Number },
   maxAge: { type: Number },
+  budget: { type: Number },
 });
 
 module.exports = mongoose.model("post", postSchema);

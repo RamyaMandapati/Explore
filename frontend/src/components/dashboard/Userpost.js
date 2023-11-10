@@ -1,59 +1,74 @@
-import React from "react";
-import person1 from "./person1.jpeg";
-import person2 from "./person2.jpeg";
-import "./Userpost.css";
-import "./Travelfeed.css";
-const UserPost = () => {
-  // Static data
-  const userData = {
-    userName: "Miranda Shaffer",
-    location: "California, California, USA",
-    fromDate: "Apr 20, 2023",
-    toDate: "Apr 27, 2023",
-    agePref: "25-30",
-    genderPref: "Any",
-    budget: "$1000 - $2000",
-    profileImage: person1,
-    postContent:
-      "Wanting to explore the main attractions of LA and New York and see what it’s known for. Would also love to do activities (walks, hikes) and find the best cafes.",
-  };
-  const postImages = [person1, person2];
+import React, { useState, useEffect } from "react";
+import axios from 'axios';
+import './Userpost.css';
+
+const UserPost = ({ genderFilter, ageFilter, countryFilter }) => {
+  const [posts, setPosts] = useState([]);
+ 
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await axios.get('http://localhost:4000/api/getPosts');
+        setPosts(response.data);
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+      }
+    };
+
+    fetchPosts();
+  }, []);
+
+  const filteredPosts = posts.filter(post => {
+    // Apply gender, age, and country filters
+    // You'll need to adjust the logic based on how the age filter is supposed to work
+    return (genderFilter ? post.genderPref === genderFilter : true) &&
+           (ageFilter ? post.minAge===ageFilter : true) &&
+           (countryFilter ? post.location.includes(countryFilter) : true);
+  });
 
   return (
-    <div className="user-post">
-      <div className="user-info">
-        <img
-          src={userData.profileImage}
-          alt={`${userData.userName}'s profile`}
-          className="profile-image"
-        />
-        <div>
-          <h3>{userData.userName}</h3>
-          <p>
-            <span role="img" aria-label="location">
-              📍
-            </span>{" "}
-            {userData.location}
-          </p>
-          <p>
-            📅 {userData.fromDate} - {userData.toDate}
-          </p>
+    
+      <div className="main-content">
+      {filteredPosts.map((post, index) => (
+        <div key={index} className="user-post">
+          <div className="user-info">
+            <img
+              src={post.user.profilePhoto}
+              alt={`${post.user.userName}'s profile`}
+              className="profile-image"
+            />
+            <div>
+              <h3>{post.user.userName}</h3>
+              <p>
+                <span role="img" aria-label="location">
+                  📍
+                </span>{" "}
+                {post.location}
+              </p>
+              <p>
+                📅 {post.fromDate} - {post.toDate}
+              </p>
+            </div>
+          </div>
+          <div className="user-preferences">
+            <p>Age Preference: {post.minAge}-{post.maxAge}</p>
+            <p>Gender Preference: {post.genderPref}</p>
+            <p>Budget: {post.budget}</p>
+          </div>
+          <div className="post-content">
+            <p>{post.description}</p>
+          </div>
+          <div className="post-images">
+            {post.imageUrls.map((imgSrc, imgIndex) => (
+              <img key={imgIndex} src={imgSrc} alt={`Post image ${imgIndex}`} />
+            ))}
+          </div>
         </div>
-      </div>
-      <div className="user-preferences">
-        <p>Age Preference: {userData.agePref}</p>
-        <p>Gender Preference: {userData.genderPref}</p>
-        <p>Budget: {userData.budget}</p>
-      </div>
-      <div className="post-content">
-        <p>{userData.postContent}</p>
-      </div>
-      <div className="post-images">
-        {postImages.map((imgSrc, index) => (
-          <img key={index} src={imgSrc} alt={`Post image ${index}`} />
-        ))}
-      </div>
+      
+      ))}
     </div>
+    // </div>
   );
 };
 
