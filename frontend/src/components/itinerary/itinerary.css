@@ -92,6 +92,12 @@ input {
   border-radius: 100px;
 }
 
+.planbutton:disabled{
+  opacity: 0.5;
+  cursor: not-allowed;
+
+}
+
 .updatebutton{
   margin-top: 20px;
 }
@@ -257,7 +263,7 @@ h2 {
   min-height: 60px;
 }
 
-.input_trip {
+.input_trip, .input_start{
   padding: 0.5rem;
   padding-right: 3rem;
   border-radius: 8px;
@@ -276,10 +282,18 @@ h2 {
   white-space: nowrap;
 }
 
-.input_trip:hover {
+.input_trip:hover, .input_start:hover  {
   background-color: #f3f4f5;
 }
 
+.input_start{
+  border-radius: 8px;
+  width: 200px;
+  color: #3f52e3;
+  /* background-color: #f3f4f5; */
+  font-size: 14px;
+  min-height: 36px;
+}
 .mt-2 {
   margin-top: 8px !important;
 }

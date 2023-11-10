@@ -24,6 +24,7 @@ const addItinerary = async (req, res) => {
       itineraryList,
       nonmembers,
       tags,
+      startingLocation,
     } = req.body;
 
     const itineraryObject = {
@@ -34,6 +35,7 @@ const addItinerary = async (req, res) => {
       budget: budget,
       interests: interests,
       itineraryList: itineraryList,
+      startingLocation: startingLocation,
       tags: tags,
     };
     let savedItinerary;
@@ -54,6 +56,7 @@ const addItinerary = async (req, res) => {
       itineraryObject.nonmembers = nonmembers;
       const itineraryModel = new itinerary(itineraryObject);
       savedItinerary = await itineraryModel.save();
+      await itineraryNotification(savedItinerary._id, userId, "ADD");
     }
     const owner = await user
       .findOne({ _id: itineraryObject.createdBy })
@@ -95,6 +98,12 @@ const getItineraryById = async (req, res) => {
       user.equals(userId)
     );
     itineraryData.userLike = itineraryData.likes.users.some((user) =>
+      user.equals(userId)
+    );
+    itineraryData.request = itineraryData.requestedMembers.some((user) =>
+      user.equals(userId)
+    );
+    itineraryData.member = itineraryData.members.some((user) =>
       user.equals(userId)
     );
     res.status(200).json({ success: true, itinerary: itineraryData });
@@ -177,6 +186,7 @@ const itineraryMembers = async (req, res) => {
 
     const notificationType = type === "ACCEPT" ? "ADD" : "REJECT";
     await memberNotification(
+      itineraryId,
       itineraryDet.createdBy,
       memberId,
       itineraryDet.itineraryName,
@@ -220,6 +230,7 @@ const itineraryAccessRequest = async (req, res) => {
     const updatedItinerary = await itineraryDet.save();
 
     memberNotification(
+      itineraryId,
       itineraryDet.createdBy,
       memberId,
       itineraryDet.itineraryName,
@@ -229,7 +240,7 @@ const itineraryAccessRequest = async (req, res) => {
     session.endSession();
     // Check if the itinerary was found and updated
     if (updatedItinerary) {
-      res.status(200).json({ data: updatedItinerary });
+      res.status(200).json({ itinerary: updatedItinerary, success: true });
     } else {
       res.status(404).json({ message: "Itinerary not found" });
     }
@@ -303,6 +314,12 @@ const itineraryLikeCount = async (req, res) => {
       itineraryObject.userRated = itineraryObject.itineraryRating.users.some(
         (user) => user.equals(userId)
       );
+      itineraryObject.request = itineraryObject.requestedMembers.some((user) =>
+        user.equals(userId)
+      );
+      itineraryObject.member = itineraryObject.members.some((user) =>
+        user.equals(userId)
+      );
       res.status(200).json({ success: true, itinerary: itineraryObject });
     } else {
       res.status(404).json({ message: "user not found" });
@@ -371,7 +388,12 @@ const removeItineraryLikeCount = async (req, res) => {
       itineraryObject.userRated = itineraryObject.itineraryRating.users.some(
         (user) => user.equals(userId)
       );
-
+      itineraryObject.request = itineraryObject.requestedMembers.some((user) =>
+        user.equals(userId)
+      );
+      itineraryObject.member = itineraryObject.members.some((user) =>
+        user.equals(userId)
+      );
       res.status(200).json({ success: true, itinerary: itineraryObject });
     } else {
       res.status(404).json({ message: "user not found" });
