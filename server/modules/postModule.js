@@ -1,9 +1,12 @@
-const Post = require("../models/Post.js"); // Assuming you have a Post model
-
+const Post = require("../models/post.js"); // Assuming you have a Post model
+const multer = require('multer');
+const upload = multer(); 
 // Create a new post
 const addPost = async (req, res) => {
   try {
-    console.log(req.body);
+    console.log("Request body:", req.body);
+console.log("Request files:", req.files);
+
     const { title, description, user, genderPref, tripCountry, imageUrls, tripState, locationName, fromDate, toDate, iteneraryId, tags, minAge, maxAge} = req.body;
     const newPost = new Post({
       title,
@@ -21,6 +24,7 @@ const addPost = async (req, res) => {
       minAge, 
       maxAge
     });
+
     const savedPost = await newPost.save();
     res.status(201).json(savedPost);
   } catch (error) {
@@ -32,7 +36,7 @@ const addPost = async (req, res) => {
 // Get all posts
 const getPosts = async (req, res) => {
   try {
-    const posts = await Post.find();
+    const posts = await Post.find().populate('user');;
     res.json(posts);
   } catch (error) {
     console.error("Error fetching posts:", error);

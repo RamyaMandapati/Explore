@@ -14,6 +14,7 @@ const Contacts = () => {
   ];
 
   return (
+    <div className='contacts'>
     <div className="contacts-container">
       <h2>Contacts</h2>
       <ul>
@@ -24,6 +25,7 @@ const Contacts = () => {
           </li>
         ))}
       </ul>
+    </div>
     </div>
   );
 };

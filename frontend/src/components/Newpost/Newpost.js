@@ -6,7 +6,12 @@ import axios from 'axios';
 import { uploadImages } from '../../utils/cloudImage';
 import { useDispatch, useSelector } from "react-redux";
 import { loadUser } from "../../actions/auth";
+import { useHistory } from 'react-router-dom';
+
+
+import { Autocomplete, useJsApiLoader } from "@react-google-maps/api";
 const ModalWrapper = ({ children, onClose }) => {
+  
   return (
     <div 
       className="modal-wrapper" 
@@ -32,6 +37,24 @@ const ModalWrapper = ({ children, onClose }) => {
 };
 const Newpost = () => {
   const [isModalOpen, setIsModalOpen] = useState(true);
+  const [autocomplete, setAutocomplete] = useState(null);
+  const { isLoaded } = useJsApiLoader({
+    id: "google-map-script",
+    googleMapsApiKey: "AIzaSyAUmGqs6vCSNoKHWwvYfifpkOJ5lZLrUBo", // Replace with your API key
+    libraries: ["places"],
+  });
+  const history = useHistory();
+
+  const onLoad = (autoC) => setAutocomplete(autoC);
+  const onPlaceChanged = () => {
+    if (autocomplete !== null) {
+      const place = autocomplete.getPlace();
+      console.log(place);
+      // You can extract the address components and set them to your state or form fields
+    } else {
+      console.log('Autocomplete is not loaded yet!');
+    }
+  };
 
   // Close modal handler
   const closeModal = () => setIsModalOpen(false);
@@ -71,7 +94,7 @@ const Newpost = () => {
   const renderItineraryOptions = () => {
     return itineraries.map((itinerary) => (
       <option key={itinerary._id} value={itinerary._id}>
-        {itinerary.title} {/* Assuming each itinerary has a title property */}
+        {itinerary.itineraryName} {/* Assuming each itinerary has a title property */}
       </option>
     ));
   };
@@ -88,13 +111,23 @@ const Newpost = () => {
       // Append each form field to the formData object
       // formData.append('type', event.target.type.value);
       formData.append('title', event.target.title.value);
+      formData.append('description', event.target.description.value);
+      formData.append('user', user?._id);
       formData.append('locationName', event.target.location.value);
       formData.append('fromDate', event.target.fromdate.value);
       formData.append('toDate', event.target.todate.value);
-      // formData.append('budget', event.target.budget.value);
+      formData.append('budget', event.target.budget.value);
+      formData.append('minAge', event.target.minAge.value);
+      formData.append('maxAge', event.target.maxAge.value);
+      formData.append('itineraryId', event.target.itineraries.value);
+      
+      
+      
+
 
       // Append the URLs of uploaded images
       imageUrls.forEach(url => formData.append('imageUrls', url));
+      console.log('Form Data:', Array.from(formData.entries()));
 
       // Send the form data with the image URLs to your API
       const response = await axios.post('http://localhost:4000/api/addPost', formData, {
@@ -105,6 +138,8 @@ const Newpost = () => {
 
       console.log(response.data);
       // Handle the successful submission here
+      closeModal();
+      history.push('/travelFeed'); 
 
     } catch (error) {
       if (error.response) {
@@ -124,7 +159,11 @@ const Newpost = () => {
       // Handle the error here
     }
   };
+  if (!isLoaded) return <div>Loading...</div>;
 
+  // Render Autocomplete only when API is loaded
+ 
+  
   return (
     <ModalWrapper onClose={closeModal}>
       <div className="create-post-container" onClick={(e) => e.stopPropagation()}>
@@ -146,10 +185,17 @@ const Newpost = () => {
         <input type="text" name="description" placeholder="Write something about your trip..!!" />
 
         <label>Location</label>
+        <Autocomplete
+      onLoad={onLoad}
+      onPlaceChanged={onPlaceChanged}
+    >
         <input type="text" name="location" placeholder="Provide city, state" />
-
+        </Autocomplete>
+        
         <label>Date</label>
         <input name="fromdate" type="date" /> to <input name="todate" type="date" />
+        <label>Age Preference</label>
+        <input name="minAge" type="age" /> to <input name="maxAge" type="age" />
 
         <label>Link itinerary</label>
         <select name="itineraries">
@@ -159,7 +205,12 @@ const Newpost = () => {
 
         <label>Budget</label>
         <input type="number" name="budget" placeholder="Enter budget amount" />
-
+        <label>Gender Preference</label>
+        <select name="gender">
+          <option>Male</option>
+          <option>Female</option>
+          <option>Non-Binary</option>
+        </select>
         <label>Images</label>
         <input type="file" name="files" multiple onChange={handleFileChange} />
 

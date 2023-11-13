@@ -1,22 +1,27 @@
-.container {
+.feed-container {
   display: flex;
+  margin-top: 100px;
   /* justify-content: space-between; Add space between main content and filters */
-  width: 100%; /* Use full width */
+  width: 100%;
+  gap: 20px; /* Use full width */
 }
 .filters {
-  flex-basis: 15%; /* Adjust based on how wide you want the filters to be */
+  flex-basis: 20%; 
+
+  /* Adjust based on how wide you want the filters to be */
 }
 .main-content {
-  flex-basis: 80%; /* Adjust based on desired width */
+  flex-basis: 55%; /* Adjust based on desired width */
   display: flex;
   padding: 10px;
   flex-direction: column;
-  gap: 10px; /*For spacing between components, adjust as necessary*/
+  gap:10px;
+   /*For spacing between components, adjust as necessary*/
 }
 .navbar {
   width: 100%;
   /* Other navbar styles */
 }
 .contacts {
-  flex-basis: 15%;
+  flex-basis: 20%;
 }

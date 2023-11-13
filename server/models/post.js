@@ -8,7 +8,7 @@ const postSchema = new Schema({
   },
   tripCountry: { type: String },
   tripState: { type: String },
-  locationName: { type: String },
+  location: { type: String },
   fromDate: { type: Date },
   toDate: { type: Date },
   imageUrls: [
@@ -19,6 +19,7 @@ const postSchema = new Schema({
   title: { type: String },
   description: { type: String },
   itineraryID: { type: Number },
+  budget: { type: Number },
   likes: [
     {
       type: mongoose.Schema.Types.ObjectId,
