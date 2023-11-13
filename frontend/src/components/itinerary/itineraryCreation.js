@@ -70,6 +70,7 @@ export const ItineraryCreation = ({ history }) => {
   const tripEndDate = endDate.format("MM/DD");
   const [members, setMembers] = useState([]);
   const [nonmembers, setNonMembers] = useState([]);
+  const [startingLocation, setStartingLocation] = useState("");
 
   const dateArray = [];
 
@@ -197,6 +198,7 @@ export const ItineraryCreation = ({ history }) => {
       userId: user && user._id,
       members: members,
       nonmembers: nonmembers,
+      startingLocation: startingLocation,
     };
     axios
       .post("/api/itinerary", data)
@@ -505,6 +507,20 @@ export const ItineraryCreation = ({ history }) => {
                 ></input>
               </div>
             </div>
+            <div className="mt-2 add-flex" style={{ gap: "5px" }}>
+              <label style={{ fontWeight: 700, paddingLeft: "5px" }}>
+                Starting Location:
+              </label>
+              <div>
+                <input
+                  type="text"
+                  placeholder="Enter starting Location"
+                  value={startingLocation}
+                  className="input_start"
+                  onChange={(e) => setStartingLocation(e.target.value)}
+                ></input>
+              </div>
+            </div>
             <div className="date-flex space-flex">
               <button
                 type="button"
@@ -684,7 +700,7 @@ export const ItineraryCreation = ({ history }) => {
                         onClick={handleMember}
                         className="planbutton updatebutton"
                       >
-                        Update
+                        Add
                       </button>
                     </Form>
                   </Box>

@@ -14,6 +14,8 @@ const connect = require("./config/connect");
 const jwtSecret = require("./config/jwtConfig");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
+const { Server } = require("socket.io");
+const notificationModel = require("./models/notification.js");
 
 //For BodyParser
 app.use(
@@ -153,5 +155,48 @@ app.post("/logout", (req, res) => {
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
 });
+
+const io = new Server({
+  cors: {
+    origin: "http://localhost:3000",
+  },
+});
+
+let onlineSocketUsers = [];
+const addSocketUser = (username, socketId) => {
+  !onlineSocketUsers.some((user) => user.username === username) &&
+    onlineSocketUsers.push({ username, socketId });
+};
+
+const removeSocketUser = (socketId) => {
+  onlineSocketUsers = onlineSocketUsers.filter(
+    (user) => user.socketId !== socketId
+  );
+};
+
+const getSocketUser = (username) => {
+  return onlineSocketUsers.find((user) => user.username === username);
+};
+
+io.on("connect", function (socket) {
+  socket.on("newSocketUser", (username) => {
+    addSocketUser(username, socket.id);
+    io.emit("socketUserInfo", socket.id);
+  });
+
+  socket.on("requestNotifications", async ({ senderName }) => {
+    const receiver = getSocketUser(senderName);
+    const notifications = await notificationModel
+      .find({ receiveruserId: senderName })
+      .sort({ timestamp: -1 });
+    io.to(receiver.socketId).emit("getNotifications", notifications);
+  });
+
+  socket.on("disconnect", () => {
+    removeSocketUser(socket.id);
+  });
+});
+
+io.listen(5001);
 
 module.exports = app;

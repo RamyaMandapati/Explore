@@ -2,7 +2,13 @@ const notification = require("../models/notification");
 const itinerary = require("../models/itinerary");
 const user = require("../models/user");
 // member notification
-const memberNotification = async (userId, member, itineraryName, action) => {
+const memberNotification = async (
+  itineraryId,
+  userId,
+  member,
+  itineraryName,
+  action
+) => {
   try {
     const userDet = await user.findById(userId);
     const memberDet = await user.findById(member);
@@ -31,6 +37,8 @@ const memberNotification = async (userId, member, itineraryName, action) => {
         senderuserId: action === "REQUEST" ? member : userId,
         receiveruserId: action === "REQUEST" ? userId : member,
         message: message,
+        itineraryId: itineraryId,
+        isRead: action === "ADD" || "REJECT" ? true : false,
         notificationType:
           action === "REQUEST" ? "ITINERARY_REQUEST" : "ITINERARY_NOTIFICATION",
       },
@@ -95,7 +103,7 @@ const readNotification = async (req, res) => {
     let notificationDet = await notification.findById(req.body.notificationId);
     notificationDet.isRead = true;
     const updatedNotification = await notificationDet.save();
-    res.status(200).json({ data: updatedNotification });
+    res.status(200).json({ notification: updatedNotification, success: true });
   } catch (err) {
     console.log(err);
     res.status(500).send(err);
