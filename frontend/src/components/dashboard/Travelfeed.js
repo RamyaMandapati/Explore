@@ -27,9 +27,10 @@ function Travelfeed() {
   };
   return (
     <div className="dashboard">
+      <div className="navbar">
       <Navbar />
-
-      <div className="container">
+   </div>
+      <div className="feed-container">
       <div className="filters">
       <Filters
         onGenderFilterChange={handleGenderFilterChange}
@@ -51,15 +52,16 @@ function Travelfeed() {
         countryFilter={countryFilter}
       />
     </div>
-          <div className="userposts">
+   </div>
+          <div className="contacts">
             <Contacts />
           </div>
-        </div>
-      </div>
+        
+     </div>
     </div>
   );
 }
 
 export default Travelfeed;
 
-// Filters.js
+

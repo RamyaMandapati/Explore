@@ -23,10 +23,13 @@ const PopularItineraries = () => {
   }, []);
 
   return (
-    <div className="popular-itineraries" style={{display:"block"}}>
-      <div>
-      <label>popular itineraries</label>
-      </div>
+    <div className="popular-container">
+      <h5 style={{fontSize:"17px"}}>popular itineraries</h5>
+    
+    <div className="popular-itineraries">
+     
+      
+      
       {itineraries.map((itinerary, index) => (
         <div className="itinerary-card" key={itinerary._id || index}>
           <img src={itinerary.imageUrl || placeImage} alt={`${itinerary.name}'s place`} className="place" />
@@ -34,6 +37,7 @@ const PopularItineraries = () => {
           <div className="name">{itinerary.createdBy.userName}</div>
         </div>
       ))}
+    </div>  
     </div>
   );
 }

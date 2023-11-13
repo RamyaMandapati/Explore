@@ -6,7 +6,7 @@ import './Filters.css';
 function Filter({ onGenderFilterChange, onAgeFilterChange, onCountryFilterChange, genderFilter, ageFilter, countryFilter }) {
     return (
       <div className="filters">
-        {/* ... */}
+       
         <div className="filter-item">
           <label>Gender:</label>
           <input
@@ -15,7 +15,10 @@ function Filter({ onGenderFilterChange, onAgeFilterChange, onCountryFilterChange
             value={genderFilter}
             onChange={(e) => onGenderFilterChange(e.target.value)}
           />
+         
         </div>
+
+
         <div className="filter-item">
           <label>Age:</label>
           <input

@@ -1,10 +1,14 @@
+.popular-container{
+  margin-left: 20px;
+}
+
 .popular-itineraries {
   flex: 1; /* This will make it grow and take up all available space beside filters */
   display: flex;
   flex-wrap: nowrap; /* Prevents the cards from wrapping to the next line */
   overflow-x: auto;
   padding: 20px 0;
-  margin-top: 80px;
+  
   justify-content: flex-start; /* Starts the cards from the beginning */
 }
 
