@@ -28,6 +28,8 @@ const {
   findUserByEmail,
 } = require("./modules/userModule");
 
+const { editMember } = require("./modules/groupModule");
+
 // itinerary related routes
 router.post("/itinerary", addItinerary);
 router.get("/itinerary/:id", isLoggedIn, getItineraryById);
@@ -55,6 +57,9 @@ router.get("/filterPosts", filterPosts);
 //user Router
 router.put("/pref", updateUserPreference);
 router.post("/user/email", findUserByEmail);
+
+//groupRouter
+router.post("/group/editmember", editMember);
 
 router.get("/session", isLoggedIn, async (req, res, next) => {
   if (req.user) {

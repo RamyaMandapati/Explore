@@ -1,5 +1,7 @@
 const notification = require("../models/notification");
 const itinerary = require("../models/itinerary");
+const everything = require("../index");
+
 const user = require("../models/user");
 // member notification
 const memberNotification = async (
@@ -38,13 +40,21 @@ const memberNotification = async (
         receiveruserId: action === "REQUEST" ? userId : member,
         message: message,
         itineraryId: itineraryId,
-        isRead: action === "ADD" || "REJECT" ? true : false,
         notificationType:
           action === "REQUEST" ? "ITINERARY_REQUEST" : "ITINERARY_NOTIFICATION",
       },
     ];
 
-    await notification.insertMany(notificationList);
+    const createdNotifications = await notification.insertMany(
+      notificationList
+    );
+    for (const notification of createdNotifications) {
+      // console.log("hello");
+      await everything.emitNotification(
+        notification.receiveruserId,
+        notification
+      );
+    }
   } catch (err) {
     console.log(err);
     throw err;

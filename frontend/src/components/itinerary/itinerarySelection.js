@@ -63,7 +63,7 @@ async function handlePlaceSelect(updateQuery) {
 export const ItinerarySelection = ({ history }) => {
   const names = [
     "Hiking",
-    "Nigtlife",
+    "Nightlife",
     "Museum",
     "Park",
     "Bridge",
@@ -82,6 +82,10 @@ export const ItinerarySelection = ({ history }) => {
     "Surfing",
     "Sailing",
     "Camping",
+    "Transgender",
+    "Male",
+    "FeMale",
+    "Baby-friendly",
   ];
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
