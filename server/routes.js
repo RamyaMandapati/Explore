@@ -1,6 +1,8 @@
 const express = require("express");
 const passport = require("passport");
 const router = express.Router();
+const multer = require('multer');
+const upload = multer();
 const {
   addItinerary,
   getItineraryById,
@@ -48,7 +50,7 @@ router.delete("/notification/:id", deleteNotification);
 router.get("/notification/:id", getNotifications);
 
 //Post routes
-router.post("/addPost", addPost);
+router.post("/addPost", upload.any(), addPost);
 router.get("/getPosts", getPosts);
 router.get("/filterPosts", filterPosts);
 
