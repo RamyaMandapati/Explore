@@ -2,12 +2,10 @@
 .filters {
   font-family: "Arial", sans-serif; /* This is a common font, you may need to adjust if using a different one */
   padding: 20px;
-  margin-left: 20px;
   background-color: #ffffff; /* This assumes a white background */
   border-radius: 10px; /* For rounded edges */
   /* Approximated width */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
-  
 }
 
 /* Filters Header */

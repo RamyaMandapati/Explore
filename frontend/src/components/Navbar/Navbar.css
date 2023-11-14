@@ -36,12 +36,12 @@
   
   /* Messenger icon styles */
   .messenger-icon {
-    color: #5b5d5ff3;
-    font-size: 35px;
+    color: #ff683c;
+    font-size: 25px;
     cursor: pointer;
     /* margin-right: 20px;
-    margin-left : 40px;
-    margin-top : 10px; */
+    margin-left : 40px;*/
+    margin-top : 10px; 
     position: relative;
     transition: transform 0.2s;
   }

@@ -6,7 +6,7 @@ import './Filters.css';
 function Filter({ onGenderFilterChange, onAgeFilterChange, onCountryFilterChange, genderFilter, ageFilter, countryFilter }) {
     return (
       <div className="filters">
-       
+        <h3 style={{marginBottom:"20px"}}>Filters</h3>
         <div className="filter-item">
           <label>Gender:</label>
           <input

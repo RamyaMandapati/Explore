@@ -63,9 +63,75 @@ const filterPosts = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+//app.post('/likePost/:postId', async (req, res) => {
+  const updateLikes= async (req, res) => {
+  const postId = req.params.postId;
+  const userId = req.body.userId; // Assuming the user's ID is sent in the request body
+
+  try {
+      // Find the post by ID and update it
+      const post = await Post.findById(postId);
+
+      if (!post) {
+          return res.status(404).send('Post not found');
+      }
+
+      // Check if the user has already liked the post
+      if (post.likes.includes(userId)) {
+          return res.status(400).send('User already liked this post');
+      }
+
+      // Add the user's ID to the likes array
+      post.likes.push(userId);
+
+      // Save the updated post
+      await post.save();
+
+      res.status(200).send('Post liked successfully');
+  } catch (error) {
+      res.status(500).send('Server error');
+  }
+};
+
+//app.post('/addComment/:postId', async (req, res) => {
+  const addComment = async (req, res) => {
+  const { postId } = req.params;
+  const { userId, text } = req.body; // userId is the ID of the user making the comment
+
+  if (!text) {
+      return res.status(400).send('Comment text is required');
+  }
+
+  try {
+      const post = await Post.findById(postId);
+      if (!post) {
+          return res.status(404).send('Post not found');
+      }
+
+      // Create a new comment object
+      const newComment = {
+          user: userId,
+          text: text,
+          createdAt: new Date() // Timestamp for the comment
+      };
+
+      // Add the comment to the post's comments array
+      post.comments.push(newComment);
+
+      // Save the updated post
+      await post.save();
+
+      res.status(200).json({ message: 'Comment added successfully', post });
+  } catch (error) {
+      res.status(500).send('Server error');
+  }
+}
+
 
 module.exports = {
   addPost,
   getPosts,
   filterPosts,
+  updateLikes,
+  addComment,
 };
