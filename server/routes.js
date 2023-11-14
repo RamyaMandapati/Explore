@@ -22,10 +22,11 @@ const {
   deleteNotification,
   getNotifications,
 } = require("./modules/notificationModule");
-const { addPost, getPosts, filterPosts } = require("./modules/postModule");
+const { addPost, getPosts, filterPosts, updateLikes,addComment } = require("./modules/postModule");
 const {
   updateUserPreference,
   findUserByEmail,
+  updateFollowers,
 } = require("./modules/userModule");
 
 // itinerary related routes
@@ -38,7 +39,7 @@ router.put("/itinerary/requestmember", itineraryAccessRequest);
 router.put("/itinerary/like", itineraryLikeCount);
 router.put("/itinerary/dislike", removeItineraryLikeCount);
 router.put("/itinerary/rating", itineraryRating);
-
+router.post("/follow/:userIdToFollow", updateFollowers);
 router.put("/users/favitinerary", favoriteItinerary);
 router.put("/users/delfavitinerary", deletefavoriteItinerary);
 
@@ -51,11 +52,11 @@ router.get("/notification/:id", getNotifications);
 router.post("/addPost", upload.any(), addPost);
 router.get("/getPosts", getPosts);
 router.get("/filterPosts", filterPosts);
-
+router.post("/likePost/:postId", updateLikes);
 //user Router
 router.put("/pref", updateUserPreference);
 router.post("/user/email", findUserByEmail);
-
+router.post("/addComment/:postId", addComment);
 router.get("/session", isLoggedIn, async (req, res, next) => {
   if (req.user) {
     const { user } = req;

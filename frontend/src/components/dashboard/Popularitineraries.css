@@ -1,5 +1,6 @@
 .popular-container{
   margin-left: 20px;
+  position: relative;
 }
 
 .popular-itineraries {
@@ -59,4 +60,25 @@
   left: 50px; /* Adjusted position */
   color: white;
   z-index: 2;
+}
+.see-all-link {
+   /* Position it anywhere you want */
+  top: 0; /* Align to the top edge of the container */
+  right: 0; /* Align to the right edge of the container */
+  margin-right: 30px; /* Adjust the margin as needed */
+  margin-top: 100px; /* Adjust the margin as needed */
+  /* Additional styles for your link */
+  align-self: flex-end;
+  text-decoration: none; /* Optional: removes underline from links */
+  color: black; /* Optional: link uses current text color */
+  cursor: pointer; /* Changes cursor to pointer to indicate it's clickable */
+}
+.navbar-center input[type="text"] {
+  border: 3px solid #f3c6ae; 
+  padding: 8px 12px;
+  font-size: 16px;
+  border-radius: 10px;
+  width: 50%;
+  height : 40px;
+  background-color: #f0f2f5; /* Facebook search bar background */
 }

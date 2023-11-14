@@ -1,5 +1,5 @@
 const user = require("../models/user");
-
+const mongoose = require('mongoose');
 // update Preference
 const updateUserPreference = async (req, res) => {
   try {
@@ -30,11 +30,13 @@ const updateUserPreference = async (req, res) => {
 
 const findUserByEmail = async (req, res) => {
   try {
+    console.log(req.body.email);
     const { email } = req.body;
-    const userDetail = await user.findOne({ email });
+    
+    const userDetail = await user.findOne({ email }).populate('followers');
     if (!userDetail) {
       return res.status(400).send({
-        error: "No user with this email has account with Trippy",
+        error: "No user with this email has account with us",
       });
     }
     return res.status(200).send(userDetail);
@@ -43,7 +45,56 @@ const findUserByEmail = async (req, res) => {
     res.status(500).send(err);
   }
 };
+
+//router.post('/follow/:userIdToFollow', async (req, res) => {
+  const updateFollowers=async(req,res)=>{
+    console.log(req.body);
+  const currentUserId = req.body.currentUserId; // Assume you get this from session or token
+  const userIdToFollow = req.params.userIdToFollow;
+
+  if (currentUserId === userIdToFollow) {
+    return res.status(400).json({ message: "You can't follow yourself" });
+  }
+
+  try {
+    // Convert string IDs to mongoose ObjectId
+    const currentUserIdObj = new mongoose.Types.ObjectId(currentUserId);
+
+    const userIdToFollowObj = new mongoose.Types.ObjectId(userIdToFollow);
+
+    // Start a session and transaction for atomic operation
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
+    // Add the current user to the followers list of the user they want to follow
+    const userToFollow = await user.findByIdAndUpdate(
+      userIdToFollowObj,
+      { $addToSet: { followers: currentUserIdObj } }, // Use $addToSet to avoid duplicates
+      { new: true, session }
+    );
+
+    // Add the other user to the following list of the current user
+    const currentUser = await user.findByIdAndUpdate(
+      currentUserIdObj,
+      { $addToSet: { following: userIdToFollowObj } }, // Use $addToSet to avoid duplicates
+      { new: true, session }
+    );
+
+    // Commit the transaction
+    await session.commitTransaction();
+    session.endSession();
+
+    res.json({
+      message: "Followed successfully",
+      
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "An error occurred while following the user" });
+  }
+};
 module.exports = {
   updateUserPreference,
   findUserByEmail,
+  updateFollowers,
 };

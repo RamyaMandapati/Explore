@@ -158,9 +158,9 @@ const Navbar = () => {
           <img className="logo" src={logo} alt="Logo" />
         </Link>
       </div>
-      <div className="navbar-center">
+      {/* <div className="navbar-center">
         <input type="text" placeholder="Search for Places, People or Tags" />
-      </div>
+      </div> */}
 
       <div className="message">
         <div className="messenger-icon" onClick={() => setOpen(!open)}>

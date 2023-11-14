@@ -3,7 +3,8 @@ import axios from 'axios';
 import './Popularitineraries.css'; // Assuming this is the correct stylesheet
 import personImage from './person1.jpeg'; // Default image if not provided by the API
 import placeImage from './person2.jpeg'; // Default image if not provided by the API
-
+import { Link } from 'react-router-dom';
+//import itinariesComponent from '../itinariesComponent/itinariesComponent';
 const PopularItineraries = () => {
   const [itineraries, setItineraries] = useState([]);
 
@@ -24,11 +25,16 @@ const PopularItineraries = () => {
 
   return (
     <div className="popular-container">
-      <h5 style={{fontSize:"17px"}}>popular itineraries</h5>
-    
+      <div className="navbar-center">
+        <input type="text" placeholder="Search for Places, People or Tags" />
+      </div>
+      <div>
+      <h5 style={{fontSize:"17px", marginTop:"20px"}}>Popular itineraries</h5>
+      
+    </div>
     <div className="popular-itineraries">
      
-      
+    
       
       {itineraries.map((itinerary, index) => (
         <div className="itinerary-card" key={itinerary._id || index}>
@@ -37,7 +43,11 @@ const PopularItineraries = () => {
           <div className="name">{itinerary.createdBy.userName}</div>
         </div>
       ))}
-    </div>  
+      <Link to="/itineraries" className="see-all-link" style={{marginTop:"20px"}}>
+        See All
+      </Link> 
+    </div> 
+   
     </div>
   );
 }
