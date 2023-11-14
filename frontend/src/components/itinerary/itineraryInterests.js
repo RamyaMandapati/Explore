@@ -17,7 +17,11 @@ import {
   faPersonBiking,
   faSailboat,
   faShip,
+  faPersonDress,
   faCampground,
+  faTransgender,
+  faPerson,
+  faBaby,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -42,8 +46,12 @@ export const ItineraryInterests = ({ interests }) => {
     Dancing: <FontAwesomeIcon icon={faIcons} />,
     "Mountain Biking": <FontAwesomeIcon icon={faPersonBiking} />,
     Rafting: <FontAwesomeIcon icon={faSailboat} />,
-    Surfing: <FontAwesomeIcon icon={faWater} />,
+    Surfing: <FontAwesomeIcon icon={faShip} />,
     Camping: <FontAwesomeIcon icon={faCampground} />,
+    Transgender: <FontAwesomeIcon icon={faTransgender} />,
+    Male: <FontAwesomeIcon icon={faPerson} />,
+    FeMale: <FontAwesomeIcon icon={faPersonDress} />,
+    "Baby-friendly": <FontAwesomeIcon icon={faBaby} />,
   };
   const interestButtons =
     interests &&

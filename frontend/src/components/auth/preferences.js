@@ -27,6 +27,10 @@ export const Preferences = ({ history }) => {
     "Surfing",
     "Sailing",
     "Camping",
+    "Transgender",
+    "Male",
+    "FeMale",
+    "Baby-friendly",
   ];
   const [selectedPreferences, setSelectedPreferences] = useState([]);
   const [userLocation, setUserLocation] = useState({

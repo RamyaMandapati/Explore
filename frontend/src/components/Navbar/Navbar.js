@@ -48,9 +48,17 @@ const Navbar = () => {
   };
 
   const [socketUser, setSocketUser] = useState("");
-  const socket = io("http://localhost:5001");
+  const [socket, setSocket] = useState(null);
+
   useEffect(() => {
-    if (user && user._id) {
+    const newSocket = io("http://localhost:5001");
+    setSocket(newSocket);
+    return () => {
+      newSocket.disconnect();
+    };
+  }, []);
+  useEffect(() => {
+    if (user && user._id && socket) {
       socket?.emit("newSocketUser", user._id);
       socket.on("socketUserInfo", (data) => {
         setSocketUser(data);
@@ -65,8 +73,33 @@ const Navbar = () => {
         setNotifications(data);
         setUnreadNotifications(unreadNotifications);
       });
+
+      return () => {
+        socket.off("socketUserInfo");
+        socket.off("getNotifications");
+      };
     }
-  }, []);
+  }, [user, socket]);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on("newNotification", (notification) => {
+        // Add the new notification to the state
+        setNotifications((prevNotifications) => [
+          notification,
+          ...prevNotifications,
+        ]);
+        if (!notification.isRead) {
+          setUnreadNotifications((prevUnread) => [notification, ...prevUnread]);
+        }
+      });
+      console.log("hey", notifications);
+      return () => {
+        socket.off("newNotification");
+      };
+    }
+  }, [socket]);
+  console.log(notifications);
   const handleNotification = async (notificationId) => {
     axios
       .put("/api/notification", { notificationId: notificationId })
@@ -127,10 +160,12 @@ const Navbar = () => {
             (notification) => notification._id !== responseData._id
           );
           setUnreadNotifications(updatedUnreadNotifications);
+          console.log("hello", response.data.success);
           window.location.reload();
         }
       })
       .catch((error) => {
+        console.log(error);
         alert(error.response.data.message);
       });
   };
