@@ -23,6 +23,18 @@ import SearchBox from "./searchBox";
 import ItineraryCategory from "./itineraryCategory";
 import { itinerarySave } from "../../actions/itinerary";
 import Chip from "@mui/material/Chip";
+import InputLabel from "@mui/material/InputLabel";
+import Select from "@mui/material/Select";
+import Checkbox from "@mui/material/Checkbox";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import MenuItem from "@mui/material/MenuItem";
+import ListItemText from "@mui/material/ListItemText";
+import InputAdornment from "@mui/material/InputAdornment";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import Stack from "@mui/material/Stack";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 const libraries = ["drawing", "places", "geometry"];
 const Form = styled.form`
@@ -34,7 +46,7 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 550,
+  width: 600,
   bgcolor: "background.paper",
   // border: "2px solid ",
   boxShadow: 24,
@@ -43,6 +55,46 @@ const style = {
 };
 
 export const ItineraryCreation = ({ history }) => {
+  const names = [
+    "Hiking",
+    "Nightlife",
+    "Museum",
+    "Park",
+    "Bridge",
+    "Neighborhood",
+    "Landmark",
+    "Kid-friendly",
+    "Beach",
+    "Amusement Park",
+    "Restaurant",
+    "Fishing",
+    "Music",
+    "Diving",
+    "Dancing",
+    "Mountain Biking",
+    "Rafting",
+    "Surfing",
+    "Sailing",
+    "Camping",
+    "Transgender",
+    "Male",
+    "FeMale",
+    "Baby-friendly",
+  ];
+
+  const ITEM_HEIGHT = 48;
+  const ITEM_PADDING_TOP = 8;
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250,
+      },
+    },
+  };
+  const Error = styled.span`
+    color: red;
+  `;
   const dispatch = useDispatch();
 
   const [image, setImage] = useState(
@@ -61,28 +113,55 @@ export const ItineraryCreation = ({ history }) => {
   );
   const { user } = useSelector((state) => state.auth);
 
-  const itineraryLocation = `Trip to ${
-    itineraryplandet && itineraryplandet.location.split(",")[0].trim()
-  }`;
-  const startDate = moment(itineraryplandet && itineraryplandet.startDate.$d);
-  const endDate = moment(itineraryplandet && itineraryplandet.endDate.$d);
-  const tripStartDate = startDate.format("MM/DD");
-  const tripEndDate = endDate.format("MM/DD");
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
+  const [interests, setInterests] = useState([]);
+  const [budget, setBudget] = useState("");
+  const [destination, setDestination] = useState("");
+
   const [members, setMembers] = useState([]);
   const [nonmembers, setNonMembers] = useState([]);
   const [startingLocation, setStartingLocation] = useState("");
 
   const dateArray = [];
-
-  while (startDate <= endDate) {
-    dateArray.push(
-      startDate.format("dddd") + ", " + startDate.format("MMMM Do")
-    );
-    startDate.add(1, "days"); // Move to the next day
+  let tripStartDate = "";
+  let tripEndDate = "";
+  if (startDate && endDate) {
+    const momentstartDate = moment(startDate.$d);
+    const momentendDate = moment(endDate.$d);
+    tripStartDate = momentstartDate.format("MM/DD");
+    tripEndDate = momentendDate.format("MM/DD");
+    let tempDate = moment(momentstartDate);
+    while (tempDate <= momentendDate) {
+      dateArray.push(
+        tempDate.format("dddd") + ", " + tempDate.format("MMMM Do")
+      );
+      tempDate.add(1, "days"); // Move to the next day
+    }
   }
-  dateArray.push(endDate.format("dddd") + ", " + endDate.format("MMMM Do"));
 
-  const [tripName, setTripName] = React.useState(itineraryLocation);
+  const [tripName, setTripName] = React.useState();
+
+  useEffect(() => {
+    if (itineraryplandet) {
+      setDestination(
+        itineraryplandet.location &&
+          itineraryplandet.location.split(",")[0].trim()
+      );
+      setInterests(itineraryplandet.interests);
+      setBudget(itineraryplandet.budget);
+      setStartDate(itineraryplandet.startDate && itineraryplandet.startDate);
+      setEndDate(itineraryplandet.endDate && itineraryplandet.endDate);
+      setTripName(
+        `Trip to ${
+          itineraryplandet.location &&
+          itineraryplandet.location.split(",")[0].trim()
+        }`
+      );
+    } else {
+      history.push("/plan");
+    }
+  }, []);
 
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
@@ -185,16 +264,32 @@ export const ItineraryCreation = ({ history }) => {
       history.push(`/itinerary/${itinerarysavedet && itinerarysavedet._id}`);
     }
   }, [itinerarysavedet]);
+  const [errorDate, setDateError] = useState(false);
+  const [editItinerary, setEditItinerary] = React.useState(false);
+  const handleEditItineraryOpen = () => setEditItinerary(true);
+  const handleEditItineraryClose = () => setEditItinerary(false);
+  const handleEditItinerary = async (e) => {
+    e.preventDefault();
+    handleEditItineraryClose();
+  };
+  const handleChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setInterests(
+      // On autofill we get a stringified value.
+      typeof value === "string" ? value.split(",") : value
+    );
+  };
   const onSubmit = () => {
     const data = {
       itineraryName: tripName,
-      destination:
-        itineraryplandet && itineraryplandet.location.split(",")[0].trim(),
-      startDate: moment(itineraryplandet && itineraryplandet.startDate.$d),
-      endDate: moment(itineraryplandet && itineraryplandet.endDate.$d),
-      budget: itineraryplandet && itineraryplandet.budget,
+      destination: destination,
+      startDate: moment(startDate.$d),
+      endDate: moment(endDate.$d),
+      budget: budget,
       itineraryList: itinerary,
-      interests: itineraryplandet && itineraryplandet.interests,
+      interests: interests,
       userId: user && user._id,
       members: members,
       nonmembers: nonmembers,
@@ -525,7 +620,7 @@ export const ItineraryCreation = ({ history }) => {
               <button
                 type="button"
                 className="btn-date btn-date1"
-                onClick={handleDateButton}
+                onClick={handleEditItineraryOpen}
               >
                 <svg
                   aria-hidden="true"
@@ -546,6 +641,133 @@ export const ItineraryCreation = ({ history }) => {
                   {tripStartDate} - {tripEndDate}
                 </span>
               </button>
+              <Modal
+                open={editItinerary}
+                onClose={handleEditItineraryClose}
+                aria-describedby="modal-modal-description"
+              >
+                <Box sx={style}>
+                  <Form>
+                    <label className="edit__label">Edit Itinerary</label>
+                    {/* <div className="itinerarybox">
+                        <TextField
+                          className="plan__location"
+                          name="location"
+                          id="plan-location-input"
+                          label="Where to?"
+                          type="text"
+                          // InputProps={{ sx: { height: 45 } }}
+                          required
+                          // autoComplete=""
+                          inputRef={autoCompleteRef}
+                          error={errorLocation}
+                          value={destination}
+                          // helperText={errorMsg}
+                          onChange={(e) => setDestination(e.target.value)}
+                          sx={{ mb: 2 }}
+                        />
+                      </div> */}
+                    <>
+                      <div className="itinerarybox1">
+                        <Stack direction="row" spacing={6}>
+                          {/* <DatePicker label="Basic date picker" /> */}
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DemoContainer components={["DatePicker"]}>
+                              <DatePicker
+                                required
+                                defaultValue={startDate}
+                                disablePast
+                                label="Start Date"
+                                onChange={(newValue) => {
+                                  setStartDate(newValue);
+                                  setItinerary([]);
+                                }}
+                                // onChange={(e) => setStartDate(e)}
+                              />
+                            </DemoContainer>
+                          </LocalizationProvider>
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DemoContainer components={["DatePicker"]}>
+                              <DatePicker
+                                required
+                                disablePast
+                                defaultValue={endDate}
+                                label="End Date"
+                                minDate={startDate}
+                                // onChange={(e) => setEndDate(e)}
+                                onChange={(newValue) => {
+                                  setEndDate(newValue);
+                                }}
+                                error={errorDate}
+                              />
+                            </DemoContainer>
+                          </LocalizationProvider>
+                        </Stack>
+                        <div>
+                          <InputLabel
+                            id="demo-multiple-checkbox-label"
+                            sx={{ mt: 1 }}
+                          >
+                            Interests
+                          </InputLabel>
+                          <Select
+                            labelId="demo-multiple-checkbox-label"
+                            id="demo-multiple-checkbox"
+                            multiple
+                            value={interests}
+                            label="intersts"
+                            onChange={handleChange}
+                            InputProps={{ sx: { height: 45 } }}
+                            input={<OutlinedInput label="Interests" />}
+                            renderValue={(selected) => selected.join(", ")}
+                            sx={{ width: 540 }}
+                            MenuProps={MenuProps}
+                          >
+                            {names.map((name) => (
+                              <MenuItem key={name} value={name}>
+                                <Checkbox
+                                  checked={interests.indexOf(name) > -1}
+                                />
+                                <ListItemText primary={name} />
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </div>
+                        <TextField
+                          className="plan__location"
+                          id="plan-budget-input"
+                          type="text"
+                          autoComplete=""
+                          label="Budget"
+                          value={budget}
+                          onChange={(e) => setBudget(e.target.value)}
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                $
+                              </InputAdornment>
+                            ),
+                          }}
+                          sx={{ width: 540, mt: 3 }}
+                        />
+                        {errorDate ? (
+                          <Error>
+                            Make sure you enter , start date and end date{" "}
+                          </Error>
+                        ) : (
+                          <p />
+                        )}
+                      </div>
+                    </>
+                    <button
+                      onClick={handleEditItinerary}
+                      className="planbutton updatebutton"
+                    >
+                      Update
+                    </button>
+                  </Form>
+                </Box>
+              </Modal>
               <div className="add-flex">
                 <button
                   className="btn btn-2"
@@ -717,7 +939,7 @@ export const ItineraryCreation = ({ history }) => {
               <button
                 type="button"
                 className="btn-date btn-date2"
-                onClick={handleDateButton}
+                onClick={handleEditItineraryOpen}
               >
                 <svg
                   aria-hidden="true"

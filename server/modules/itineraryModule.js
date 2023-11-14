@@ -197,13 +197,13 @@ const itineraryMembers = async (req, res) => {
       { _id: notificationId },
       {
         notificationType: `ITINERARY_${type}`,
+        isRead: true,
       },
       { new: true }
     );
-    console.log(updatedNotification);
     await session.commitTransaction();
     session.endSession();
-    res.status(200).json({ data: itineraryDetails });
+    res.status(200).json({ notification: updatedNotification, success: true });
   } catch (e) {
     await session.abortTransaction();
     session.endSession();

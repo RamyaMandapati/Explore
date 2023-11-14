@@ -72,11 +72,14 @@ export const ItineraryCategory = ({ onSave, onCancel }) => {
             }}
             value={selectedOption}
           >
+            <option value="none" class="px-3 py-2 Select__option">
+              Select Category
+            </option>
             <option value="Hiking" class="px-3 py-2 Select__option">
               Hiking
             </option>
-            <option value="Nigtlife" class="px-3 py-2 Select__option">
-              Nigtlife
+            <option value="Nightlife" class="px-3 py-2 Select__option">
+              Nightlife
             </option>
             <option value="Museum" class="px-3 py-2 Select__option">
               Museum
@@ -131,6 +134,18 @@ export const ItineraryCategory = ({ onSave, onCancel }) => {
             </option>
             <option value="Camping" class="px-3 py-2 Select__option">
               Camping
+            </option>
+            <option value="Transgender" class="px-3 py-2 Select__option">
+              Transgender
+            </option>
+            <option value="Male" class="px-3 py-2 Select__option">
+              Male
+            </option>
+            <option value="FeMale" class="px-3 py-2 Select__option">
+              FeMale
+            </option>
+            <option value="Baby-friendly" class="px-3 py-2 Select__option">
+              Baby-friendly
             </option>
           </select>
         </div>

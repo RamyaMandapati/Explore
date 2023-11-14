@@ -60,7 +60,7 @@ const style = {
 export const ItineraryPlanEdit = ({ history }) => {
   const names = [
     "Hiking",
-    "Nigtlife",
+    "Nightlife",
     "Museum",
     "Park",
     "Bridge",
@@ -79,6 +79,10 @@ export const ItineraryPlanEdit = ({ history }) => {
     "Surfing",
     "Sailing",
     "Camping",
+    "Transgender",
+    "Male",
+    "FeMale",
+    "Baby-friendly",
   ];
 
   const ITEM_HEIGHT = 48;
@@ -133,24 +137,18 @@ export const ItineraryPlanEdit = ({ history }) => {
   let tripStartDate = "";
   let tripEndDate = "";
   if (startDate && endDate) {
-    // setStartDayjsDate(dayjs(startDate));
-    // setEndDayjsDate(dayjs(endDate));
-
     const momentStartDate = moment(startDate);
     const momentEndDate = moment(endDate);
     tripStartDate = momentStartDate.format("MM/DD");
     tripEndDate = momentEndDate.format("MM/DD");
-    while (momentStartDate <= momentEndDate) {
+    let tempDate = moment(momentStartDate);
+
+    while (tempDate <= momentEndDate) {
       dateArray.push(
-        momentStartDate.format("dddd") +
-          ", " +
-          momentStartDate.format("MMMM Do")
+        tempDate.format("dddd") + ", " + tempDate.format("MMMM Do")
       );
-      momentStartDate.add(1, "days"); // Move to the next day
+      tempDate.add(1, "days"); // Move to the next day
     }
-    dateArray.push(
-      momentEndDate.format("dddd") + ", " + momentEndDate.format("MMMM Do")
-    );
   }
 
   const [tripName, setTripName] = React.useState("");
@@ -309,6 +307,7 @@ export const ItineraryPlanEdit = ({ history }) => {
       userId: user && user._id,
       members: members,
       nonmembers: nonmembers,
+      startingLocation: startingLocation,
     };
     axios
       .post("/api/itinerary", data)
@@ -409,7 +408,23 @@ export const ItineraryPlanEdit = ({ history }) => {
   const handleAddMemberClose = () => setAddMember(false);
   const handleMember = async (e) => {
     e.preventDefault();
-    handleAddMemberClose();
+    try {
+      await fetch(`/api/group/editmember`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          itineraryId: itineraryId,
+          userId: user && user._id,
+          members,
+        }),
+      });
+      handleAddMemberClose();
+      window.location.reload();
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const [editItinerary, setEditItinerary] = React.useState(false);

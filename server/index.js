@@ -178,6 +178,13 @@ const getSocketUser = (username) => {
   return onlineSocketUsers.find((user) => user.username === username);
 };
 
+exports.emitNotification = (userId, notification) => {
+  const userSocket = getSocketUser(userId.toString());
+  if (userSocket) {
+    io.to(userSocket.socketId).emit("newNotification", notification);
+  }
+};
+
 io.on("connect", function (socket) {
   socket.on("newSocketUser", (username) => {
     addSocketUser(username, socket.id);
