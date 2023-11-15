@@ -57,7 +57,7 @@ const Newpost = () => {
   };
 
   // Close modal handler
-  const closeModal = () => setIsModalOpen(false);
+  const closeModal = () => {setIsModalOpen(false); history.push('/travelFeed'); };
 
   // Render nothing if modal is not open
   

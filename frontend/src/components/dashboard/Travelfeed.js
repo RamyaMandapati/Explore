@@ -11,7 +11,7 @@ import { useState, useEffect } from "react";
 function Travelfeed() {
   const [genderFilter, setGenderFilter] = useState('');
   const [ageFilter, setAgeFilter] = useState('');
-  const [countryFilter, setCountryFilter] = useState('');
+  const [budgetFilter, setBudgetFilter] = useState('');
 
   // Handlers to update the filters
   const handleGenderFilterChange = (newGender) => {
@@ -22,8 +22,8 @@ function Travelfeed() {
     setAgeFilter(newAge);
   };
 
-  const handleCountryFilterChange = (newCountry) => {
-    setCountryFilter(newCountry);
+  const handleBudgetFilterChange = (budget) => {
+    setBudgetFilter(budget);
   };
   return (
     <div className="dashboard">
@@ -35,10 +35,10 @@ function Travelfeed() {
       <Filters
         onGenderFilterChange={handleGenderFilterChange}
         onAgeFilterChange={handleAgeFilterChange}
-        onCountryFilterChange={handleCountryFilterChange}
+        onBudgetFilterChange={handleBudgetFilterChange}
         genderFilter={genderFilter}
         ageFilter={ageFilter}
-        countryFilter={countryFilter}
+        budgetFilter={budgetFilter}
       />
     </div>
         <div className="main-content">
@@ -49,7 +49,8 @@ function Travelfeed() {
       <UserPosts
         genderFilter={genderFilter}
         ageFilter={ageFilter}
-        countryFilter={countryFilter}
+        
+        budgetFilter={budgetFilter}
       />
     </div>
    </div>
