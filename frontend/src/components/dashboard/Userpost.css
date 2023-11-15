@@ -1,4 +1,5 @@
 .user-post {
+  font-family: "Rubik", sans-serif;
   background-color: #ffffff;
   padding: 20px;
   border-radius: 10px;
@@ -22,7 +23,7 @@
 }
 
 .user-preferences p {
- 
+  font-family: "Rubik", sans-serif;
   font-size: 14px;
   
 }
@@ -83,6 +84,7 @@
 }
 
 .overlay-text {
+  font-family: "Rubik", sans-serif;
   position: absolute;
   bottom: 0;
   right: 0;
@@ -169,6 +171,46 @@
   font-size: medium;
   margin-top:10px
 }
+.navbar-center {
+  display: flex;
+  justify-content: space-between; /* Aligns children to the opposite ends */
+  align-items: center; /* Centers items vertically */
+  gap: 10px; /* Optional: adds space between children */
+}
+.navbar-center input[type="text"] {
+  border: 3px solid #f3c6ae; 
+  padding: 8px 12px;
+  font-size: 16px;
+  border-radius: 10px;
+  width: 50%;
+  height : 40px;
+  background-color: #f0f2f5;
+  margin-bottom: 10px; /* Facebook search bar background */
+  
+}
+.search-input {
+  flex-grow: 1; /* Allows the search input to fill the space */
+  margin-right: 10px; /* Optional: adds space between the search input and the buttons */
+}
 
+.button-container {
+  display: flex;
+  gap: 10px; /* Spacing between the buttons */
+}
+
+.create-post-btn, .create-itinerary-btn {
+  background-color: hsl(14, 80%, 62%);
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 12px;
+  white-space: nowrap; /* Prevents text wrapping */
+}
+
+.create-post-btn:hover, .create-itinerary-btn:hover {
+  background-color: #FF7F50; /* Slightly darker orange on hover */
+}
 /* Style for existing comments, if necessary */
 

@@ -1,9 +1,11 @@
 .feed-container {
   display: flex;
-  margin-top: 100px;
+  margin-top: 80px;
   /* justify-content: space-between; Add space between main content and filters */
   width: 100%;
   gap: 20px; /* Use full width */
+  background-color: #f2f3f7;
+  
 }
 .filters {
   flex-basis: 20%; 
