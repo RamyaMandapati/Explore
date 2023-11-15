@@ -246,12 +246,6 @@ export const ItineraryCalendarPage = ({ history }) => {
     });
     tempDate.add(1, "days"); // Move to the next day
   }
-  // if (!startDate.isSame(endDate)) {
-  //   dateArray.push({
-  //     day: endDate.format("dddd"),
-  //     date: endDate.format("MMMM Do"),
-  //   });
-  // }
 
   async function getImage() {
     const location = itinerarydet && itinerarydet.destination;

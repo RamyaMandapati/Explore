@@ -5,15 +5,23 @@ import { useDispatch, useSelector } from "react-redux";
 import { loadUser } from "../../actions/auth";
 import profilephoto from '../../images/profilephoto.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faThumbsUp, faComment, faUserPlus, faUserFriends } from '@fortawesome/free-solid-svg-icons';
+import { faThumbsUp, faComment, faUserPlus, faUserFriends, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
-const UserPost = ({ genderFilter, ageFilter, countryFilter }) => {
+import { useHistory } from 'react-router-dom';
+const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
   const [posts, setPosts] = useState([]);
   const [showCommentsForPost, setShowCommentsForPost] = useState(null);
   const [newComment, setNewComment] = useState({});
   const dispatch = useDispatch();
+  const [searchTerm, setSearchTerm] = useState('');
+  const [min, max] = ageFilter.split('-').map(Number);
   const { user } = useSelector((state) => state.auth);
   console.log(user._id);
+  const history = useHistory();
+
+  const navigateToNewPost = () => {
+    history.push('/newPost');
+  };
   const formatDate = (dateString) => {
     const options = { year: 'numeric', month: 'short', day: 'numeric' };
     return new Date(dateString).toLocaleDateString('en-US', options);
@@ -46,13 +54,23 @@ const UserPost = ({ genderFilter, ageFilter, countryFilter }) => {
       // Handle errors, such as displaying a message to the user
     }
   };
-
+  const parseBudgetFilter = (filter) => {
+    if (!filter) return { min: 0, max: Infinity };
+    if (filter === "5000+") return { min: 5000, max: Infinity };
+    const max = parseInt(filter.slice(1), 10);
+    return { min: 0, max };
+  };
+  const { budgetmin, budgetmax } = parseBudgetFilter(budgetFilter);
   const filteredPosts = posts.filter(post => {
     // Apply gender, age, and country filters
     // You'll need to adjust the logic based on how the age filter is supposed to work
+    
     return (genderFilter ? post.genderPref === genderFilter : true) &&
-           (ageFilter ? post.minAge===ageFilter : true) &&
-           (countryFilter ? post.location.includes(countryFilter) : true);
+           (ageFilter ? (post.minAge>=min) && (post.maxAge<=max) : true) &&
+           
+           (budgetFilter? (post.budget >= budgetmin) && (post.budget <= budgetmax) : true)&&
+           (searchTerm ? post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        post.description.toLowerCase().includes(searchTerm.toLowerCase()) : true);
   });
   const handleCommentClick = (index) => {
     setShowCommentsForPost(showCommentsForPost === index ? null : index);
@@ -111,7 +129,20 @@ const UserPost = ({ genderFilter, ageFilter, countryFilter }) => {
   return (
     
       <div className="main-content">
-        
+       <div className="navbar-center">
+       <input
+    type="text"
+    placeholder="Search..."
+    value={searchTerm}
+    onChange={(e) => setSearchTerm(e.target.value)}
+    className="search-input"
+  />
+   <div className="button-container">
+  <button className="create-post-btn" onClick={navigateToNewPost}>+ Create Post</button>
+  <button className="create-itinerary-btn">+ Create Itinerary</button>
+</div>
+
+      </div> 
       {filteredPosts.map((post, index) => (
 
         <div key={index} className="user-post">
@@ -160,7 +191,6 @@ const UserPost = ({ genderFilter, ageFilter, countryFilter }) => {
 </div>
 
           <div className="user-preferences">
-          
               <div className="post-content">
             <p>{post.description}</p>
           </div>

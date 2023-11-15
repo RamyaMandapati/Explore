@@ -167,7 +167,7 @@ const getItineraries = async (req, res) => {
     }
     const itineraries = await itinerary
       .find(query, {}, { lean: true })
-      .sort({ "likes.likecount": -1 })
+      .sort({ "likes.likecount": -1 }).populate("createdBy")
       .limit(pageSize * 1)
       .skip(pageSize * (page - 1))
       .exec();

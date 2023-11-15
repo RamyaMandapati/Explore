@@ -25,11 +25,11 @@
   font-weight: bold;
 }
 /* Individual Filter Input */
-.filters input {
+.filters select {
   padding: 10px; /* Spacing inside the input */
   margin-bottom: 15px; /* Spacing between filter items */
   border: 1px solid #ddd; /* Light gray border */
   border-radius: 5px; /* Slightly rounded edges */
-  font-size: 16px;
+  font-size: 12px;
   color: #555; /* Gray text color */
 }

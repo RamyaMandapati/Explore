@@ -60,6 +60,7 @@
   left: 50px; /* Adjusted position */
   color: white;
   z-index: 2;
+  align-self: center;
 }
 .see-all-link {
    /* Position it anywhere you want */

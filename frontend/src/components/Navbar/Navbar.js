@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComments, faBell } from "@fortawesome/free-solid-svg-icons"; // Import the messenger icon
 import "./Navbar.css"; // You can create a CSS file for styling
 import logo from "../../logo.png";
-import profile from "../../profilepic.jpeg";
+import profile from "../../images/profile.svg";
 import { Travelfeed } from "../dashboard/Travelfeed.js";
 import { Link } from "react-router-dom";
 import axios from "axios";

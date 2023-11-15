@@ -25,9 +25,7 @@ const PopularItineraries = () => {
 
   return (
     <div className="popular-container">
-      <div className="navbar-center">
-        <input type="text" placeholder="Search for Places, People or Tags" />
-      </div>
+      
       <div>
       <h5 style={{fontSize:"17px", marginTop:"20px"}}>Popular itineraries</h5>
       
@@ -39,8 +37,8 @@ const PopularItineraries = () => {
       {itineraries.map((itinerary, index) => (
         <div className="itinerary-card" key={itinerary._id || index}>
           <img src={itinerary.imageUrl || placeImage} alt={`${itinerary.name}'s place`} className="place" />
-          <img src={itinerary.createdBy.profilePicture || personImage} alt={itinerary.name} className="person" />
-          <div className="name">{itinerary.createdBy.userName}</div>
+          {/* <img src={itinerary.createdBy.profilePicture || personImage} alt={itinerary.name} className="person" /> */}
+          <div className="name">{itinerary.destination}</div>
         </div>
       ))}
       <Link to="/itineraries" className="see-all-link" style={{marginTop:"20px"}}>
