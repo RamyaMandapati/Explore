@@ -19,7 +19,6 @@ import InputAdornment from "@mui/material/InputAdornment";
 import styled from "styled-components";
 import { ITINERARY_PLAN_DETAILS } from "../../actions/types";
 import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
 
 let autoComplete;
 
@@ -105,7 +104,6 @@ export const ItinerarySelection = ({ history }) => {
   const today = dayjs();
   const [errorLocation, setLocationError] = useState(false);
 
-  const [query, setQuery] = useState("");
   const autoCompleteRef = useRef(null);
   const itineraryplandet = useSelector(
     (state) => state.itinerary.itineraryplandet
@@ -126,7 +124,8 @@ export const ItinerarySelection = ({ history }) => {
     (itineraryplandet && itineraryplandet.budget) || ""
   );
   const [errorDate, setDateError] = useState(false);
-  const [isLoading, setLoading] = useState(false);
+  const [errorBudget, setErrorBudget] = useState(false);
+  const [errorInterests, setErrorInterests] = useState(false);
 
   useEffect(() => {
     loadScript(
@@ -138,6 +137,7 @@ export const ItinerarySelection = ({ history }) => {
     const {
       target: { value },
     } = event;
+    setErrorInterests(false);
     setInterests(
       // On autofill we get a stringified value.
       typeof value === "string" ? value.split(",") : value
@@ -145,16 +145,35 @@ export const ItinerarySelection = ({ history }) => {
   };
 
   const handleClick = () => {
-    dispatch({
-      type: ITINERARY_PLAN_DETAILS,
-      payload: {
-        location: location,
-        startDate: startDate,
-        endDate: endDate,
-        interests: interests,
-        budget: budget,
-      },
-    }).then(history.push("/itinerary"));
+    setLocationError(false);
+    setDateError(false);
+    setErrorInterests(false);
+    setErrorBudget(false);
+    if (!location) {
+      setLocationError(true);
+    }
+    if (!budget) {
+      setErrorBudget(true);
+    }
+    if (!startDate || !endDate) {
+      setDateError(true);
+    }
+    if (interests.length === 0) {
+      setErrorInterests(true);
+    }
+
+    if (budget && location && startDate && endDate && interests.length !== 0) {
+      dispatch({
+        type: ITINERARY_PLAN_DETAILS,
+        payload: {
+          location: location,
+          startDate: startDate,
+          endDate: endDate,
+          interests: interests,
+          budget: budget,
+        },
+      }).then(history.push("/itinerary"));
+    }
   };
 
   return (
@@ -176,7 +195,10 @@ export const ItinerarySelection = ({ history }) => {
           error={errorLocation}
           value={location}
           // helperText={errorMsg}
-          onChange={(e) => setLocation(e.target.value)}
+          onChange={(e) => {
+            setLocationError(false);
+            setLocation(e.target.value);
+          }}
           sx={{ mb: 2 }}
         />
       </div>
@@ -225,6 +247,8 @@ export const ItinerarySelection = ({ history }) => {
               renderValue={(selected) => selected.join(", ")}
               sx={{ width: 540 }}
               MenuProps={MenuProps}
+              required
+              error={errorInterests}
             >
               {names.map((name) => (
                 <MenuItem key={name} value={name}>
@@ -241,17 +265,23 @@ export const ItinerarySelection = ({ history }) => {
             autoComplete=""
             label="Budget"
             value={budget}
-            onChange={(e) => setBudget(e.target.value)}
+            required
+            onChange={(e) => {
+              setErrorBudget(false);
+              setBudget(e.target.value);
+            }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">$</InputAdornment>
               ),
             }}
+            error={errorBudget}
             sx={{ width: 540, mt: 3 }}
           />
-          {errorLocation || errorDate ? (
+          {errorLocation || errorDate || errorBudget || errorInterests ? (
             <Error>
-              Make sure you enter location, start date and end date{" "}
+              Make sure you enter location, start date, end date, interests,
+              budget
             </Error>
           ) : (
             <p />
@@ -260,6 +290,9 @@ export const ItinerarySelection = ({ history }) => {
             type="button"
             className="planbutton planbutton1"
             onClick={handleClick}
+            disabled={
+              errorLocation || errorDate || errorBudget || errorInterests
+            }
           >
             Start Planning
           </button>

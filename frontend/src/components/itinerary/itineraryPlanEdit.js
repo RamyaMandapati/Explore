@@ -132,6 +132,7 @@ export const ItineraryPlanEdit = ({ history }) => {
   const [interests, setInterests] = useState([]);
   const [startdayjsDate, setStartDayjsDate] = useState();
   const [enddayjsDate, setEndDayjsDate] = useState();
+  const [imageUrl, setImageUrl] = useState();
 
   let dateArray = [];
   let tripStartDate = "";
@@ -275,6 +276,7 @@ export const ItineraryPlanEdit = ({ history }) => {
         setMembers(responseData.itinerary.members.map((member) => member._id));
         setNonMembers(responseData.itinerary.nonmembers);
         setStartingLocation(responseData.itinerary.startingLocation);
+        setImageUrl(responseData.itinerary.imageUrl);
         const place = responseData.itinerary.itineraryList[0].Places[0];
         map.setCenter({ lat: place.Latitude, lng: place.Longitude });
       } catch (err) {
@@ -421,7 +423,6 @@ export const ItineraryPlanEdit = ({ history }) => {
         }),
       });
       handleAddMemberClose();
-      window.location.reload();
     } catch (e) {
       console.log(e);
     }
@@ -532,7 +533,7 @@ export const ItineraryPlanEdit = ({ history }) => {
   }
 
   const containerStyle = {
-    backgroundImage: `linear-gradient(180deg,rgba(33,37,41,.5) 0,transparent 50%), url(https://media.timeout.com/images/105770969/1372/772/image.jpg)`, // Set the dynamic image URL
+    backgroundImage: `linear-gradient(180deg,rgba(33,37,41,.5) 0,transparent 50%), url(${imageUrl})`, // Set the dynamic image URL
     backgroundSize: "cover", // Adjust as needed
     backgroundRepeat: "no-repeat", // Adjust as needed
     // Add other styles as needed
@@ -540,12 +541,18 @@ export const ItineraryPlanEdit = ({ history }) => {
     height: "240px",
     position: "relative",
   };
-  const handleFileInputChange = (event) => {
+  const handleFileInputChange = async (event) => {
     const file = event.target.files[0];
     if (file) {
-      setSelectedFile(file);
-      // You can perform additional actions with the selected file here.
-      console.log(`Selected file: ${file.name}`);
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", "thrryyss");
+
+      const response = await axios.post(
+        "https://api.cloudinary.com/v1_1/dylqg3itm/image/upload",
+        formData
+      );
+      setImageUrl(response.data.secure_url);
     }
   };
 
@@ -1209,6 +1216,11 @@ export const ItineraryPlanEdit = ({ history }) => {
                                       place.cost !== "" ||
                                       place.category !== "" ? (
                                         <div className="add-flex mb-2">
+                                          {/* {((openBoxIndices.dateIndex ===
+                                            index &&
+                                            openBoxIndices.placeIndex ===
+                                              placeIndex) ||
+                                            place.startTime !== "") && ( */}
                                           <div
                                             className={
                                               place.startTime === "" ||
@@ -1224,7 +1236,9 @@ export const ItineraryPlanEdit = ({ history }) => {
                                                   ? "btn-date btn-date1"
                                                   : "btn-date btn-date1 btn-time-cost"
                                               }
-                                              style={{ position: "relative" }}
+                                              style={{
+                                                position: "relative",
+                                              }}
                                               onClick={() =>
                                                 handleAddTime(index, placeIndex)
                                               }
@@ -1290,6 +1304,7 @@ export const ItineraryPlanEdit = ({ history }) => {
                                                 />
                                               )}
                                           </div>
+                                          {/* )} */}
                                           <div
                                             className={
                                               place.startTime === "" ||

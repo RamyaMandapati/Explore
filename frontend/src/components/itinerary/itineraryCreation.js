@@ -35,6 +35,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import Stack from "@mui/material/Stack";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { uploadImages } from "../../utils/cloudImage";
 
 const libraries = ["drawing", "places", "geometry"];
 const Form = styled.form`
@@ -104,7 +105,9 @@ export const ItineraryCreation = ({ history }) => {
   const [map, setMap] = React.useState(null);
 
   const [isCost, setisCost] = React.useState(false);
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [imageUrl, setImageUrl] = useState(
+    "https://media.timeout.com/images/105770969/1372/772/image.jpg"
+  );
   const [itinerary, setItinerary] = useState([]);
 
   const [markerPositions, setMarkerPositions] = useState([]);
@@ -294,6 +297,7 @@ export const ItineraryCreation = ({ history }) => {
       members: members,
       nonmembers: nonmembers,
       startingLocation: startingLocation,
+      imageUrl: imageUrl,
     };
     axios
       .post("/api/itinerary", data)
@@ -514,7 +518,7 @@ export const ItineraryCreation = ({ history }) => {
   }
 
   const containerStyle = {
-    backgroundImage: `linear-gradient(180deg,rgba(33,37,41,.5) 0,transparent 50%), url(https://media.timeout.com/images/105770969/1372/772/image.jpg)`, // Set the dynamic image URL
+    backgroundImage: `linear-gradient(180deg,rgba(33,37,41,.5) 0,transparent 50%), url(${imageUrl})`, // Set the dynamic image URL
     backgroundSize: "cover", // Adjust as needed
     backgroundRepeat: "no-repeat", // Adjust as needed
     // Add other styles as needed
@@ -522,12 +526,19 @@ export const ItineraryCreation = ({ history }) => {
     height: "240px",
     position: "relative",
   };
-  const handleFileInputChange = (event) => {
+  const handleFileInputChange = async (event) => {
     const file = event.target.files[0];
     if (file) {
-      setSelectedFile(file);
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", "thrryyss");
+
+      const response = await axios.post(
+        "https://api.cloudinary.com/v1_1/dylqg3itm/image/upload",
+        formData
+      );
+      setImageUrl(response.data.secure_url);
       // You can perform additional actions with the selected file here.
-      console.log(`Selected file: ${file.name}`);
     }
   };
 
