@@ -1,14 +1,14 @@
-import { Configuration, OpenAIApi } from "openai";
-import * as dotenv from "dotenv";
+const { OpenAI } = require("openai");
+const dotenv = require("dotenv");
 
 dotenv.config();
 
-const configuration = new Configuration({
-  organization: process.env.organizationKey,
-  apiKey: process.env.openApiKey,
+// const configuration = new Configuration({
+//   apiKey: "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",
+// });
+const openai = new OpenAI({
+  apiKey: "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",
 });
-const openai = new OpenAIApi(configuration);
-
 const model = "text-davinci-003";
 const completions = 5;
 const options = {
@@ -19,14 +19,14 @@ const options = {
 };
 
 async function openaiquery(prompt) {
-  const response = await openai.createCompletion({
+  const response = await openai.completions.create({
     model: model,
     prompt: prompt,
     max_tokens: 1200,
     temperature: 0.5,
     n: 1,
   });
-  return response.data.choices[0].text.trim();
+  return response.choices[0].text.trim();
 }
 
-export default openaiquery;
+module.exports = { openaiquery };

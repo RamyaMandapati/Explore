@@ -18,6 +18,7 @@ export const getItineraryDetails = (itineraryId) => async (dispatch) => {
       });
     }
   } catch (err) {
+    console.log(err);
     const errors = err.response.data.errors;
     alert(errors);
   }

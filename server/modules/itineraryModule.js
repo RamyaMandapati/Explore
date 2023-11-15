@@ -7,6 +7,7 @@ const {
 const mongoose = require("mongoose");
 const notification = require("../models/notification");
 const { update } = require("tar");
+const { openaiquery } = require("../utils/openai.js");
 
 // save the itinerary
 const addItinerary = async (req, res) => {
@@ -25,6 +26,7 @@ const addItinerary = async (req, res) => {
       nonmembers,
       tags,
       startingLocation,
+      imageUrl,
     } = req.body;
 
     const itineraryObject = {
@@ -37,6 +39,7 @@ const addItinerary = async (req, res) => {
       itineraryList: itineraryList,
       startingLocation: startingLocation,
       tags: tags,
+      imageUrl: imageUrl,
     };
     let savedItinerary;
     if (itineraryId) {
@@ -56,7 +59,7 @@ const addItinerary = async (req, res) => {
       itineraryObject.nonmembers = nonmembers;
       const itineraryModel = new itinerary(itineraryObject);
       savedItinerary = await itineraryModel.save();
-      await itineraryNotification(savedItinerary._id, userId, "ADD");
+      await itineraryNotification(savedItinerary._id, userId, "ADDE");
     }
     const owner = await user
       .findOne({ _id: itineraryObject.createdBy })
@@ -64,6 +67,40 @@ const addItinerary = async (req, res) => {
     savedItinerary.members = [owner];
     savedItinerary.createdBy = owner;
     res.status(200).json({ itinerary: savedItinerary, success: true });
+  } catch (err) {
+    console.log(err);
+    res
+      .status(500)
+      .send("Unable to generate itinerary. Please try again in sometime");
+  }
+};
+
+const generate = async (req, res) => {
+  try {
+    const { startDate, endDate, destination, interests, budget } = req.body;
+    const endDateMs = new Date(endDate).getTime();
+    const startDateMs = new Date(startDate).getTime();
+    const duration =
+      Math.ceil((endDateMs - startDateMs) / (1000 * 3600 * 24)) + 1;
+    if (!(destination && duration)) {
+      res.status(400).send("Mandatory fields missing");
+    }
+
+    var prompt = `Generate a ${duration}-day itinerary for a trip to ${destination}. 
+    The itinerary should have a budget of ${budget} and include activities related to ${interests}. 
+    The response should be in JSON format which includes the following fields-  Response should be in JSON format as a list of dictionaries.
+    Each dictionary will have 2 fields - "day"(in number) and "places". 
+    The value places should be a list of dictionaries containing fields- "placeName", "lat", "lng", "desc", "cost"(in USD), "startTime", "endTime", "category".
+    The itinerary should be distance efficient with minimum travel time in a day. Arrange the places in order it should be visited.
+    Reply with only the answer in JSON form and include no other commentary.
+    Limit the output to less than 1000 tokens.`;
+
+    console.log(prompt);
+
+    const itinerary = await openaiquery(prompt);
+    console.log(itinerary);
+
+    res.status(200).send(itinerary);
   } catch (err) {
     console.log(err);
     res
@@ -416,4 +453,5 @@ module.exports = {
   itineraryLikeCount,
   removeItineraryLikeCount,
   itineraryRating,
+  generate,
 };

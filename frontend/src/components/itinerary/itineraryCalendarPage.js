@@ -49,16 +49,18 @@ export const ItineraryCalendarPage = ({ history }) => {
     async function fetchAllImages() {
       const images = {};
       const itineraryData = itinerarydet && itinerarydet.itineraryList;
-      for (const day of itineraryData) {
-        for (const place of day.places) {
-          const imageURL = await fetchImageForPlace(place.placeName);
-          images[place.placeName] = imageURL
-            ? imageURL
-            : "https://media.timeout.com/images/105770969/1372/772/image.jpg";
+      if (itineraryData) {
+        for (const day of itineraryData) {
+          for (const place of day.places) {
+            const imageURL = await fetchImageForPlace(place.placeName);
+            images[place.placeName] = imageURL
+              ? imageURL
+              : "https://media.timeout.com/images/105770969/1372/772/image.jpg";
+          }
         }
-      }
 
-      setPlaceImages(images);
+        setPlaceImages(images);
+      }
     }
     fetchAllImages();
   }, [itinerarydet]);
@@ -226,6 +228,7 @@ export const ItineraryCalendarPage = ({ history }) => {
     position: "relative",
     borderRadius: "8px 8px 0 0",
   };
+  let tempDate = moment(itinerarydet && itinerarydet.startDate);
   const startDate = moment(itinerarydet && itinerarydet.startDate);
   const endDate = moment(itinerarydet && itinerarydet.endDate);
   const tripStartDate = moment(itinerarydet && itinerarydet.startDate).format(
@@ -236,19 +239,19 @@ export const ItineraryCalendarPage = ({ history }) => {
   );
   const dateArray = [];
 
-  while (startDate < endDate) {
+  while (tempDate <= endDate) {
     dateArray.push({
-      day: startDate.format("dddd"),
-      date: startDate.format("MMMM Do"),
+      day: tempDate.format("dddd"),
+      date: tempDate.format("MMMM Do"),
     });
-    startDate.add(1, "days"); // Move to the next day
+    tempDate.add(1, "days"); // Move to the next day
   }
-  if (!startDate.isSame(endDate)) {
-    dateArray.push({
-      day: endDate.format("dddd"),
-      date: endDate.format("MMMM Do"),
-    });
-  }
+  // if (!startDate.isSame(endDate)) {
+  //   dateArray.push({
+  //     day: endDate.format("dddd"),
+  //     date: endDate.format("MMMM Do"),
+  //   });
+  // }
 
   async function getImage() {
     const location = itinerarydet && itinerarydet.destination;
@@ -277,7 +280,11 @@ export const ItineraryCalendarPage = ({ history }) => {
     history.push(`/itineraryedit/${itineraryId}`);
   };
   useEffect(() => {
-    getImage();
+    if (itinerarydet && itinerarydet.imageUrl) {
+      setLocationImage(itinerarydet.imageUrl);
+    } else {
+      getImage();
+    }
     getProfileImage();
   }, [itinerarydet]);
   const maxStars = 5;
@@ -558,9 +565,9 @@ export const ItineraryCalendarPage = ({ history }) => {
                 <div key={index} className="day-container">
                   <div className="day-header">
                     <div>
-                      <p>{dateArray && dateArray[index].day}</p>
+                      <p>{dateArray.length && dateArray[index].day}</p>
                       <p style={{ color: "#f75940" }}>
-                        {dateArray && dateArray[index].date}
+                        {dateArray.length && dateArray[index].date}
                       </p>
                     </div>
                   </div>
