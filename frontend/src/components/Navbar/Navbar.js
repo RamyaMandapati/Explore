@@ -1,26 +1,27 @@
-import React, { useState, useEffect } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faComments, faBell } from "@fortawesome/free-solid-svg-icons"; // Import the messenger icon
-import "./Navbar.css"; // You can create a CSS file for styling
-import logo from "../../logo.png";
-import profile from "../../images/profile.svg";
-import { Travelfeed } from "../dashboard/Travelfeed.js";
-import { Link } from "react-router-dom";
-import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
-import { LOGOUT } from "../../actions/types";
-import { useHistory } from "react-router-dom";
-import { loadUser } from "../../actions/auth";
-import Menu from "@mui/material/Menu";
-import io from "socket.io-client";
+import React, { useState, useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faComments, faBell } from '@fortawesome/free-solid-svg-icons'; // Import the messenger icon
+import './Navbar.css'; // You can create a CSS file for styling
+import logo from '../../logo.png';
+import profile from '../../images/profile.svg';
+import { Travelfeed } from '../dashboard/Travelfeed.js';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { LOGOUT } from '../../actions/types';
+import { useHistory } from 'react-router-dom';
+import { loadUser } from '../../actions/auth';
+import Menu from '@mui/material/Menu';
+import io from 'socket.io-client';
 
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import Divider from "@mui/material/Divider";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemText from "@mui/material/ListItemText";
-import Badge from "@mui/material/Badge";
-import ListItemIcon from "@mui/material/ListItemIcon";
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import Divider from '@mui/material/Divider';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+import Badge from '@mui/material/Badge';
+import ListItemIcon from '@mui/material/ListItemIcon';
+
 const Navbar = () => {
   const history = useHistory();
 
@@ -47,11 +48,11 @@ const Navbar = () => {
     setAnchorNotification(null);
   };
 
-  const [socketUser, setSocketUser] = useState("");
+  const [socketUser, setSocketUser] = useState('');
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    const newSocket = io("http://localhost:5001");
+    const newSocket = io('http://localhost:5001');
     setSocket(newSocket);
     return () => {
       newSocket.disconnect();
@@ -59,14 +60,14 @@ const Navbar = () => {
   }, []);
   useEffect(() => {
     if (user && user._id && socket) {
-      socket?.emit("newSocketUser", user._id);
-      socket.on("socketUserInfo", (data) => {
+      socket?.emit('newSocketUser', user._id);
+      socket.on('socketUserInfo', (data) => {
         setSocketUser(data);
       });
-      socket.emit("requestNotifications", {
+      socket.emit('requestNotifications', {
         senderName: user._id,
       });
-      socket.on("getNotifications", (data) => {
+      socket.on('getNotifications', (data) => {
         const unreadNotifications = data.filter(
           (notification) => notification.isRead === false
         );
@@ -75,15 +76,15 @@ const Navbar = () => {
       });
 
       return () => {
-        socket.off("socketUserInfo");
-        socket.off("getNotifications");
+        socket.off('socketUserInfo');
+        socket.off('getNotifications');
       };
     }
   }, [user, socket]);
 
   useEffect(() => {
     if (socket) {
-      socket.on("newNotification", (notification) => {
+      socket.on('newNotification', (notification) => {
         // Add the new notification to the state
         setNotifications((prevNotifications) => [
           notification,
@@ -93,16 +94,17 @@ const Navbar = () => {
           setUnreadNotifications((prevUnread) => [notification, ...prevUnread]);
         }
       });
-      console.log("hey", notifications);
+      // console.log('hey', notifications);
       return () => {
-        socket.off("newNotification");
+        socket.off('newNotification');
       };
     }
   }, [socket]);
-  console.log(notifications);
+
+  // console.log(notifications);
   const handleNotification = async (notificationId) => {
     axios
-      .put("/api/notification", { notificationId: notificationId })
+      .put('/api/notification', { notificationId: notificationId })
       .then((response) => {
         if (response.data.success) {
           const responseData = response.data.notification;
@@ -123,11 +125,11 @@ const Navbar = () => {
     const data = {
       itineraryId: itineraryId,
       notificationId: notificationId,
-      type: "ACCEPT",
+      type: 'ACCEPT',
       memberId: memberId,
     };
     axios
-      .put("/api/itinerary/members", data)
+      .put('/api/itinerary/members', data)
       .then((response) => {
         if (response.data.success) {
           const responseData = response.data.notification;
@@ -148,11 +150,11 @@ const Navbar = () => {
     const data = {
       itineraryId: itineraryId,
       notificationId: notificationId,
-      type: "REJECT",
+      type: 'REJECT',
       memberId: memberId,
     };
     axios
-      .put("/api/itinerary/members", data)
+      .put('/api/itinerary/members', data)
       .then((response) => {
         if (response.data.success) {
           const responseData = response.data.notification;
@@ -160,7 +162,7 @@ const Navbar = () => {
             (notification) => notification._id !== responseData._id
           );
           setUnreadNotifications(updatedUnreadNotifications);
-          console.log("hello", response.data.success);
+          console.log('hello', response.data.success);
           window.location.reload();
         }
       })
@@ -174,11 +176,11 @@ const Navbar = () => {
   // }, []);
   const logout = () => {
     axios
-      .post("/logout")
+      .post('/logout')
       .then((response) => {
-        dispatch({ type: "LOGOUT" });
+        dispatch({ type: 'LOGOUT' });
         if (history) {
-          history.push("/");
+          history.push('/');
         }
       })
       .catch((error) => {
@@ -187,38 +189,38 @@ const Navbar = () => {
   };
 
   return (
-    <div className="navbar">
-      <div className="navbar-left">
-        <Link to="/TravelFeed">
-          <img className="logo" src={logo} alt="Logo" />
+    <div className='navbar'>
+      <div className='navbar-left'>
+        <Link to='/TravelFeed'>
+          <img className='logo' src={logo} alt='Logo' />
         </Link>
       </div>
       {/* <div className="navbar-center">
         <input type="text" placeholder="Search for Places, People or Tags" />
       </div> */}
 
-      <div className="message">
-        <div className="messenger-icon" onClick={() => setOpen(!open)}>
+      <div className='message flex items-center p-0'>
+        <div className='messenger-icon' onClick={() => setOpen(!open)}>
           <FontAwesomeIcon
             icon={faBell}
-            size="lg"
+            size='lg'
             onClick={handleOpenNotificationMenu}
           />
           {unreadNotifications.length > 0 && (
-            <div className="counter">{unreadNotifications.length}</div>
+            <div className='counter'>{unreadNotifications.length}</div>
           )}
           <Menu
-            sx={{ mt: "45px", maxHeight: "40%" }}
-            id="menu-appbar"
+            sx={{ mt: '45px', maxHeight: '40%' }}
+            id='menu-appbar'
             anchorEl={anchorNotification}
             anchorOrigin={{
-              vertical: "top",
-              horizontal: "right",
+              vertical: 'top',
+              horizontal: 'right',
             }}
             keepMounted
             transformOrigin={{
-              vertical: "top",
-              horizontal: "right",
+              vertical: 'top',
+              horizontal: 'right',
             }}
             open={Boolean(anchorNotification)}
             onClose={handleCloseNotificationMenu}
@@ -226,12 +228,12 @@ const Navbar = () => {
             {notifications.map((notification) => (
               <List
                 sx={{
-                  width: "100%",
+                  width: '100%',
                   maxWidth: 400,
-                  bgcolor: "background.paper",
+                  bgcolor: 'background.paper',
                 }}
               >
-                <ListItem alignItems="flex-start">
+                <ListItem alignItems='flex-start'>
                   <ListItemButton
                     onClick={() => handleNotification(notification._id)}
                   >
@@ -241,10 +243,10 @@ const Navbar = () => {
                       }
                     />
 
-                    {notification.notificationType === "ITINERARY_REQUEST" ? (
+                    {notification.notificationType === 'ITINERARY_REQUEST' ? (
                       <>
                         <div
-                          className="acceptButton"
+                          className='acceptButton'
                           onClick={(e) =>
                             handleAcceptRequest(
                               e,
@@ -257,7 +259,7 @@ const Navbar = () => {
                           Accept
                         </div>
                         <div
-                          className="rejectButton"
+                          className='rejectButton'
                           onClick={(e) =>
                             handleRejectRequest(
                               e,
@@ -267,7 +269,7 @@ const Navbar = () => {
                             )
                           }
                         >
-                          {" "}
+                          {' '}
                           Reject
                         </div>
                       </>
@@ -277,10 +279,10 @@ const Navbar = () => {
                           <div></div>
                         ) : (
                           <Badge
-                            color="primary"
+                            color='primary'
                             sx={{ paddingLeft: 5 }}
-                            badgeContent=" "
-                            variant="dot"
+                            badgeContent=' '
+                            variant='dot'
                           />
                         )}
                       </ListItemIcon>
@@ -293,23 +295,36 @@ const Navbar = () => {
           </Menu>
         </div>
 
-        <div className="messenger-icon">
-          <FontAwesomeIcon icon={faComments} size="lg" />
+        <div className='messenger-icon'>
+          <FontAwesomeIcon icon={faComments} size='lg' />
         </div>
 
-        <div className="profile">
+        <div className='relative'>
           <img
-            className="profile-image"
-            src={profile}
-            alt="Profile"
+            className='w-10 cursor-pointer rounded-full aspect-square'
+            src={user.profilePhoto || profile}
+            alt='Profile'
             onClick={toggleDropdown}
           />
+
           {isDropdownOpen && (
-            <div className="dropdown">
+            <div className='absolute top-[44px] shadow-md border bg-white -left-24'>
               <ul>
-                <li>Profile</li>
-                <li>Settings</li>
-                <li onClick={logout}>Logout</li>
+                <li>
+                  <Link
+                    to='/profile'
+                    className='p-2 hover:bg-gray-100 px-12 block'
+                  >
+                    Profile
+                  </Link>
+                </li>
+                <li className='p-2 hover:bg-gray-100 px-12 block'>Settings</li>
+                <li
+                  className='p-2 hover:bg-gray-100 px-12 block'
+                  onClick={logout}
+                >
+                  Logout
+                </li>
               </ul>
             </div>
           )}

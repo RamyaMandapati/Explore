@@ -8,12 +8,9 @@
   background-color: #ffffff; /* Facebook blue */
   padding: 0px 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  position: fixed;
+  position: sticky;
   top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  height: min-content;
+  z-index: 10;
 }
 
 /* Logo styles */
@@ -24,7 +21,7 @@
 }
 
 /* Search bar styles */
-.navbar-center input[type="text"] {
+.navbar-center input[type='text'] {
   border: 3px solid #aeb6f3;
   padding: 8px 12px;
   font-size: 16px;

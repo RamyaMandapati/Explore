@@ -1,13 +1,13 @@
-const itinerary = require("../models/itinerary");
-const user = require("../models/user");
+const itinerary = require('../models/itinerary');
+const user = require('../models/user');
 const {
   memberNotification,
   itineraryNotification,
-} = require("./notificationModule.js");
-const mongoose = require("mongoose");
-const notification = require("../models/notification");
-const { update } = require("tar");
-const { openaiquery } = require("../utils/openai.js");
+} = require('./notificationModule.js');
+const mongoose = require('mongoose');
+const notification = require('../models/notification');
+const { update } = require('tar');
+const { openaiquery } = require('../utils/openai.js');
 
 // save the itinerary
 const addItinerary = async (req, res) => {
@@ -51,7 +51,7 @@ const addItinerary = async (req, res) => {
         { $set: itineraryObject },
         { upsert: true, new: true }
       );
-      await itineraryNotification(itineraryId, userId, "UPDATE");
+      await itineraryNotification(itineraryId, userId, 'UPDATE');
     } else {
       itineraryObject.createdBy = userId;
       members.push(userId);
@@ -59,11 +59,11 @@ const addItinerary = async (req, res) => {
       itineraryObject.nonmembers = nonmembers;
       const itineraryModel = new itinerary(itineraryObject);
       savedItinerary = await itineraryModel.save();
-      await itineraryNotification(savedItinerary._id, userId, "ADDE");
+      await itineraryNotification(savedItinerary._id, userId, 'ADDE');
     }
     const owner = await user
       .findOne({ _id: itineraryObject.createdBy })
-      .select("userName email");
+      .select('userName email');
     savedItinerary.members = [owner];
     savedItinerary.createdBy = owner;
     res.status(200).json({ itinerary: savedItinerary, success: true });
@@ -71,7 +71,7 @@ const addItinerary = async (req, res) => {
     console.log(err);
     res
       .status(500)
-      .send("Unable to generate itinerary. Please try again in sometime");
+      .send('Unable to generate itinerary. Please try again in sometime');
   }
 };
 
@@ -83,7 +83,7 @@ const generate = async (req, res) => {
     const duration =
       Math.ceil((endDateMs - startDateMs) / (1000 * 3600 * 24)) + 1;
     if (!(destination && duration)) {
-      res.status(400).send("Mandatory fields missing");
+      res.status(400).send('Mandatory fields missing');
     }
 
     var prompt = `Generate a ${duration}-day itinerary for a trip to ${destination}. 
@@ -105,7 +105,7 @@ const generate = async (req, res) => {
     console.log(err);
     res
       .status(500)
-      .send("Unable to generate itinerary. Please try again in sometime");
+      .send('Unable to generate itinerary. Please try again in sometime');
   }
 };
 
@@ -121,13 +121,13 @@ const getItineraryById = async (req, res) => {
       itineraryData.members.map(async (member) => {
         const memberData = await user
           .findOne({ _id: member })
-          .select("userName email");
+          .select('userName email');
         memberInfo.push(memberData);
       })
     );
     const owner = await user
       .findOne({ _id: itineraryData.createdBy })
-      .select("userName email");
+      .select('userName email profilePhoto');
     itineraryData.members = memberInfo;
     itineraryData.createdBy = owner;
     const userId = req.user._id;
@@ -146,7 +146,7 @@ const getItineraryById = async (req, res) => {
     res.status(200).json({ success: true, itinerary: itineraryData });
   } catch (e) {
     console.log(e);
-    res.status(500).send("Unable to fetch itinerary");
+    res.status(500).send('Unable to fetch itinerary');
   }
 };
 
@@ -157,7 +157,7 @@ const getItineraries = async (req, res) => {
     let { destination, pageSize, page } = req.query;
     const query = {};
     if (destination) {
-      query.destination = new RegExp(destination, "i");
+      query.destination = new RegExp(destination, 'i');
     }
     if (!pageSize) {
       pageSize = 10;
@@ -167,14 +167,15 @@ const getItineraries = async (req, res) => {
     }
     const itineraries = await itinerary
       .find(query, {}, { lean: true })
-      .sort({ "likes.likecount": -1 }).populate("createdBy")
+      .sort({ 'likes.likecount': -1 })
+      .populate('createdBy')
       .limit(pageSize * 1)
       .skip(pageSize * (page - 1))
       .exec();
     res.status(200).json({ data: itineraries });
   } catch (e) {
     console.log(e);
-    res.status(500).send("Unable to fetch itinerary");
+    res.status(500).send('Unable to fetch itinerary');
   }
 };
 
@@ -185,8 +186,8 @@ const getItineraryByUserId = async (req, res) => {
     const query = [{ createdBy: userId }, { members: { $in: [userId] } }];
     const itineraryDetails = await itinerary
       .find({ $or: query }, {}, { lean: true })
-      .populate("createdBy")
-      .populate("members");
+      .populate('createdBy')
+      .populate('members');
     res.status(200).json({ data: itineraryDetails });
   } catch (e) {
     console.log(e);
@@ -205,23 +206,23 @@ const itineraryMembers = async (req, res) => {
     if (!itineraryDet) {
       await session.abortTransaction();
       session.endSession();
-      res.status(404).json({ message: "Itinerary not found" });
+      res.status(404).json({ message: 'Itinerary not found' });
     }
-    if (type === "ACCEPT") {
+    if (type === 'ACCEPT') {
       // Remove the new member from requestedMembers
       itineraryDet.requestedMembers.pull(memberId);
       // Add the new member to members
       itineraryDet.members.push(memberId);
-    } else if (type === "REJECT") {
+    } else if (type === 'REJECT') {
       // Remove the new member from requestedMembers
       itineraryDet.requestedMembers.pull(memberId);
     } else {
-      res.status(404).json({ message: "type is incorrect" });
+      res.status(404).json({ message: 'type is incorrect' });
     }
     // Save the changes to the itinerary
     itineraryDetails = await itineraryDet.save();
 
-    const notificationType = type === "ACCEPT" ? "ADD" : "REJECT";
+    const notificationType = type === 'ACCEPT' ? 'ADD' : 'REJECT';
     await memberNotification(
       itineraryId,
       itineraryDet.createdBy,
@@ -245,7 +246,7 @@ const itineraryMembers = async (req, res) => {
     await session.abortTransaction();
     session.endSession();
     console.log(e);
-    res.status(500).json({ error: "An error occurred" + e });
+    res.status(500).json({ error: 'An error occurred' + e });
   }
 };
 
@@ -260,7 +261,7 @@ const itineraryAccessRequest = async (req, res) => {
     if (!itineraryDet) {
       await session.abortTransaction();
       session.endSession();
-      res.status(404).json({ message: "Itinerary not found" });
+      res.status(404).json({ message: 'Itinerary not found' });
     }
     itineraryDet.requestedMembers.push(memberId);
 
@@ -271,7 +272,7 @@ const itineraryAccessRequest = async (req, res) => {
       itineraryDet.createdBy,
       memberId,
       itineraryDet.itineraryName,
-      "REQUEST"
+      'REQUEST'
     );
     await session.commitTransaction();
     session.endSession();
@@ -279,7 +280,7 @@ const itineraryAccessRequest = async (req, res) => {
     if (updatedItinerary) {
       res.status(200).json({ itinerary: updatedItinerary, success: true });
     } else {
-      res.status(404).json({ message: "Itinerary not found" });
+      res.status(404).json({ message: 'Itinerary not found' });
     }
   } catch (e) {
     await session.abortTransaction();
@@ -302,7 +303,7 @@ const favoriteItinerary = async (req, res) => {
     if (updatedUser) {
       res.status(200).json({ data: updatedUser });
     } else {
-      res.status(404).json({ message: "user not found" });
+      res.status(404).json({ message: 'user not found' });
     }
   } catch (e) {
     console.log(e);
@@ -323,7 +324,7 @@ const deletefavoriteItinerary = async (req, res) => {
     if (updatedUser) {
       res.status(200).json({ data: updatedUser });
     } else {
-      res.status(404).json({ message: "user not found" });
+      res.status(404).json({ message: 'user not found' });
     }
   } catch (e) {
     console.log(e);
@@ -338,8 +339,8 @@ const itineraryLikeCount = async (req, res) => {
     const updatedItinerary = await itinerary.findByIdAndUpdate(
       itineraryId,
       {
-        $push: { "likes.users": userId },
-        $inc: { "likes.likecount": 1 }, // Increment likecount by 1
+        $push: { 'likes.users': userId },
+        $inc: { 'likes.likecount': 1 }, // Increment likecount by 1
       },
       { new: true }
     );
@@ -359,7 +360,7 @@ const itineraryLikeCount = async (req, res) => {
       );
       res.status(200).json({ success: true, itinerary: itineraryObject });
     } else {
-      res.status(404).json({ message: "user not found" });
+      res.status(404).json({ message: 'user not found' });
     }
   } catch (e) {
     console.log(e);
@@ -378,7 +379,7 @@ const itineraryRating = async (req, res) => {
     if (!itineraryDet) {
       await session.abortTransaction();
       session.endSession();
-      return res.status(404).json({ message: "Itinerary not found" });
+      return res.status(404).json({ message: 'Itinerary not found' });
     }
     // Update the itineraryRating subdocument
     itineraryDet.itineraryRating.users.push(userId); // Add the user to the users array
@@ -412,8 +413,8 @@ const removeItineraryLikeCount = async (req, res) => {
     const updatedItinerary = await itinerary.findByIdAndUpdate(
       itineraryId,
       {
-        $pull: { "likes.users": userId },
-        $inc: { "likes.likecount": -1 }, // decrement likecount by 1
+        $pull: { 'likes.users': userId },
+        $inc: { 'likes.likecount': -1 }, // decrement likecount by 1
       },
       { new: true }
     );
@@ -433,7 +434,7 @@ const removeItineraryLikeCount = async (req, res) => {
       );
       res.status(200).json({ success: true, itinerary: itineraryObject });
     } else {
-      res.status(404).json({ message: "user not found" });
+      res.status(404).json({ message: 'user not found' });
     }
   } catch (e) {
     console.log(e);

@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const userProfileSchema = new Schema({
@@ -11,6 +11,7 @@ const userProfileSchema = new Schema({
   phoneNumber: { type: String },
   identificationProof: { type: String },
   profilePhoto: { type: String },
+  coverPhoto: { type: String },
   city: { type: String },
   state: { type: String },
   country: { type: String },
@@ -19,41 +20,48 @@ const userProfileSchema = new Schema({
       type: String,
     },
   ],
+  about: {
+    type: String,
+  },
+  bio: {
+    type: String,
+  },
+
   followers: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "user",
+      ref: 'user',
     },
   ],
   following: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "user",
+      ref: 'user',
     },
   ],
   tripsCreated: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "itinerary",
+      ref: 'itinerary',
     },
   ],
   isFavoriteItinerary: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "itinerary",
+      ref: 'itinerary',
     },
   ],
   postsCreated: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "post",
+      ref: 'post',
     },
   ],
   userReviews: [
     {
       user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "user",
+        ref: 'user',
       },
       review: {
         type: String,
@@ -65,6 +73,10 @@ const userProfileSchema = new Schema({
       },
     },
   ],
+  views: {
+    type: Number,
+    default: 0,
+  },
 });
 
-module.exports = mongoose.model("user", userProfileSchema);
+module.exports = mongoose.model('user', userProfileSchema);

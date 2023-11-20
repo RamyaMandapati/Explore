@@ -1,4 +1,4 @@
-const user = require("../models/user");
+const user = require('../models/user');
 const mongoose = require('mongoose');
 // update Preference
 const updateUserPreference = async (req, res) => {
@@ -20,7 +20,7 @@ const updateUserPreference = async (req, res) => {
     if (updatedUserPreference) {
       res.status(200).json({ success: true, data: updatedUserPreference });
     } else {
-      res.status(404).json({ success: false, message: "user not found" });
+      res.status(404).json({ success: false, message: 'user not found' });
     }
   } catch (e) {
     console.log(e);
@@ -32,11 +32,11 @@ const findUserByEmail = async (req, res) => {
   try {
     console.log(req.body.email);
     const { email } = req.body;
-    
+
     const userDetail = await user.findOne({ email }).populate('followers');
     if (!userDetail) {
       return res.status(400).send({
-        error: "No user with this email has account with us",
+        error: 'No user with this email has account with us',
       });
     }
     return res.status(200).send(userDetail);
@@ -47,8 +47,8 @@ const findUserByEmail = async (req, res) => {
 };
 
 //router.post('/follow/:userIdToFollow', async (req, res) => {
-  const updateFollowers=async(req,res)=>{
-    console.log(req.body);
+const updateFollowers = async (req, res) => {
+  console.log(req.body);
   const currentUserId = req.body.currentUserId; // Assume you get this from session or token
   const userIdToFollow = req.params.userIdToFollow;
 
@@ -85,12 +85,13 @@ const findUserByEmail = async (req, res) => {
     session.endSession();
 
     res.json({
-      message: "Followed successfully",
-      
+      message: 'Followed successfully',
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "An error occurred while following the user" });
+    res
+      .status(500)
+      .json({ message: 'An error occurred while following the user' });
   }
 };
 module.exports = {
