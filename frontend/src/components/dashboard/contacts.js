@@ -43,6 +43,7 @@ const Contacts = () => {
           <li key={contact._id} className="contact-item">
             <img src={contact.profilePhoto || profilephoto} />
             <span>{contact?.userName}</span>
+            
           </li>
         ))}
       </ul>

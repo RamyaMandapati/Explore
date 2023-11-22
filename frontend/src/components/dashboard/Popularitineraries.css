@@ -57,10 +57,11 @@
 .itinerary-card .name {
   position: absolute;
   bottom: 15px; /* Adjusted position */
-  left: 50px; /* Adjusted position */
+  left: 10px; /* Adjusted position */
   color: white;
   z-index: 2;
   align-self: center;
+  font-weight: bold;
 }
 .see-all-link {
    /* Position it anywhere you want */
@@ -72,7 +73,8 @@
   align-self: flex-end;
   text-decoration: none; /* Optional: removes underline from links */
   color: black; /* Optional: link uses current text color */
-  cursor: pointer; /* Changes cursor to pointer to indicate it's clickable */
+  cursor: pointer;
+  font-size: x-small; /* Changes cursor to pointer to indicate it's clickable */
 }
 .navbar-center input[type="text"] {
   border: 3px solid #f3c6ae; 

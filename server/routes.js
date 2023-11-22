@@ -27,6 +27,7 @@ const {
   updateUserPreference,
   findUserByEmail,
   updateFollowers,
+  savePost,
 } = require("./modules/userModule");
 
 const { editMember } = require("./modules/groupModule");
@@ -45,7 +46,7 @@ router.put("/itinerary/rating", itineraryRating);
 router.post("/follow/:userIdToFollow", updateFollowers);
 router.put("/users/favitinerary", favoriteItinerary);
 router.put("/users/delfavitinerary", deletefavoriteItinerary);
-
+router.post("/savePost/:postId", savePost);
 //notification related routes
 router.put("/notification", readNotification);
 router.delete("/notification/:id", deleteNotification);

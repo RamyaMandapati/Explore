@@ -179,11 +179,11 @@
 }
 .navbar-center input[type="text"] {
   border: 3px solid #f3c6ae; 
-  padding: 8px 12px;
-  font-size: 16px;
+  padding: 8px 8px;
+  font-size: 14px;
   border-radius: 10px;
   width: 50%;
-  height : 40px;
+  height : 20px;
   background-color: #f0f2f5;
   margin-bottom: 10px; /* Facebook search bar background */
   
@@ -213,4 +213,24 @@
   background-color: #FF7F50; /* Slightly darker orange on hover */
 }
 /* Style for existing comments, if necessary */
+.post-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 150px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  z-index: 10;
+}
+
+.post-menu div {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.post-menu div:hover {
+  background-color: #f7f7f7;
+}
 

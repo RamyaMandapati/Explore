@@ -32,6 +32,10 @@ const ItinerariesComponent = () => {
     // You can call other functions here or do further processing based on the value
     searchItineraries(value);
 };
+const formatDate = (dateString) => {
+  const options = { year: '2-digit', month: '2-digit', day: '2-digit' };
+  return new Date(dateString).toLocaleDateString('en-GB', options);
+};
 
 const searchItineraries = (term) => {
     // Search the itineraries or make an API call based on the term
@@ -70,7 +74,7 @@ const searchItineraries = (term) => {
             <img src={itinerary.imageUrl} alt="Itinerary" />
             <div className="card-info">
               <p className="location"><span role="img" aria-label="pin">📍</span> {itinerary.destination}</p>
-              <p className="date"><span role="img" aria-label="calendar">📅</span> {itinerary.startDate}</p>
+              <p className="date"><span role="img" aria-label="calendar">📅</span> {formatDate(itinerary.startDate)}-{formatDate(itinerary.endDate)} </p>
             </div>
           </div>
         ))}
