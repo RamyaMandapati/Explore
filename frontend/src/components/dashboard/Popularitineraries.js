@@ -14,7 +14,7 @@ const PopularItineraries = () => {
         const response = await axios.get('http://localhost:4000/api/itinerary');
         console.log(response.data.data);
         // Assuming the API returns an array of itineraries
-        setItineraries(response.data.data.slice(0, 7)); // Take the first 7 itineraries
+        setItineraries(response.data.data.slice(0, 4)); // Take the first 7 itineraries
       } catch (error) {
         console.error('Error fetching itineraries:', error);
       }
@@ -27,7 +27,7 @@ const PopularItineraries = () => {
     <div className="popular-container">
       
       <div>
-      <h5 style={{fontSize:"17px", marginTop:"20px"}}>Popular itineraries</h5>
+      <h5 style={{fontSize:"16px"}}>Popular itineraries</h5>
       
     </div>
     <div className="popular-itineraries">

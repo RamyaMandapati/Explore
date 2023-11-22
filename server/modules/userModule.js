@@ -110,9 +110,28 @@ const updateFollowers = async (req, res) => {
       .json({ message: "An error occurred while following the user" });
   }
 };
+
+const savePost = async (req, res) => {
+  const currentUserId = req.body.currentUserId;
+  const postId = req.params.postId;
+  user
+    .updateOne({ _id: currentUserId }, { $addToSet: { savedPosts: postId } })
+    .then((result) => {
+      console.log("Post added to savedPosts", result);
+    })
+    .catch((error) => {
+      console.error("Error saving post", error);
+    });
+};
+
+
+
+
+
 module.exports = {
   updateUserPreference,
   findUserByEmail,
   updateFollowers,
+  savePost
   findUserById,
 };

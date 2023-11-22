@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsUp, faComment, faUserPlus, faUserFriends, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import { useHistory } from 'react-router-dom';
+import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
   const [posts, setPosts] = useState([]);
   const [showCommentsForPost, setShowCommentsForPost] = useState(null);
@@ -16,9 +17,38 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [min, max] = ageFilter.split('-').map(Number);
   const { user } = useSelector((state) => state.auth);
+  const [showMenu, setShowMenu] = useState(null);
   console.log(user._id);
   const history = useHistory();
+  const toggleMenu = (index) => {
+    if (showMenu === index) {
+      setShowMenu(null);
+    } else {
+      setShowMenu(index);
+    }
+  };
+  const handleSavePost = async (postId) => {
+    setShowMenu(null);
+    const currentUserId = user._id; // Replace with actual logic to retrieve current user ID
+    try {
+      const response = await axios.post(`http://localhost:4000/api/savePost/${postId}`,{currentUserId});
+      console.log(response.data); // Handle the response appropriately
+      // You might want to update the state to reflect the new follow relationship
+    } catch (error) {
+      console.error('Error saving post', error);
+      // Handle errors, such as displaying a message to the user
+    }
+   
+  };
 
+  const handleEditPost = (postId) => {
+    // Implementation to edit the post
+    // This might involve setting a state with the post's data and opening a modal or another page for editing
+  };
+
+  const handleDeletePost = (postId) => {
+    // Implementation to delete the post
+  };
   const navigateToNewPost = () => {
     history.push('/newPost');
   };
@@ -138,17 +168,27 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
     className="search-input"
   />
    <div className="button-container">
-  <button className="create-post-btn" onClick={navigateToNewPost}>+ Create Post</button>
-  <button className="create-itinerary-btn">+ Create Itinerary</button>
+  <button className="create-post-btn" onClick={navigateToNewPost}>Create Post</button>
+  <button className="create-itinerary-btn">Create Itinerary</button>
 </div>
 
       </div> 
-      {filteredPosts.map((post, index) => (
+      {filteredPosts.slice().reverse().map((post, index) => (
 
         <div key={index} className="user-post">
           <div className="top-right-icons">
-            <FontAwesomeIcon icon={faUserPlus} className="icon follow-icon" style={{marginRight:"20px"}}  onClick={() => handleFollow(post.user?._id)} />
-            {/* <FontAwesomeIcon icon={faUserFriends} className="icon connect-icon" /> */}
+          {!user.following.includes(post.user?._id) && (
+      <FontAwesomeIcon icon={faUserPlus} className="icon follow-icon" 
+        onClick={() => handleFollow(post.user?._id)} style={{marginRight:"10px"}}/>
+    )}
+            <FontAwesomeIcon icon={faEllipsisV} onClick={() => toggleMenu(index)} />
+            {showMenu === index && (
+              <div className="post-menu">
+                <div onClick={() => handleSavePost(post._id)}>Save Post</div>
+                <div onClick={() => handleEditPost(post._id)}>Edit Post</div>
+                <div onClick={() => handleDeletePost(post._id)}>Delete Post</div>
+              </div>
+            )}
           </div>
 
           <div className="user-info">

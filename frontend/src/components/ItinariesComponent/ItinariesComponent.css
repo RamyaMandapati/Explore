@@ -3,11 +3,16 @@
   background-color: #f8f8f8;
   padding: 20px;
   margin-top: 60px;
+  
+  flex-direction: column; /* Stack children vertically */
+  align-items: center; /* Center children horizontally */
+  display: flex;  
+  
 }
 
 .header {
   display: flex;
-  justify-content: flex-start;
+  
 }
 
 .title {
@@ -42,6 +47,7 @@
 
 .itineraries-section {
   margin-top: 20px;
+  margin-left:160px;
 }
 
 .card {
