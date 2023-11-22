@@ -14,7 +14,7 @@ const PopularItineraries = () => {
         const response = await axios.get('http://localhost:4000/api/itinerary');
         console.log(response.data.data);
         // Assuming the API returns an array of itineraries
-        setItineraries(response.data.data.slice(0, 4)); // Take the first 7 itineraries
+        setItineraries(response.data.data.slice(0, 5)); // Take the first 7 itineraries
       } catch (error) {
         console.error('Error fetching itineraries:', error);
       }

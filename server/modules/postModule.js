@@ -37,7 +37,10 @@ console.log("Request files:", req.files);
 // Get all posts
 const getPosts = async (req, res) => {
   try {
-    const posts = await Post.find().populate('user');;
+    const posts = await Post.find().populate('user').populate({
+      path: 'comments.user',
+ // Only include the userName field
+    });
     res.json(posts);
   } catch (error) {
     console.error("Error fetching posts:", error);

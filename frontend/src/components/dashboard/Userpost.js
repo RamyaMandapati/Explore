@@ -102,8 +102,8 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
            (searchTerm ? post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                         post.description.toLowerCase().includes(searchTerm.toLowerCase()) : true);
   });
-  const handleCommentClick = (index) => {
-    setShowCommentsForPost(showCommentsForPost === index ? null : index);
+  const handleCommentClick = (postId) => {
+    setShowCommentsForPost(showCommentsForPost === postId ? null : postId);
   };
   const handleLike = async (postId) => {
     const userId = user._id; // The current user's ID
@@ -126,31 +126,27 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
   };
   
 
-  const handleCommentChange = (text, index) => {
-    setNewComment({ ...newComment, [index]: text });
+  const handleCommentChange = (text, postId) => {
+    setNewComment({ ...newComment, [postId]: text });
   };
-  const submitComment = async (index, commentText) => {
-    const postId = posts[index]._id; // ID of the post being commented on
-    const userId = user._id; // The current user's ID
-  
+  const submitComment = async (postId, commentText) => {
     if (!commentText.trim()) {
       return; // Avoid sending empty comments
     }
   
     try {
       const response = await axios.post(`http://localhost:4000/api/addComment/${postId}`, {
-        userId,
+        userId: user._id,
         text: commentText
       });
   
-      console.log(response.data);
-  
-      // Update the state to include the new comment
-      const updatedPosts = [...posts];
-      updatedPosts[index].comments.push({ user, text: commentText, createdAt: new Date() });
-  
-      setPosts(updatedPosts);
-      setNewComment({ ...newComment, [index]: '' }); // Clear the comment input field
+      setPosts(currentPosts => currentPosts.map(post => {
+        if (post._id === postId) {
+          return { ...post, comments: [...post.comments, { user, text: commentText, createdAt: new Date() }] };
+        }
+        return post;
+      }));
+      setNewComment({ ...newComment, [postId]: '' }); // Clear the comment input field
     } catch (error) {
       console.error('Error adding comment:', error);
     }
@@ -175,7 +171,7 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
       </div> 
       {filteredPosts.slice().reverse().map((post, index) => (
 
-        <div key={index} className="user-post">
+        <div key={post._id} className="user-post">
           <div className="top-right-icons">
           {!user.following.includes(post.user?._id) && (
       <FontAwesomeIcon icon={faUserPlus} className="icon follow-icon" 
@@ -261,17 +257,17 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
             <div className="comment-input-section">
               <hr></hr>
               <input
-                type="text"
-                className="comment-input"
-                placeholder="Write a comment..."
-                value={newComment[index] || ''}
-                onChange={(e) => handleCommentChange(e.target.value, index)}
-                onKeyPress={(e) => e.key === 'Enter' ? submitComment(index, newComment[index]) : null}
-              />
+  type="text"
+  className="comment-input"
+  placeholder="Write a comment..."
+  value={newComment[post._id] || ''}
+  onChange={(e) => handleCommentChange(e.target.value, post._id)}
+  onKeyPress={(e) => e.key === 'Enter' ? submitComment(post._id, newComment[post._id]) : null}
+/>
               <FontAwesomeIcon
   icon={faPaperPlane}
   className="comment-submit-arrow"
-  onClick={() => submitComment(index, newComment[index])}
+  onClick={() => submitComment(post._id, newComment[post._id])}
 />
 
             </div>

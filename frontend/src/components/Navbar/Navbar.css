@@ -23,7 +23,7 @@
   width: 200px;
   height: 60px;
   margin-right: 10px;
- /* margin-left:150px; */
+ margin-left:110px;
 }
 
 /* Search bar styles */
@@ -42,8 +42,8 @@
  color: rgb(111, 107, 107);
   font-size: 20px;
   cursor: pointer;
-  /* margin-right: 20px;
-    margin-left : 40px;*/
+ 
+   /* margin-left : 40px; */
   margin-top: 10px;
   position: relative;
   transition: transform 0.2s;
@@ -76,6 +76,7 @@
   transition: transform 0.2s;
   margin-top: 0px;
   position: relative;
+  margin-right: 140px;
 
   
  
@@ -91,7 +92,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 4px;
   display: none;
-  margin-right: 150px;
+  margin-right: 140px;
 }
 
 .dropdown ul {
