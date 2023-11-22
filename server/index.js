@@ -185,6 +185,14 @@ exports.emitNotification = (userId, notification) => {
   }
 };
 
+// exports.emitMessage = async (userId, message) => {
+//   const userSocket = await getSocketUser(userId.toString());
+//   console.log(userSocket);
+//   if (userSocket) {
+//     io.to(userSocket.socketId).emit("getMessage", message);
+//   }
+// };
+
 io.on("connect", function (socket) {
   socket.on("newSocketUser", (username) => {
     addSocketUser(username, socket.id);
@@ -192,11 +200,23 @@ io.on("connect", function (socket) {
   });
 
   socket.on("requestNotifications", async ({ senderName }) => {
-    const receiver = getSocketUser(senderName);
+    const receiver = await getSocketUser(senderName);
     const notifications = await notificationModel
       .find({ receiveruserId: senderName })
       .sort({ timestamp: -1 });
-    io.to(receiver.socketId).emit("getNotifications", notifications);
+    if (receiver) {
+      io.to(receiver.socketId).emit("getNotifications", notifications);
+    }
+  });
+
+  socket.on("sendMessage", async ({ senderId, receiverId, text }) => {
+    const user = await getSocketUser(receiverId);
+    if (user) {
+      io.to(user.socketId).emit("getMessage", {
+        senderId,
+        text,
+      });
+    }
   });
 
   socket.on("disconnect", () => {

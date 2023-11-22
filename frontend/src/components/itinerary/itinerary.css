@@ -92,13 +92,13 @@ input {
   border-radius: 100px;
 }
 
-.planbutton:disabled{
+.planbutton:disabled,
+.Button.Button__withLabel:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-
 }
 
-.updatebutton{
+.updatebutton {
   margin-top: 20px;
 }
 .planbutton1 {
@@ -236,7 +236,7 @@ h2 {
   transition: background-color 0.2s;
 }
 
-.btn-e{
+.btn-e {
   top: 16px;
   right: 16px;
 }
@@ -263,7 +263,8 @@ h2 {
   min-height: 60px;
 }
 
-.input_trip, .input_start{
+.input_trip,
+.input_start {
   padding: 0.5rem;
   padding-right: 3rem;
   border-radius: 8px;
@@ -282,11 +283,12 @@ h2 {
   white-space: nowrap;
 }
 
-.input_trip:hover, .input_start:hover  {
+.input_trip:hover,
+.input_start:hover {
   background-color: #f3f4f5;
 }
 
-.input_start{
+.input_start {
   border-radius: 8px;
   width: 200px;
   color: #3f52e3;
@@ -660,7 +662,7 @@ h2 {
   padding: 16px;
 }
 
-.cost_box1{
+.cost_box1 {
   margin: 0px;
   margin-bottom: 10px;
 }
@@ -752,9 +754,20 @@ h2 {
   margin-bottom: 4px;
 }
 
-.edit__label{
+.edit__label {
   text-align: center;
   margin-bottom: 15px;
   font-size: 25px;
   font-weight: 500;
+}
+
+.marker-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end; /* Align to the bottom of the container */
+  height: 40px; /* Height of your marker */
+}
+
+.marker-svg {
+  transform: translateY(-50%); /* Move the SVG up by half its height */
 }

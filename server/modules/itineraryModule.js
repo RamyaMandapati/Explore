@@ -63,7 +63,7 @@ const addItinerary = async (req, res) => {
     }
     const owner = await user
       .findOne({ _id: itineraryObject.createdBy })
-      .select("userName email");
+      .select("userName email profilePhoto");
     savedItinerary.members = [owner];
     savedItinerary.createdBy = owner;
     res.status(200).json({ itinerary: savedItinerary, success: true });
@@ -121,13 +121,13 @@ const getItineraryById = async (req, res) => {
       itineraryData.members.map(async (member) => {
         const memberData = await user
           .findOne({ _id: member })
-          .select("userName email");
+          .select("userName email profilePhoto");
         memberInfo.push(memberData);
       })
     );
     const owner = await user
       .findOne({ _id: itineraryData.createdBy })
-      .select("userName email");
+      .select("userName email profilePhoto");
     itineraryData.members = memberInfo;
     itineraryData.createdBy = owner;
     const userId = req.user._id;
@@ -167,7 +167,8 @@ const getItineraries = async (req, res) => {
     }
     const itineraries = await itinerary
       .find(query, {}, { lean: true })
-      .sort({ "likes.likecount": -1 }).populate("createdBy")
+      .sort({ "likes.likecount": -1 })
+      .populate("createdBy")
       .limit(pageSize * 1)
       .skip(pageSize * (page - 1))
       .exec();

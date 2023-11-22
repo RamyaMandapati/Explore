@@ -238,15 +238,23 @@ export const ItineraryCalendarPage = ({ history }) => {
     "MMM D,YYYY"
   );
   const dateArray = [];
-
-  while (tempDate <= endDate) {
-    dateArray.push({
-      day: tempDate.format("dddd"),
-      date: tempDate.format("MMMM Do"),
-    });
-    tempDate.add(1, "days"); // Move to the next day
+  if (startDate && endDate) {
+    while (tempDate <= endDate) {
+      dateArray.push({
+        day: tempDate.format("dddd"),
+        date: tempDate.format("MMMM Do"),
+      });
+      tempDate.add(1, "days"); // Move to the next day
+    }
+    if (!startDate.isSame(endDate)) {
+      dateArray.push({
+        day: endDate.format("dddd"),
+        date: endDate.format("MMMM Do"),
+      });
+    }
   }
 
+  console.log("date", dateArray);
   async function getImage() {
     const location = itinerarydet && itinerarydet.destination;
     const url = `https://pixabay.com/api/?key=40271680-2ccb695ef668215fefa858c10&q=${location}&image_type=photo&per_page=10&safesearch=True&category=places&editors_choice=True`;
@@ -287,6 +295,8 @@ export const ItineraryCalendarPage = ({ history }) => {
   let hasHalfStar = false;
   hasHalfStar =
     itinerarydet && itinerarydet.itineraryAvgRating - fullStars >= 0.5;
+
+  const [isHovered, setIsHovered] = useState(false);
 
   return (
     <>
@@ -449,14 +459,83 @@ export const ItineraryCalendarPage = ({ history }) => {
                 </span>
               </h2>
               <div className="add-flex">
-                <img
-                  src={profileImage}
-                  style={{ height: "52px", width: "52px", borderRadius: "50%" }}
-                ></img>
+                <div
+                  className="add-flex"
+                  onMouseEnter={() => setIsHovered(true)}
+                  onMouseLeave={() => setIsHovered(false)}
+                >
+                  <img
+                    src={profileImage}
+                    style={{
+                      borderRadius: "50%",
+                    }}
+                    className="customer-image"
+                  ></img>
+                  <img
+                    src={profileImage}
+                    style={{
+                      borderRadius: "50%",
+                    }}
+                    className="customer-image"
+                  ></img>
+                  <div className="user-count">+3</div>
+                  {isHovered && (
+                    <div className="user-details-popup">
+                      <h3 style={{ textAlign: "center", color: "#f75940" }}>
+                        Members
+                      </h3>
+                      {itinerarydet &&
+                        itinerarydet.members.map((member, index) => (
+                          <div key={index} className="user-detail">
+                            <img
+                              src={member.profilePhoto && member.profilePhoto}
+                              style={{
+                                borderRadius: "50%",
+                                width: "50px",
+                                height: "50px",
+                              }}
+                            />
+                            <a href="#" className="a-tag">
+                              {member.userName}
+                            </a>
+                          </div>
+                        ))}
+                      {itinerarydet && itinerarydet.nonmembers.length !== 0 && (
+                        <>
+                          <h3
+                            style={{
+                              textAlign: "center",
+                              color: "#f75940",
+                              marginTop: "20px",
+                            }}
+                          >
+                            Non Members
+                          </h3>
+                          <>
+                            {itinerarydet &&
+                              itinerarydet.nonmembers.map((member, index) => (
+                                <div key={index} className="user-detail">
+                                  <img
+                                    src="https://res.cloudinary.com/dylqg3itm/image/upload/v1700327154/explore/default-avatar-profile-icon-of-social-media-user-vector_gqejru.jpg"
+                                    style={{
+                                      borderRadius: "50%",
+                                      width: "50px",
+                                      height: "50px",
+                                    }}
+                                  />
+                                  <p style={{ fontWeight: 700 }}>{member}</p>
+                                </div>
+                              ))}
+                          </>
+                        </>
+                      )}
+                    </div>
+                  )}
+                </div>
                 {itinerarydet &&
                   itinerarydet.createdBy._id !== (user && user._id) &&
                   !itinerarydet.userRated && (
-                    <div className="add-flex ml-2">
+                    <div className="add-flex ml-4">
                       {Array(5)
                         .fill()
                         .map((_, index) => (
@@ -489,10 +568,7 @@ export const ItineraryCalendarPage = ({ history }) => {
                           fontWeight: "700",
                         }}
                       >
-                        Rate{" "}
-                        {itinerarydet &&
-                          itinerarydet.createdBy &&
-                          itinerarydet.createdBy.userName}
+                        Rate Trip
                       </span>
                     </div>
                   )}
@@ -559,9 +635,15 @@ export const ItineraryCalendarPage = ({ history }) => {
                 <div key={index} className="day-container">
                   <div className="day-header">
                     <div>
-                      <p>{dateArray.length && dateArray[index].day}</p>
+                      <p>
+                        {dateArray.length !== 0 &&
+                          dateArray[index] &&
+                          dateArray[index].day}
+                      </p>
                       <p style={{ color: "#f75940" }}>
-                        {dateArray.length && dateArray[index].date}
+                        {dateArray.length !== 0 &&
+                          dateArray[index] &&
+                          dateArray[index].date}
                       </p>
                     </div>
                   </div>

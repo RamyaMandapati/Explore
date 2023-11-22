@@ -1,21 +1,27 @@
 import React, { useState, useEffect } from "react";
-import axios from 'axios';
-import './Userpost.css';
+import axios from "axios";
+import "./Userpost.css";
 import { useDispatch, useSelector } from "react-redux";
 import { loadUser } from "../../actions/auth";
-import profilephoto from '../../images/profilephoto.png'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faThumbsUp, faComment, faUserPlus, faUserFriends, faSearch } from '@fortawesome/free-solid-svg-icons';
-import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
-import { useHistory } from 'react-router-dom';
-import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
+import profilephoto from "../../images/profilephoto.png";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faThumbsUp,
+  faComment,
+  faUserPlus,
+  faUserFriends,
+  faSearch,
+} from "@fortawesome/free-solid-svg-icons";
+import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import { useHistory } from "react-router-dom";
+import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
 const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
   const [posts, setPosts] = useState([]);
   const [showCommentsForPost, setShowCommentsForPost] = useState(null);
   const [newComment, setNewComment] = useState({});
   const dispatch = useDispatch();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [min, max] = ageFilter.split('-').map(Number);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [min, max] = ageFilter.split("-").map(Number);
   const { user } = useSelector((state) => state.auth);
   const [showMenu, setShowMenu] = useState(null);
   console.log(user._id);
@@ -31,14 +37,16 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
     setShowMenu(null);
     const currentUserId = user._id; // Replace with actual logic to retrieve current user ID
     try {
-      const response = await axios.post(`http://localhost:4000/api/savePost/${postId}`,{currentUserId});
+      const response = await axios.post(
+        `http://localhost:4000/api/savePost/${postId}`,
+        { currentUserId }
+      );
       console.log(response.data); // Handle the response appropriately
       // You might want to update the state to reflect the new follow relationship
     } catch (error) {
-      console.error('Error saving post', error);
+      console.error("Error saving post", error);
       // Handle errors, such as displaying a message to the user
     }
-   
   };
 
   const handleEditPost = (postId) => {
@@ -50,11 +58,11 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
     // Implementation to delete the post
   };
   const navigateToNewPost = () => {
-    history.push('/newPost');
+    history.push("/newPost");
   };
   const formatDate = (dateString) => {
-    const options = { year: 'numeric', month: 'short', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString('en-US', options);
+    const options = { year: "numeric", month: "short", day: "numeric" };
+    return new Date(dateString).toLocaleDateString("en-US", options);
   };
   useEffect(() => {
     if (!user) {
@@ -62,11 +70,11 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
     }
     const fetchPosts = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/api/getPosts');
+        const response = await axios.get("http://localhost:4000/api/getPosts");
         console.log(response.data);
         setPosts(response.data);
       } catch (error) {
-        console.error('Error fetching posts:', error);
+        console.error("Error fetching posts:", error);
       }
     };
 
@@ -76,11 +84,14 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
     // Assuming `currentUserId` is available through the user's session or authentication context
     const currentUserId = user._id; // Replace with actual logic to retrieve current user ID
     try {
-      const response = await axios.post(`http://localhost:4000/api/follow/${userIdToFollow}`,{currentUserId});
+      const response = await axios.post(
+        `http://localhost:4000/api/follow/${userIdToFollow}`,
+        { currentUserId }
+      );
       console.log(response.data); // Handle the response appropriately
       // You might want to update the state to reflect the new follow relationship
     } catch (error) {
-      console.error('Error following user:', error);
+      console.error("Error following user:", error);
       // Handle errors, such as displaying a message to the user
     }
   };
@@ -91,16 +102,21 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
     return { min: 0, max };
   };
   const { budgetmin, budgetmax } = parseBudgetFilter(budgetFilter);
-  const filteredPosts = posts.filter(post => {
+  const filteredPosts = posts.filter((post) => {
     // Apply gender, age, and country filters
     // You'll need to adjust the logic based on how the age filter is supposed to work
-    
-    return (genderFilter ? post.genderPref === genderFilter : true) &&
-           (ageFilter ? (post.minAge>=min) && (post.maxAge<=max) : true) &&
-           
-           (budgetFilter? (post.budget >= budgetmin) && (post.budget <= budgetmax) : true)&&
-           (searchTerm ? post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                        post.description.toLowerCase().includes(searchTerm.toLowerCase()) : true);
+
+    return (
+      (genderFilter ? post.genderPref === genderFilter : true) &&
+      (ageFilter ? post.minAge >= min && post.maxAge <= max : true) &&
+      (budgetFilter
+        ? post.budget >= budgetmin && post.budget <= budgetmax
+        : true) &&
+      (searchTerm
+        ? post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          post.description.toLowerCase().includes(searchTerm.toLowerCase())
+        : true)
+    );
   });
   const handleCommentClick = (postId) => {
     setShowCommentsForPost(showCommentsForPost === postId ? null : postId);
@@ -108,20 +124,23 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
   const handleLike = async (postId) => {
     const userId = user._id; // The current user's ID
     try {
-      const response = await axios.post(`http://localhost:4000/api/likePost/${postId}`, { userId });
+      const response = await axios.post(
+        `http://localhost:4000/api/likePost/${postId}`,
+        { userId }
+      );
       console.log(response.data);
-  
+
       // Update the state to reflect the new like
-      const updatedPosts = posts.map(post => {
+      const updatedPosts = posts.map((post) => {
         if (post._id === postId) {
           return { ...post, likes: [...post.likes, userId] };
         }
         return post;
       });
-  
+
       setPosts(updatedPosts);
     } catch (error) {
-      console.error('Error liking post:', error);
+      console.error("Error liking post:", error);
     }
   };
   
@@ -133,7 +152,7 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
     if (!commentText.trim()) {
       return; // Avoid sending empty comments
     }
-  
+
     try {
       const response = await axios.post(`http://localhost:4000/api/addComment/${postId}`, {
         userId: user._id,
@@ -148,10 +167,13 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
       }));
       setNewComment({ ...newComment, [postId]: '' }); // Clear the comment input field
     } catch (error) {
-      console.error('Error adding comment:', error);
+      console.error("Error adding comment:", error);
     }
   };
 
+  const navigateToItineraryPlan = () => {
+    history.push(`/plan`);
+  };
   return (
     
       <div className="main-content">
@@ -187,49 +209,62 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
             )}
           </div>
 
-          <div className="user-info">
-            <img
-              src={post.user?.profilePhoto || profilephoto}
-              
-              className="profile-image-user"
-            />
-            <div>
-              <h3>{post.user?.userName || "username"}</h3>
-        
+            <div className="user-info">
+              <img
+                src={post.user?.profilePhoto || profilephoto}
+                className="profile-image-user"
+              />
+              <div>
+                <h3>{post.user?.userName || "username"}</h3>
+              </div>
             </div>
-          </div>
-          <p style={{marginTop:"10px"}}>
-                <span role="img" aria-label="location">
-                  📍
-                </span>
-                {post.location}
-              </p>
-          <div className="post-images-container">
-  {/* Large featured image */}
-  {post.imageUrls.length > 0 && (
-    <img src={post.imageUrls[0]} alt="Featured" className="featured-image" />
-  )}
+            <p style={{ marginTop: "10px" }}>
+              <span role="img" aria-label="location">
+                📍
+              </span>
+              {post.location}
+            </p>
+            <div className="post-images-container">
+              {/* Large featured image */}
+              {post.imageUrls.length > 0 && (
+                <img
+                  src={post.imageUrls[0]}
+                  alt="Featured"
+                  className="featured-image"
+                />
+              )}
 
-  {/* Grid for the smaller images */}
-  <div className="grid-images">
-    {post.imageUrls.slice(1, 5).map((imgSrc, imgIndex) => (
-      <img key={imgIndex} src={imgSrc} alt={`Post image ${imgIndex + 1}`} className="grid-image" />
-    ))}
+              {/* Grid for the smaller images */}
+              <div className="grid-images">
+                {post.imageUrls.slice(1, 5).map((imgSrc, imgIndex) => (
+                  <img
+                    key={imgIndex}
+                    src={imgSrc}
+                    alt={`Post image ${imgIndex + 1}`}
+                    className="grid-image"
+                  />
+                ))}
 
-    {/* Overlay image with the count, if more images are present */}
-    {post.imageUrls.length > 5 && (
-      <div className="overlay-container">
-        <img src={post.imageUrls[5]} alt="More images" className="grid-image overlay-image" />
-        <span className="overlay-text">+{post.imageUrls.length - 5}</span>
-      </div>
-    )}
-  </div>
-</div>
+                {/* Overlay image with the count, if more images are present */}
+                {post.imageUrls.length > 5 && (
+                  <div className="overlay-container">
+                    <img
+                      src={post.imageUrls[5]}
+                      alt="More images"
+                      className="grid-image overlay-image"
+                    />
+                    <span className="overlay-text">
+                      +{post.imageUrls.length - 5}
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
 
-          <div className="user-preferences">
+            <div className="user-preferences">
               <div className="post-content">
-            <p>{post.description}</p>
-          </div>
+                <p>{post.description}</p>
+              </div>
               <p>
                 📅 {formatDate(post.fromDate)} - {formatDate(post.toDate)}
               </p>
@@ -287,7 +322,6 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
       
       ))}
     </div>
-    
   );
 };
 
