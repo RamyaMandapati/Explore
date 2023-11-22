@@ -1,17 +1,49 @@
 import "./itineraryTime.css";
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
-export const ItineraryTime = ({ onSave, onCancel }) => {
+export const ItineraryTime = ({
+  onSave,
+  onCancel,
+  initialStartTime,
+  initialEndTime,
+}) => {
   const [selectedOption, setSelectedOption] = useState("");
-  const [startTime, setStartTime] = useState("");
-  const [endTime, setEndTime] = useState("");
+  const [startTime, setStartTime] = useState(initialStartTime);
+  const [endTime, setEndTime] = useState(initialEndTime);
+  const [focusedField, setFocusedField] = useState("startTime");
+  const startTimeRef = useRef(null);
+  const endTimeRef = useRef(null);
+  const [isTimeValid, setIsTimeValid] = useState(true);
+
+  // startTimeRef.current.focus();
+  useEffect(() => {
+    validateTime();
+  }, [startTime, endTime]);
+
+  const validateTime = () => {
+    if (startTime && endTime) {
+      // Assuming startTime and endTime are in a format that can be directly compared
+      // If they're in a format like 'HH:MM AM/PM', you'll need to convert them to 24-hour format or to Date objects
+      const start = new Date(`1970/01/01 ${startTime}`);
+      const end = new Date(`1970/01/01 ${endTime}`);
+      setIsTimeValid(start < end);
+    } else {
+      // Consider the scenario where either startTime or endTime might not be set
+      setIsTimeValid(true);
+    }
+  };
 
   const handleOptionSelect = (option) => {
-    if (!startTime) {
+    if (focusedField === "startTime") {
       setStartTime(option);
-    } else {
+      setFocusedField("endTime");
+      endTimeRef.current.focus();
+    } else if (focusedField === "endTime") {
       setEndTime(option);
+      setFocusedField("startTime");
+      startTimeRef.current.focus();
     }
+    // validateTime();
   };
 
   const handleSave = () => {
@@ -27,6 +59,12 @@ export const ItineraryTime = ({ onSave, onCancel }) => {
     setSelectedOption("");
     setStartTime("");
     setEndTime("");
+    setFocusedField("startTime");
+    startTimeRef.current.focus();
+
+    // onSave("", "");
+
+    // onCancel();
   };
 
   return (
@@ -40,9 +78,11 @@ export const ItineraryTime = ({ onSave, onCancel }) => {
               </div>
             </div>
             <input
-              class="smartlook-show form-control Input__input w-100 Input__small form-control-gray StartEndTimePickerInner__input focus"
+              ref={startTimeRef}
+              class={`smartlook-show form-control Input__input w-100 Input__small form-control-gray StartEndTimePickerInner__input focus`}
               value={startTime}
               onChange={(e) => setStartTime(e.target.value)}
+              onFocus={() => setFocusedField("startTime")}
               placeholder="Start time"
             />
           </div>
@@ -54,9 +94,11 @@ export const ItineraryTime = ({ onSave, onCancel }) => {
               </div>
             </div>
             <input
-              class="smartlook-show form-control Input__input w-100 Input__small form-control-gray StartEndTimePickerInner__input"
+              ref={endTimeRef}
+              class={`smartlook-show form-control Input__input w-100 Input__small form-control-gray StartEndTimePickerInner__input`}
               value={endTime}
               onChange={(e) => setEndTime(e.target.value)}
+              onFocus={() => setFocusedField("endTime")}
               placeholder="End time"
             />
           </div>
@@ -70,6 +112,9 @@ export const ItineraryTime = ({ onSave, onCancel }) => {
             }}
             value={selectedOption}
           >
+            <option value="None" class="px-3 py-2 Select__option">
+              Select Start Time and End Time
+            </option>
             <option value="12:00 AM" class="px-3 py-2 Select__option">
               12:00 AM
             </option>
@@ -217,6 +262,11 @@ export const ItineraryTime = ({ onSave, onCancel }) => {
             </option>
           </select>
         </div>
+        {!isTimeValid && (
+          <div className="error-message" style={{ color: "red" }}>
+            Start time must be less than end time.
+          </div>
+        )}
         <div class="d-flex pt-2 justify-content-center">
           <button
             type="button"
@@ -233,10 +283,11 @@ export const ItineraryTime = ({ onSave, onCancel }) => {
             </div>
           </button>
           <button
-            type="submit"
+            type="button"
             tabindex="0"
             class="Button Button__brand Button__md Button__shape__pill overflow-hidden Button__withLabel"
             onClick={handleSave}
+            disabled={!isTimeValid}
           >
             <div class="flex-grow-1 flex-shrink-1 minw-0">
               <div class="Button__label flex-shrink-1 minw-0">
