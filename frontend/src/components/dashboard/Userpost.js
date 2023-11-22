@@ -168,8 +168,8 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
     className="search-input"
   />
    <div className="button-container">
-  <button className="create-post-btn" onClick={navigateToNewPost}>+ Create Post</button>
-  <button className="create-itinerary-btn">+ Create Itinerary</button>
+  <button className="create-post-btn" onClick={navigateToNewPost}>Create Post</button>
+  <button className="create-itinerary-btn">Create Itinerary</button>
 </div>
 
       </div> 
@@ -177,8 +177,10 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
 
         <div key={index} className="user-post">
           <div className="top-right-icons">
-            <FontAwesomeIcon icon={faUserPlus} className="icon follow-icon" style={{marginRight:"20px"}}  onClick={() => handleFollow(post.user?._id)} />
-            {/* <FontAwesomeIcon icon={faUserFriends} className="icon connect-icon" /> */}
+          {!user.following.includes(post.user?._id) && (
+      <FontAwesomeIcon icon={faUserPlus} className="icon follow-icon" 
+        onClick={() => handleFollow(post.user?._id)} style={{marginRight:"10px"}}/>
+    )}
             <FontAwesomeIcon icon={faEllipsisV} onClick={() => toggleMenu(index)} />
             {showMenu === index && (
               <div className="post-menu">

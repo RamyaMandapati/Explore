@@ -7,14 +7,17 @@
   /* ... other styles ... */
   position: absolute;
    /* Assuming your navbar height is around 60px */
+  width: 225px;
+  position:fixed;
+  
   
  
-  width:20%;
+  
   /* ... other styles ... */
-  position: absolute;
+ 
   /* Assuming your navbar height is around 60px */
-  right: 30px;
-  width:250px;
+  
+ 
   
 
   
@@ -31,7 +34,7 @@
   align-items: center;
   margin-bottom: 15px;
   border-bottom: 1px solid #dadada;
-  padding:10px;
+  padding: 10px;
 }
 
 .contact-item img {

@@ -26,10 +26,13 @@ function Travelfeed() {
     setBudgetFilter(budget);
   };
   return (
+   
     <div className="dashboard">
-      <div className="navbar">
+     
+      <div className="navbar" style={{backgroundColor:"white"}}>
       <Navbar />
    </div>
+ 
       <div className="feed-container">
       <div className="filters">
       <Filters
@@ -60,6 +63,7 @@ function Travelfeed() {
         
      </div>
     </div>
+   
   );
 }
 

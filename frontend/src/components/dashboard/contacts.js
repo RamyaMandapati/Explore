@@ -5,7 +5,7 @@ import person2 from './person2.jpeg';
 import { useDispatch, useSelector } from "react-redux";
 import { loadUser } from "../../actions/auth";
 import { useState, useEffect } from "react";
-import profilephoto from '../../images/profilephoto.png';
+import profilephoto from '../../profilepic.jpeg';
 import axios from 'axios';
 const Contacts = () => {
   const [contacts,setContacts] = useState([]);
@@ -46,8 +46,20 @@ const Contacts = () => {
             
           </li>
         ))}
+        
+      </ul>
+      <h2 style={{marginTop:"30px"}}>Suggested contacts</h2>
+      <ul>
+        {contacts?.map(contact => (
+          <li key={contact._id} className="contact-item">
+            <img src={contact.profilePhoto || profilephoto} />
+            <span>{contact?.userName}</span>
+            
+          </li>
+        ))}
       </ul>
     </div>
+    
     </div>
   );
 };

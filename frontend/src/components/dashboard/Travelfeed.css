@@ -1,46 +1,56 @@
+.dashboard{
+  font:inherit;
+  display: flex;
+  justify-content: center;
+  /* align-items: center; */
+  height: 100%;
+  background-color: #f2f3f7;
+   
+    /* Additional styling */
+}
+
+
 .feed-container {
   display: flex;
-  margin-top: 80px;
+  margin-top: 60px;
   /* justify-content: space-between; Add space between main content and filters */
-  width: 100%;
-  gap: 20px; /* Use full width */
+  max-width: 1128px;
+  gap: 5px; /* Use full width */
   background-color: #f2f3f7;
+   /* Center horizontally */
+   
   
 }
 
 .filters {
-  font-family: "Arial", sans-serif; /* This is a common font, you may need to adjust if using a different one */
-  padding: 20px;
-  background-color: #ffffff; /* This assumes a white background */
-  border-radius: 10px; /* For rounded edges */
-  /* Approximated width */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+  
+  margin-top: 60px;
   flex-basis: 20%;
-  margin-left:30px;
-  height:max-content;
-  width: 200px;
-  position: sticky;
-  top: 0; /* Adjust as necessary to account for any navbar height */
-  height: calc(100vh - 100); /* Adjust height as necessary */
-  overflow-y: auto;
+  
+  
+ 
+  
 }
 .main-content {
   flex-basis: 55%; /* Adjust based on desired width */
   display: flex;
   padding: 10px;
   flex-direction: column;
-  gap:10px;
+  gap:0px;
   /* flex-grow: 1;
   overflow-y: auto; */
    /*For spacing between components, adjust as necessary*/
 }
-.navbar {
-  width: 100%;
-  /* Other navbar styles */
-}
+
 .contacts {
   flex-basis: 20%;
-  position: sticky;
+  
+  margin-top: 20px;
+  height:max-content;
+  width: 200px;
+  
+  
+  
   /* top: 0; 
   height: calc(100vh - 80);  */
   /* overflow-y: auto;  */
