@@ -1,7 +1,7 @@
 const express = require("express");
 const passport = require("passport");
 const router = express.Router();
-const multer = require('multer');
+const multer = require("multer");
 const upload = multer();
 const {
   addItinerary,
@@ -15,6 +15,7 @@ const {
   itineraryLikeCount,
   removeItineraryLikeCount,
   itineraryRating,
+  generate,
 } = require("./modules/itineraryModule");
 
 const {
@@ -22,7 +23,13 @@ const {
   deleteNotification,
   getNotifications,
 } = require("./modules/notificationModule");
-const { addPost, getPosts, filterPosts, updateLikes,addComment } = require("./modules/postModule");
+const {
+  addPost,
+  getPosts,
+  filterPosts,
+  updateLikes,
+  addComment,
+} = require("./modules/postModule");
 const {
   updateUserPreference,
   findUserByEmail,
@@ -31,7 +38,6 @@ const {
 } = require("./modules/userModule");
 
 const { editMember } = require("./modules/groupModule");
-
 
 // itinerary related routes
 router.post("/itinerary", addItinerary);
@@ -46,6 +52,7 @@ router.put("/itinerary/rating", itineraryRating);
 router.post("/follow/:userIdToFollow", updateFollowers);
 router.put("/users/favitinerary", favoriteItinerary);
 router.put("/users/delfavitinerary", deletefavoriteItinerary);
+router.post("/itinerary/openai", generate);
 router.post("/savePost/:postId", savePost);
 //notification related routes
 router.put("/notification", readNotification);
@@ -60,9 +67,6 @@ router.post("/likePost/:postId", updateLikes);
 //user Router
 router.put("/pref", updateUserPreference);
 router.post("/user/email", findUserByEmail);
-
-
-
 
 //groupRouter
 router.post("/group/editmember", editMember);

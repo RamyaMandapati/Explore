@@ -2,130 +2,128 @@
 
 /* Main Navbar container */
 .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #ffffff; /* Facebook blue */
-    padding: 0px 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
-    height: min-content ;
-  }
-  
-  /* Logo styles */
-  .logo {
-    width: 200px;
-    height: 60px;
-    margin-right: 10px;
-  }
-  
-  /* Search bar styles */
-  .navbar-center input[type="text"] {
-    border: 3px solid #aeb6f3; 
-    padding: 8px 12px;
-    font-size: 16px;
-    border-radius: 20px;
-    width: 700px;
-    height : 40px;
-    background-color: #f0f2f5; /* Facebook search bar background */
-  }
-  
-  /* Messenger icon styles */
-  .messenger-icon {
-    color: #ff683c;
-    font-size: 25px;
-    cursor: pointer;
-    /* margin-right: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff; /* Facebook blue */
+  padding: 0px 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  height: min-content;
+}
+
+/* Logo styles */
+.logo {
+  width: 200px;
+  height: 60px;
+  margin-right: 10px;
+}
+
+/* Search bar styles */
+.navbar-center input[type="text"] {
+  border: 3px solid #aeb6f3;
+  padding: 8px 12px;
+  font-size: 16px;
+  border-radius: 20px;
+  width: 700px;
+  height: 40px;
+  background-color: #f0f2f5; /* Facebook search bar background */
+}
+
+/* Messenger icon styles */
+.messenger-icon {
+  color: #ff683c;
+  font-size: 25px;
+  cursor: pointer;
+  /* margin-right: 20px;
     margin-left : 40px;*/
-    margin-top : 10px; 
-    position: relative;
-    transition: transform 0.2s;
-  }
-  
-  .counter {
-    width: 10px;
-    height: 10px;
-    background-color: #f75940;
-    border-radius: 50%;
-    padding: 8px;
-    font-size: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    top: -2px;
-    right: -5px;
-    margin-right: 31%;
-    color: #fff;
-  }
-  /* Profile image styles */
-  .profile-image {
-    width: 50px;
-    height: 60px;
-    border-radius: 50%;
-    margin-right: 30px;
-    cursor: pointer;
-    transition: transform 0.2s;
-  }
-  
-  /* Dropdown styles */
-  .dropdown {
-    position: absolute;
-    top: 60px;
-    right: 20px;
-    background-color: white;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 4px;
-    display: none;
-  }
-  
-  .dropdown ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .dropdown li {
-    padding: 10px;
-    cursor: pointer;
-  }
-  
-  /* Show dropdown when profile image is clicked */
-  .profile:hover .dropdown {
-    display: block;
-  }
-  
-  /* Hover effects for profile image and messenger icon */
-  .profile:hover .profile-image,
-  .messenger-icon:hover {
-    transform: scale(1.1);
-  }
-  .message{
-    display:flex;
-    gap: 20px;
+  margin-top: 10px;
+  position: relative;
+  transition: transform 0.2s;
+}
 
-  }
-  
-  .acceptButton{
-    color: #fff;
-    background-color: #f75940;
-    border-radius:8px;
-    padding: 3px 10px;
-    font-size: 14px;
-    font-weight: 500;
-    margin-right: 10px;
+.counter {
+  width: 10px;
+  height: 10px;
+  background-color: #f75940;
+  border-radius: 50%;
+  padding: 8px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: -2px;
+  right: -5px;
+  margin-right: 31%;
+  color: #fff;
+}
+/* Profile image styles */
+.profile-image {
+  width: 50px;
+  height: 60px;
+  border-radius: 50%;
+  margin-right: 30px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
 
-  }
+/* Dropdown styles */
+.dropdown {
+  position: absolute;
+  top: 60px;
+  right: 20px;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  display: none;
+}
 
-  .rejectButton{
-    background-color: #f3f4f5;
-    border-radius:8px;
-    padding: 3px 10px;
-    font-size: 14px;
-    font-weight: 500;
-    color: #212529;
-  }
+.dropdown ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dropdown li {
+  padding: 10px;
+  cursor: pointer;
+}
+
+/* Show dropdown when profile image is clicked */
+.profile:hover .dropdown {
+  display: block;
+}
+
+/* Hover effects for profile image and messenger icon */
+.profile:hover .profile-image,
+.messenger-icon:hover {
+  transform: scale(1.1);
+}
+.message {
+  display: flex;
+  gap: 20px;
+}
+
+.acceptButton {
+  color: #fff;
+  background-color: #f75940;
+  border-radius: 8px;
+  padding: 3px 10px;
+  font-size: 14px;
+  font-weight: 500;
+  margin-right: 10px;
+}
+
+.rejectButton {
+  background-color: #f3f4f5;
+  border-radius: 8px;
+  padding: 3px 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #212529;
+}

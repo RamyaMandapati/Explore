@@ -49,7 +49,6 @@ const memberNotification = async (
       notificationList
     );
     for (const notification of createdNotifications) {
-      // console.log("hello");
       await everything.emitNotification(
         notification.receiveruserId,
         notification
@@ -80,7 +79,15 @@ const itineraryNotification = async (itineraryId, userId, action) => {
         notificationType: "ITINERARY_NOTIFICATION",
       });
     }
-    await notification.insertMany(notificationList);
+    const createdNotifications = await notification.insertMany(
+      notificationList
+    );
+    for (const notification of createdNotifications) {
+      await everything.emitNotification(
+        notification.receiveruserId,
+        notification
+      );
+    }
   } catch (err) {
     console.log(err);
   }
@@ -102,7 +109,15 @@ const followNotification = async (userId, member, action) => {
       message: message,
     });
 
-    await notificationModel.insertMany(notificationList);
+    const createdNotifications = await notificationModel.insertMany(
+      notificationList
+    );
+    for (const notification of createdNotifications) {
+      await everything.emitNotification(
+        notification.receiveruserId,
+        notification
+      );
+    }
   } catch (err) {
     console.log(err);
   }
