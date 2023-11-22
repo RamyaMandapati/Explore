@@ -145,7 +145,7 @@ export default function Messenger() {
           >
             {currentChat ? (
               <>
-                <div
+                {/* <div
                   style={{
                     // borderBottom: "2px solid #f3f4f5",
                     height: "64px",
@@ -162,7 +162,7 @@ export default function Messenger() {
                     />
                     <span className="conversationName">Rakshith</span>
                   </div>
-                </div>
+                </div> */}
                 <div className="chatBoxTop">
                   <div ref={scrollRef}>
                     {messages.map((m) => (

@@ -124,14 +124,10 @@ const savePost = async (req, res) => {
     });
 };
 
-
-
-
-
 module.exports = {
   updateUserPreference,
   findUserByEmail,
   updateFollowers,
-  savePost
+  savePost,
   findUserById,
 };

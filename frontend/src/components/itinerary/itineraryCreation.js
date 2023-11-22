@@ -1571,7 +1571,7 @@ export const ItineraryCreation = ({ history }) => {
                   </OverlayView>
                 ))}
 
-                {itineraryItem?.places.length > 1 && (
+                {/* {itineraryItem?.places.length > 1 && (
                   <Polyline
                     path={itineraryItem?.places.map((place) => ({
                       lat: place.lat,
@@ -1587,7 +1587,7 @@ export const ItineraryCreation = ({ history }) => {
                       // Additional options can be added here
                     }}
                   />
-                )}
+                )} */}
               </React.Fragment>
             ))}
           </GoogleMap>

@@ -131,6 +131,7 @@ const Navbar = () => {
             (notification) => notification._id !== responseData._id
           );
           setUnreadNotifications(updatedUnreadNotifications);
+          window.location.reload();
         }
       })
       .catch((error) => {
@@ -181,8 +182,11 @@ const Navbar = () => {
       });
   };
 
+  const handleMessages = () => {
+    history.push("/messenger");
+  };
+
   return (
-   
     <div className="navbar">
       <div className="navbar-left">
         <Link to="/TravelFeed">
@@ -294,7 +298,7 @@ const Navbar = () => {
           </Menu>
         </div>
 
-        <div className="messenger-icon">
+        <div className="messenger-icon" onClick={handleMessages}>
           <FontAwesomeIcon icon={faComments} size="lg" />
         </div>
 
@@ -317,7 +321,6 @@ const Navbar = () => {
         </div>
       </div>
     </div>
-    
   );
 };
 

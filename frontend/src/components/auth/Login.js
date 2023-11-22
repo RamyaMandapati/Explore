@@ -34,7 +34,7 @@ export const Login = ({ history }) => {
 
   useEffect(() => {
     if (isAuthenticated && user) {
-      history.push("/plan");
+      history.push("/travelfeed");
     }
   }, [history, isAuthenticated, user]);
 

@@ -535,7 +535,7 @@ export const ItineraryCalendarPage = ({ history }) => {
                 {itinerarydet &&
                   itinerarydet.createdBy._id !== (user && user._id) &&
                   !itinerarydet.userRated && (
-                    <div className="add-flex ml-2">
+                    <div className="add-flex ml-4">
                       {Array(5)
                         .fill()
                         .map((_, index) => (
