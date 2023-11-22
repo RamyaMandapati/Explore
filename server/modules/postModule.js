@@ -7,7 +7,7 @@ const addPost = async (req, res) => {
     console.log("Request body:", req.body);
 console.log("Request files:", req.files);
 
-    const { title, description, user, genderPref, tripCountry, imageUrls, tripState, locationName, fromDate, toDate, iteneraryId, tags, minAge, maxAge} = req.body;
+    const { title, description, user, genderPref, tripCountry, imageUrls, tripState, location, fromDate, toDate, iteneraryId, tags, minAge, maxAge,budget} = req.body;
     const newPost = new Post({
       title,
       description,
@@ -16,13 +16,14 @@ console.log("Request files:", req.files);
       tripCountry,
       imageUrls,
       tripState,
-      locationName,
+      location,
       fromDate,
       toDate, 
       iteneraryId, 
       tags, 
       minAge, 
-      maxAge
+      maxAge,
+      budget,
     });
 
     const savedPost = await newPost.save();

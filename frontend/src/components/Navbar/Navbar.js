@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComments, faBell } from "@fortawesome/free-solid-svg-icons"; // Import the messenger icon
 import "./Navbar.css"; // You can create a CSS file for styling
 import logo from "../../logo.png";
-import profile from "../../images/profile.svg";
+import profile from "../../profilepic.jpeg";
 import { Travelfeed } from "../dashboard/Travelfeed.js";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -187,6 +187,7 @@ const Navbar = () => {
   };
 
   return (
+   
     <div className="navbar">
       <div className="navbar-left">
         <Link to="/TravelFeed">
@@ -316,6 +317,7 @@ const Navbar = () => {
         </div>
       </div>
     </div>
+    
   );
 };
 

@@ -1,29 +1,59 @@
+.dashboard{
+  font:inherit;
+  display: flex;
+  justify-content: center;
+  /* align-items: center; */
+  height: 100%;
+  background-color: #f2f3f7;
+   
+    /* Additional styling */
+}
+
+
 .feed-container {
   display: flex;
-  margin-top: 80px;
+  margin-top: 60px;
   /* justify-content: space-between; Add space between main content and filters */
-  width: 100%;
-  gap: 20px; /* Use full width */
+  max-width: 1200px;
+  gap: 5px; /* Use full width */
   background-color: #f2f3f7;
+   /* Center horizontally */
+   
   
 }
-.filters {
-  flex-basis: 20%; 
 
-  /* Adjust based on how wide you want the filters to be */
+.filters {
+  
+  margin-top: 60px;
+  flex-basis: 20%;
+  
+  
+ 
+  
 }
 .main-content {
   flex-basis: 55%; /* Adjust based on desired width */
   display: flex;
   padding: 10px;
   flex-direction: column;
-  gap:10px;
+  gap:0px;
+  /* flex-grow: 1;
+  overflow-y: auto; */
    /*For spacing between components, adjust as necessary*/
 }
-.navbar {
-  width: 100%;
-  /* Other navbar styles */
-}
+
 .contacts {
   flex-basis: 20%;
+  
+  margin-top: 20px;
+  height:max-content;
+  width: 200px;
+  margin-left: 10px;
+  
+  
+  
+  /* top: 0; 
+  height: calc(100vh - 80);  */
+  /* overflow-y: auto;  */
 }
+

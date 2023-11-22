@@ -113,7 +113,7 @@ const Newpost = () => {
       formData.append('title', event.target.title.value);
       formData.append('description', event.target.description.value);
       formData.append('user', user?._id);
-      formData.append('locationName', event.target.location.value);
+      formData.append('location', event.target.location.value);
       formData.append('fromDate', event.target.fromdate.value);
       formData.append('toDate', event.target.todate.value);
       formData.append('budget', event.target.budget.value);
@@ -207,6 +207,7 @@ const Newpost = () => {
         <input type="number" name="budget" placeholder="Enter budget amount" />
         <label>Gender Preference</label>
         <select name="gender">
+          <option>Any</option>
           <option>Male</option>
           <option>Female</option>
           <option>Non-Binary</option>
