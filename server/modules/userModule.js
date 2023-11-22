@@ -1,5 +1,5 @@
 const user = require("../models/user");
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 // update Preference
 const updateUserPreference = async (req, res) => {
   try {
@@ -28,12 +28,28 @@ const updateUserPreference = async (req, res) => {
   }
 };
 
+const findUserById = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const userDetail = await user.findOne({ _id: userId });
+    if (!userDetail) {
+      return res.status(400).send({
+        error: "No user with this id has account with us",
+      });
+    }
+    return res.status(200).json(userDetail);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send(err);
+  }
+};
+
 const findUserByEmail = async (req, res) => {
   try {
     console.log(req.body.email);
     const { email } = req.body;
-    
-    const userDetail = await user.findOne({ email }).populate('followers');
+
+    const userDetail = await user.findOne({ email }).populate("followers");
     if (!userDetail) {
       return res.status(400).send({
         error: "No user with this email has account with us",
@@ -47,8 +63,8 @@ const findUserByEmail = async (req, res) => {
 };
 
 //router.post('/follow/:userIdToFollow', async (req, res) => {
-  const updateFollowers=async(req,res)=>{
-    console.log(req.body);
+const updateFollowers = async (req, res) => {
+  console.log(req.body);
   const currentUserId = req.body.currentUserId; // Assume you get this from session or token
   const userIdToFollow = req.params.userIdToFollow;
 
@@ -86,15 +102,17 @@ const findUserByEmail = async (req, res) => {
 
     res.json({
       message: "Followed successfully",
-      
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "An error occurred while following the user" });
+    res
+      .status(500)
+      .json({ message: "An error occurred while following the user" });
   }
 };
 module.exports = {
   updateUserPreference,
   findUserByEmail,
   updateFollowers,
+  findUserById,
 };

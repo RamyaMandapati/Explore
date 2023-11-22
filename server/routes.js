@@ -34,9 +34,18 @@ const {
   updateUserPreference,
   findUserByEmail,
   updateFollowers,
+  findUserById,
 } = require("./modules/userModule");
 
 const { editMember } = require("./modules/groupModule");
+
+const {
+  getConversationTwoUserIds,
+  saveConversation,
+  getConversation,
+} = require("./modules/conversationModule");
+
+const { saveMessage, getMessages } = require("./modules/messageModule");
 
 // itinerary related routes
 router.post("/itinerary", addItinerary);
@@ -66,10 +75,26 @@ router.post("/likePost/:postId", updateLikes);
 //user Router
 router.put("/pref", updateUserPreference);
 router.post("/user/email", findUserByEmail);
+router.get("/user/:userId", findUserById);
 
 //groupRouter
 router.post("/group/editmember", editMember);
 router.post("/addComment/:postId", addComment);
+
+// conversation Router
+
+router.post("/conversation", saveConversation);
+router.get("/conversation/:userId", getConversation);
+router.get(
+  "/conversation/:firstUserId/:secondUserId",
+  getConversationTwoUserIds
+);
+
+//message router
+
+router.post("/messages", saveMessage);
+router.get("/messages/:conversationId", getMessages);
+
 router.get("/session", isLoggedIn, async (req, res, next) => {
   if (req.user) {
     const { user } = req;

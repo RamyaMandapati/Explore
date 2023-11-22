@@ -121,27 +121,59 @@ export const ItineraryCreation = ({ history }) => {
   const [interests, setInterests] = useState([]);
   const [budget, setBudget] = useState("");
   const [destination, setDestination] = useState("");
+  // const [tempDate, settempDate] = useState("");
 
   const [members, setMembers] = useState([]);
   const [nonmembers, setNonMembers] = useState([]);
   const [startingLocation, setStartingLocation] = useState("");
+  const [tripStartDate, settripStartDate] = useState("");
+  const [tripEndDate, settripEndDate] = useState("");
 
-  const dateArray = [];
-  let tripStartDate = "";
-  let tripEndDate = "";
-  if (startDate && endDate) {
-    const momentstartDate = moment(startDate.$d);
-    const momentendDate = moment(endDate.$d);
-    tripStartDate = momentstartDate.format("MM/DD");
-    tripEndDate = momentendDate.format("MM/DD");
-    let tempDate = moment(momentstartDate);
-    while (tempDate <= momentendDate) {
-      dateArray.push(
-        tempDate.format("dddd") + ", " + tempDate.format("MMMM Do")
-      );
-      tempDate.add(1, "days"); // Move to the next day
+  const [dateArray, setDateArray] = useState([]);
+
+  useEffect(() => {
+    if (startDate && endDate) {
+      const tempDateArray = [];
+
+      const momentstartDate = moment(startDate.$d);
+      const momentendDate = moment(endDate.$d);
+
+      let tempDate = moment(startDate.$d);
+
+      settripStartDate(momentstartDate.format("MM/DD"));
+      settripEndDate(momentendDate.format("MM/DD"));
+      while (tempDate <= momentendDate) {
+        tempDateArray.push(
+          tempDate.format("dddd") + ", " + tempDate.format("MMMM Do")
+        );
+        tempDate.add(1, "days"); // Move to the next day
+      }
+      if (!momentstartDate.isSame(momentendDate)) {
+        tempDateArray.push(
+          momentendDate.format("dddd") + ", " + momentendDate.format("MMMM Do")
+        );
+      }
+      setDateArray(tempDateArray);
     }
-  }
+  }, [startDate, endDate]);
+  // if (startDate && endDate) {
+  //   const momentstartDate = moment(startDate.$d);
+  //   const momentendDate = moment(endDate.$d);
+  //   tripStartDate = momentstartDate.format("MM/DD");
+  //   tripEndDate = momentendDate.format("MM/DD");
+  //   let tempDate = moment(momentstartDate);
+  //   while (tempDate <= momentendDate) {
+  //     dateArray.push(
+  //       tempDate.format("dddd") + ", " + tempDate.format("MMMM Do")
+  //     );
+  //     tempDate.add(1, "days"); // Move to the next day
+  //   }
+  //   if (!momentstartDate.isSame(momentendDate)) {
+  //     dateArray.push(
+  //       momentendDate.format("dddd") + ", " + momentendDate.format("MMMM Do")
+  //     );
+  //   }
+  // }
 
   const [tripName, setTripName] = React.useState();
 
@@ -155,6 +187,7 @@ export const ItineraryCreation = ({ history }) => {
       setBudget(itineraryplandet.budget);
       setStartDate(itineraryplandet.startDate && itineraryplandet.startDate);
       setEndDate(itineraryplandet.endDate && itineraryplandet.endDate);
+
       setTripName(
         `Trip to ${
           itineraryplandet.location &&
@@ -407,13 +440,15 @@ export const ItineraryCreation = ({ history }) => {
   ) => {
     setItinerary((prevItinerary) => {
       const updatedItinerary = [...prevItinerary];
-
+      let newPlaceIndex = 0;
       if (!updatedItinerary[dateIndexToAddLocation]) {
         updatedItinerary[dateIndexToAddLocation] = {
           day: dateIndexToAddLocation + 1,
           places: [selectedLocation],
         };
+        newPlaceIndex = 0;
       } else {
+        newPlaceIndex = updatedItinerary[dateIndexToAddLocation].places.length;
         updatedItinerary[dateIndexToAddLocation] = {
           ...updatedItinerary[dateIndexToAddLocation],
           places: [
@@ -422,6 +457,7 @@ export const ItineraryCreation = ({ history }) => {
           ],
         };
       }
+      toggleBoxVisibility(dateIndexToAddLocation, newPlaceIndex);
 
       return updatedItinerary;
     });
@@ -691,6 +727,7 @@ export const ItineraryCreation = ({ history }) => {
                                 label="Start Date"
                                 onChange={(newValue) => {
                                   setStartDate(newValue);
+
                                   setItinerary([]);
                                 }}
                                 // onChange={(e) => setStartDate(e)}
@@ -902,7 +939,6 @@ export const ItineraryCreation = ({ history }) => {
                             });
                           }
                           setNonMembers(finalMemberList);
-                          console.log(nonmembers);
                         }}
                         renderTags={(mems, getTagProps) =>
                           mems.map((option, index) => (
@@ -1255,6 +1291,8 @@ export const ItineraryCreation = ({ history }) => {
                                               onCancel={() =>
                                                 setSelectedTime(null)
                                               }
+                                              initialStartTime={place.startTime}
+                                              initialEndTime={place.endTime}
                                             />
                                           )}
                                       </div>
@@ -1489,49 +1527,69 @@ export const ItineraryCreation = ({ history }) => {
             onUnmount={onUnmount}
             // onClick={placeClicked}
           >
-            {itinerary.map((itineraryItem, index) =>
-              itineraryItem?.places.map((place, placeIndex) => (
-                <OverlayView
-                  position={{ lat: place.lat, lng: place.lng }}
-                  mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
-                >
-                  <div>
-                    <span
-                      class="MarkerIconWithColor"
-                      style={{ fontSize: "2rem" }}
-                    >
-                      <span class="MarkerIconWithColor__label MarkerIconWithColor__labelLarge">
-                        {placeIndex + 1}
-                      </span>
+            {itinerary.map((itineraryItem, index) => (
+              <React.Fragment key={index}>
+                {itineraryItem?.places.map((place, placeIndex) => (
+                  <OverlayView
+                    position={{ lat: place.lat, lng: place.lng }}
+                    mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+                  >
+                    <div className="marker-container">
                       <span
-                        class="MarkerIconWithColor__outlined"
-                        style={{
-                          color: colors[index],
-                          stroke: "#fff",
-                          strokeWidth: "40",
-                        }}
+                        class="MarkerIconWithColor marker-svg"
+                        style={{ fontSize: "2rem" }}
                       >
-                        <svg
-                          aria-hidden="true"
-                          focusable="false"
-                          data-prefix="fas"
-                          data-icon="location-pin"
-                          class="svg-inline--fa  svg-inline--fa-icon fa-location-pin fa-w-12 "
-                          role="img"
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 384 512"
+                        <span class="MarkerIconWithColor__label MarkerIconWithColor__labelLarge">
+                          {placeIndex + 1}
+                        </span>
+                        <span
+                          class="MarkerIconWithColor__outlined"
+                          style={{
+                            color: colors[index],
+                            stroke: "#fff",
+                            strokeWidth: "40",
+                          }}
                         >
-                          <path
-                            fill="currentColor"
-                            d="M384 192c0 87.4-117 243-168.3 307.2c-12.3 15.3-35.1 15.3-47.4 0C117 435 0 279.4 0 192C0 86 86 0 192 0S384 86 384 192z"
-                          ></path>
-                        </svg>
+                          <svg
+                            aria-hidden="true"
+                            focusable="false"
+                            data-prefix="fas"
+                            data-icon="location-pin"
+                            class="svg-inline--fa  svg-inline--fa-icon fa-location-pin fa-w-12 "
+                            role="img"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 384 512"
+                          >
+                            <path
+                              fill="currentColor"
+                              d="M384 192c0 87.4-117 243-168.3 307.2c-12.3 15.3-35.1 15.3-47.4 0C117 435 0 279.4 0 192C0 86 86 0 192 0S384 86 384 192z"
+                            ></path>
+                          </svg>
+                        </span>
                       </span>
-                    </span>
-                  </div>
-                </OverlayView>
-              ))
-            )}
+                    </div>
+                  </OverlayView>
+                ))}
+
+                {itineraryItem?.places.length > 1 && (
+                  <Polyline
+                    path={itineraryItem?.places.map((place) => ({
+                      lat: place.lat,
+                      lng: place.lng,
+                    }))}
+                    options={{
+                      strokeColor: colors[index], // Color for the line
+                      strokeOpacity: 0.8,
+                      strokeWeight: 5,
+                      geodesic: true,
+                      clickable: true,
+
+                      // Additional options can be added here
+                    }}
+                  />
+                )}
+              </React.Fragment>
+            ))}
           </GoogleMap>
         ) : (
           ""

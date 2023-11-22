@@ -21,6 +21,8 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import Badge from "@mui/material/Badge";
 import ListItemIcon from "@mui/material/ListItemIcon";
+import socket from "./../../utils/socket";
+
 const Navbar = () => {
   const history = useHistory();
 
@@ -48,17 +50,10 @@ const Navbar = () => {
   };
 
   const [socketUser, setSocketUser] = useState("");
-  const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    const newSocket = io("http://localhost:5001");
-    setSocket(newSocket);
-    return () => {
-      newSocket.disconnect();
-    };
-  }, []);
-  useEffect(() => {
     if (user && user._id && socket) {
+      console.log(socket);
       socket?.emit("newSocketUser", user._id);
       socket.on("socketUserInfo", (data) => {
         setSocketUser(data);
@@ -75,7 +70,6 @@ const Navbar = () => {
       });
 
       return () => {
-        socket.off("socketUserInfo");
         socket.off("getNotifications");
       };
     }
@@ -100,7 +94,7 @@ const Navbar = () => {
     }
   }, [socket]);
   console.log(notifications);
-  const handleNotification = async (notificationId) => {
+  const handleNotification = async (notificationId, itineraryId) => {
     axios
       .put("/api/notification", { notificationId: notificationId })
       .then((response) => {
@@ -110,6 +104,8 @@ const Navbar = () => {
             (notification) => notification._id !== responseData._id
           );
           setUnreadNotifications(updatedUnreadNotifications);
+
+          history.push(`/itinerary/${itineraryId}`);
           window.location.reload();
         }
       })
@@ -135,7 +131,6 @@ const Navbar = () => {
             (notification) => notification._id !== responseData._id
           );
           setUnreadNotifications(updatedUnreadNotifications);
-          window.location.reload();
         }
       })
       .catch((error) => {
@@ -233,7 +228,12 @@ const Navbar = () => {
               >
                 <ListItem alignItems="flex-start">
                   <ListItemButton
-                    onClick={() => handleNotification(notification._id)}
+                    onClick={() =>
+                      handleNotification(
+                        notification._id,
+                        notification.itineraryId
+                      )
+                    }
                   >
                     <ListItemText
                       primary={

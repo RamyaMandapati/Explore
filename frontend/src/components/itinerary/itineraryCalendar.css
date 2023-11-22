@@ -18,7 +18,7 @@
   padding: 0 20px;
   margin-bottom: 30px;
 }
-.Interests{
+.Interests {
   margin: 0px auto;
   max-width: 1000px;
   padding: 0 20px;
@@ -27,7 +27,7 @@
   grid-gap: 10px;
 }
 
-.Interests-button{
+.Interests-button {
   background-color: #feefed;
   padding: 4px 4px;
   border: 1px solid #f75940;
@@ -142,9 +142,8 @@
 .star-icon {
   fill: #f75940;
 }
-.star-icon-white{
+.star-icon-white {
   fill: #fff;
-
 }
 
 .star-icon-color {
@@ -163,4 +162,56 @@
 
 .planbutton2 {
   border-radius: 16px;
+}
+
+.customer-image {
+  height: 36px;
+  width: 36px;
+  border-radius: 50%;
+  margin-right: -1.1rem;
+  border: 3px solid #fdf2e9;
+}
+
+.user-count {
+  height: 36px;
+  width: 36px;
+  border-radius: 50%;
+  border: 3px solid #fdf2e9;
+  background-color: #fff;
+  margin-right: -1.6rem;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
+  color: #000;
+}
+
+.user-details-popup {
+  position: absolute;
+  background-color: #fff;
+  padding: 20px 60px;
+  border-radius: 10px;
+  height: 200px;
+  overflow-y: scroll;
+  top: 45%;
+  left: 7%;
+}
+
+.user-detail {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  gap: 20px;
+}
+
+.a-tag {
+  text-decoration: none;
+  font-weight: 700;
+  color: #212529;
+}
+
+.a-tag:hover {
+  text-decoration: underline;
+  color: #f75940;
 }

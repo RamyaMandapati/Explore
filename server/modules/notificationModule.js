@@ -76,6 +76,7 @@ const itineraryNotification = async (itineraryId, userId, action) => {
         senderuserId: userId,
         receiveruserId: member,
         message: message,
+        itineraryId: itineraryId,
         notificationType: "ITINERARY_NOTIFICATION",
       });
     }
