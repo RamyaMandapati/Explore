@@ -14,7 +14,7 @@
   display: flex;
   margin-top: 60px;
   /* justify-content: space-between; Add space between main content and filters */
-  max-width: 1128px;
+  max-width: 1200px;
   gap: 5px; /* Use full width */
   background-color: #f2f3f7;
    /* Center horizontally */
@@ -48,6 +48,7 @@
   margin-top: 20px;
   height:max-content;
   width: 200px;
+  margin-left: 10px;
   
   
   
