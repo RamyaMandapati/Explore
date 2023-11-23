@@ -33,6 +33,23 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
       setShowMenu(index);
     }
   };
+  
+  const handleDeletePost = async (postId) => {
+    try {
+
+      // API call to delete the post
+      const response = await axios.delete(`http://localhost:4000/api/deletePost/${postId}`, {
+        data: { userId: user._id }
+      });
+      // Handle the successful deletion here
+      console.log(response.data.message);
+      // Optionally, update the posts state to reflect the deletion
+      setPosts(currentPosts => currentPosts.filter(post => post._id !== postId));
+    } catch (error) {
+      // Handle the error here
+      console.error("Error deleting post:", error.response?.data?.message || error.message);
+    }
+  };
   const handleSavePost = async (postId) => {
     setShowMenu(null);
     const currentUserId = user._id; // Replace with actual logic to retrieve current user ID
@@ -49,14 +66,9 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
     }
   };
 
-  const handleEditPost = (postId) => {
-    // Implementation to edit the post
-    // This might involve setting a state with the post's data and opening a modal or another page for editing
-  };
+ 
 
-  const handleDeletePost = (postId) => {
-    // Implementation to delete the post
-  };
+  
   const navigateToNewPost = () => {
     history.push("/newPost");
   };
@@ -191,19 +203,19 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
 </div>
 
       </div> 
-      {filteredPosts.slice().reverse().map((post, index) => (
+      {filteredPosts?.slice().reverse().map((post, index) => (
 
         <div key={post._id} className="user-post">
           <div className="top-right-icons">
-          {!user.following.includes(post.user?._id) && (
-      <FontAwesomeIcon icon={faUserPlus} className="icon follow-icon" 
+          
+      <FontAwesomeIcon icon={faUserPlus} className={`icon follow-icon ${user.following.includes(post.user?._id) ? "followed" : ""}`}
         onClick={() => handleFollow(post.user?._id)} style={{marginRight:"10px"}}/>
-    )}
+    
             <FontAwesomeIcon icon={faEllipsisV} onClick={() => toggleMenu(index)} />
             {showMenu === index && (
               <div className="post-menu">
                 <div onClick={() => handleSavePost(post._id)}>Save Post</div>
-                <div onClick={() => handleEditPost(post._id)}>Edit Post</div>
+                
                 <div onClick={() => handleDeletePost(post._id)}>Delete Post</div>
               </div>
             )}
@@ -218,7 +230,7 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
                 <h3>{post.user?.userName || "username"}</h3>
               </div>
             </div>
-            <p style={{ marginTop: "10px" }}>
+            <p style={{ marginTop: "10px" , marginBottom:"10px"}}>
               <span role="img" aria-label="location">
                 📍
               </span>
@@ -260,7 +272,14 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
                 )}
               </div>
             </div>
-
+            {post.itineraryId && (
+          <button
+          className="view-itinerary-btn"
+          onClick={() => window.location.href = `/itinerary/${post.itineraryId}`}
+        >
+          View Itinerary
+        </button>
+    )}
             <div className="user-preferences">
               <div className="post-content">
                 <p>{post.description}</p>
@@ -283,7 +302,7 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
             </span>
           </div>
           <div className="bottom-right-icons">
-            <FontAwesomeIcon icon={faThumbsUp} className="icon like-icon" onClick={() => handleLike(post._id)}/>
+            <FontAwesomeIcon icon={faThumbsUp} className={`icon like-icon ${post.likes.includes(user._id) ? "liked" : ""}`} onClick={() => handleLike(post._id)}/>
             <FontAwesomeIcon icon={faComment} className="icon comment-icon" onClick={() => handleCommentClick(index)}/>
           </div>
          

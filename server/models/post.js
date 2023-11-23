@@ -18,7 +18,7 @@
     ],
     title: { type: String },
     description: { type: String },
-    itineraryID: { type: Number },
+    itineraryId: { type: mongoose.Schema.Types.ObjectId, ref: "itinerary" },
     budget: { type: Number },
     likes: [
       {

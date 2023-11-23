@@ -44,7 +44,17 @@ const Newpost = () => {
     libraries: ["places"],
   });
   const history = useHistory();
+  const [minToDate, setMinToDate] = useState('');
+  const [selectedItineraryId, setSelectedItineraryId] = useState('');
 
+// Handler to update minToDate when fromdate changes
+const handleFromDateChange = (event) => {
+  setMinToDate(event.target.value);
+};
+const handleItineraryChange = (e) => {
+  setSelectedItineraryId(e.target.value);
+};
+const today = new Date().toISOString().split('T')[0];
   const onLoad = (autoC) => setAutocomplete(autoC);
   const onPlaceChanged = () => {
     if (autocomplete !== null) {
@@ -119,7 +129,7 @@ const Newpost = () => {
       formData.append('budget', event.target.budget.value);
       formData.append('minAge', event.target.minAge.value);
       formData.append('maxAge', event.target.maxAge.value);
-      formData.append('itineraryId', event.target.itineraries.value);
+      formData.append('itineraryId', selectedItineraryId);
       
       
       
@@ -193,12 +203,21 @@ const Newpost = () => {
         </Autocomplete>
         
         <label>Date</label>
-        <input name="fromdate" type="date" /> to <input name="todate" type="date" />
+        <input 
+    name="fromdate" 
+    type="date" 
+    onChange={handleFromDateChange}
+    min={today} // today's date as the minimum value
+  /> to  <input 
+    name="todate" 
+    type="date" 
+    min={minToDate} // the selected "from date" as the minimum value
+  />
         <label>Age Preference</label>
         <input name="minAge" type="age" /> to <input name="maxAge" type="age" />
 
         <label>Link itinerary</label>
-        <select name="itineraries">
+        <select name="itineraries" onChange={handleItineraryChange} value={selectedItineraryId}>
         <option value="">Select an itinerary</option>
           {renderItineraryOptions()}
         </select>
