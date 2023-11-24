@@ -55,7 +55,7 @@ const style = {
   p: 4,
 };
 
-export const ItineraryCreation = ({ history }) => {
+export const ItineraryCreation = ({ history, isLoaded }) => {
   const names = [
     "Hiking",
     "Nightlife",
@@ -98,13 +98,8 @@ export const ItineraryCreation = ({ history }) => {
   `;
   const dispatch = useDispatch();
 
-  const [image, setImage] = useState(
-    "https://media.timeout.com/images/105770969/1372/772/image.jpg"
-  );
-
   const [map, setMap] = React.useState(null);
 
-  const [isCost, setisCost] = React.useState(false);
   const [imageUrl, setImageUrl] = useState(
     "https://media.timeout.com/images/105770969/1372/772/image.jpg"
   );
@@ -199,11 +194,11 @@ export const ItineraryCreation = ({ history }) => {
     }
   }, []);
 
-  const { isLoaded } = useJsApiLoader({
-    id: "google-map-script",
-    googleMapsApiKey: "AIzaSyAUmGqs6vCSNoKHWwvYfifpkOJ5lZLrUBo",
-    libraries,
-  });
+  // const { isLoaded } = useJsApiLoader({
+  //   id: "google-map-script",
+  //   googleMapsApiKey: "AIzaSyAUmGqs6vCSNoKHWwvYfifpkOJ5lZLrUBo",
+  //   libraries,
+  // });
 
   const [buttonStates, setButtonStates] = useState(
     Array(dateArray.length).fill(false)
@@ -344,9 +339,9 @@ export const ItineraryCreation = ({ history }) => {
       });
   };
 
-  useEffect(() => {
-    getImage();
-  }, []);
+  // useEffect(() => {
+  //   getImage();
+  // }, []);
 
   const containerStyle1 = {
     width: "460px",
@@ -546,12 +541,12 @@ export const ItineraryCreation = ({ history }) => {
   //   setSearchLocations(updatedSearchLocations);
   // };
 
-  async function getImage() {
-    const url = `https://pixabay.com/api/?key=35714305-8294bdfc234a78b237b91a723&q=chicago&image_type=photo&per_page=10&safesearch=True&category=places&editors_choice=True`;
-    const res = await axios.get(url);
-    const ind = Math.floor(Math.random() * 10);
-    setImage(res.data.hits[ind].webformatURL);
-  }
+  // async function getImage() {
+  //   const url = `https://pixabay.com/api/?key=35714305-8294bdfc234a78b237b91a723&q=chicago&image_type=photo&per_page=10&safesearch=True&category=places&editors_choice=True`;
+  //   const res = await axios.get(url);
+  //   const ind = Math.floor(Math.random() * 10);
+  //   setImage(res.data.hits[ind].webformatURL);
+  // }
 
   const containerStyle = {
     backgroundImage: `linear-gradient(180deg,rgba(33,37,41,.5) 0,transparent 50%), url(${imageUrl})`, // Set the dynamic image URL
@@ -1571,7 +1566,7 @@ export const ItineraryCreation = ({ history }) => {
                   </OverlayView>
                 ))}
 
-                {/* {itineraryItem?.places.length > 1 && (
+                {itineraryItem?.places.length > 1 && (
                   <Polyline
                     path={itineraryItem?.places.map((place) => ({
                       lat: place.lat,
@@ -1587,7 +1582,7 @@ export const ItineraryCreation = ({ history }) => {
                       // Additional options can be added here
                     }}
                   />
-                )} */}
+                )}
               </React.Fragment>
             ))}
           </GoogleMap>

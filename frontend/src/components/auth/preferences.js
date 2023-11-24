@@ -86,7 +86,7 @@ export const Preferences = ({ history }) => {
     axios
       .put("/api/pref", data)
       .then((response) => {
-        dispatch(loadUser()).then(history.push("/plan"));
+        dispatch(loadUser()).then(history.push("/travelfeed"));
       })
       .catch((error) => {
         alert(error.response.data.message);
@@ -117,6 +117,7 @@ export const Preferences = ({ history }) => {
         <button
           className="planbutton planbutton1"
           style={{ width: "120px", marginTop: "0px" }}
+          disabled={selectedPreferences.length === 0}
           onClick={() => onSubmit()}
         >
           Submit

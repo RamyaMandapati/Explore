@@ -3,28 +3,37 @@ import "./Login.css";
 import { useDispatch, useSelector } from "react-redux";
 import logo from "../../logo.png";
 import { register } from "../../actions/auth";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
 
 export const Register = ({ history }) => {
   const dispatch = useDispatch();
   // const alert = useAlert();
   const { isAuthenticated, user } = useSelector((state) => state.auth);
 
-  const [formData, setFormData] = useState({
-    userName: "",
-    email: "",
-    password: "",
-    dateOfBirth: "",
-    gender: "",
+  // const [formData, setFormData] = useState({
+  //   userName: "",
+  //   email: "",
+  //   password: "",
+  //   dateOfBirth: "",
+  //   gender: "",
+  // });
+  // const { userName, email, password, dateOfBirth, gender } = formData;
+  const SignupSchema = Yup.object().shape({
+    userName: Yup.string().required("Required"),
+    email: Yup.string().email("Invalid email").required("Required"),
+    password: Yup.string().min(6, "Too Short!").required("Required"),
+    dateOfBirth: Yup.date().required("Required"),
+    gender: Yup.string().required("Required"),
   });
-  const { userName, email, password, dateOfBirth, gender } = formData;
 
-  const onChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-  const onSubmit = () => {
-    // e.preventDefault();
-    dispatch(register({ userName, email, password, dateOfBirth, gender }));
-  };
+  // const onChange = (e) => {
+  //   setFormData({ ...formData, [e.target.name]: e.target.value });
+  // };
+  // const onSubmit = () => {
+  //   // e.preventDefault();
+  //   dispatch(register({ userName, email, password, dateOfBirth, gender }));
+  // };
 
   useEffect(() => {
     if (isAuthenticated && user) {
@@ -66,66 +75,123 @@ export const Register = ({ history }) => {
           </div>
         </div>
         <div className="login-section sign-up-section">
-          <h1 style={{ marginBottom: "20px", fontSize: "2em" }}>
-            Get Started For Free!
-          </h1>
-          <div className="form-group">
-            <label>Name</label>
-            <input
-              type="text"
-              placeholder="Enter your name"
-              name="userName"
-              value={userName}
-              onChange={(e) => onChange(e)}
-            />
-          </div>
-          <div className="form-group">
-            <label>Email</label>
-            <input
-              type="email"
-              placeholder="name@gmail.com"
-              name="email"
-              value={email}
-              onChange={(e) => onChange(e)}
-            />
-          </div>
-          <div className="form-group">
-            <label>Password</label>
-            <input
-              type="password"
-              name="password"
-              placeholder="6+ characters"
-              value={password}
-              onChange={(e) => onChange(e)}
-            />
-          </div>
-          <div className="form-group">
-            <label>Date of Birth</label>
-            <input
-              type="text"
-              name="dateOfBirth"
-              placeholder="mm/dd/yy"
-              value={dateOfBirth}
-              onChange={(e) => onChange(e)}
-            />
-          </div>
-          <div className="form-group">
-            <label>Gender</label>
-            <select
-              className="select-but"
-              name="gender"
-              value={gender}
-              onChange={(e) => onChange(e)}
-            >
-              <option>Select Gender</option>
-              <option key="male">Male</option>
-              <option key="female">Female</option>
-            </select>
-          </div>
+          <Formik
+            initialValues={{
+              userName: "",
+              email: "",
+              password: "",
+              dateOfBirth: "",
+              gender: "",
+            }}
+            validationSchema={SignupSchema}
+            onSubmit={(values, { setSubmitting }) => {
+              dispatch(register(values));
+              setSubmitting(false);
+            }}
+          >
+            {({ isSubmitting, isValid, dirty }) => (
+              <Form className="form-group">
+                <h1
+                  style={{
+                    marginBottom: "20px",
+                    fontSize: "2em",
+                    textAlign: "left",
+                  }}
+                >
+                  Get Started For Free!
+                </h1>
+                <div className="form-group">
+                  <label>Name</label>
+                  <Field
+                    type="text"
+                    placeholder="Enter your name"
+                    name="userName"
+                    className="formik-field"
+                    // value={userName}
+                    // onChange={(e) => onChange(e)}
+                  />
+                  <ErrorMessage
+                    name="userName"
+                    component="div"
+                    style={{ color: "red" }}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Email</label>
+                  <Field
+                    type="email"
+                    placeholder="name@gmail.com"
+                    name="email"
+                    // value={email}
+                    // onChange={(e) => onChange(e)}
+                  />
+                  <ErrorMessage
+                    name="email"
+                    component="div"
+                    style={{ color: "red" }}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Password</label>
+                  <Field
+                    type="password"
+                    name="password"
+                    placeholder="6+ characters"
+                    // value={password}
+                    // onChange={(e) => onChange(e)}
+                  />
+                  <ErrorMessage
+                    name="password"
+                    component="div"
+                    style={{ color: "red" }}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Date of Birth</label>
+                  <Field
+                    type="date"
+                    name="dateOfBirth"
+                    placeholder="mm/dd/yy"
+                    // value={dateOfBirth}
+                    // onChange={(e) => onChange(e)}
+                  />
+                  <ErrorMessage
+                    name="dateOfBirth"
+                    component="div"
+                    style={{ color: "red" }}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Gender</label>
+                  <Field
+                    as="select"
+                    className="select-but"
+                    name="gender"
+                    // value={gender}
+                    // onChange={(e) => onChange(e)}
+                  >
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Non-Binary">Non-Binary</option>
+                  </Field>
+                  <ErrorMessage
+                    name="gender"
+                    component="div"
+                    style={{ color: "red" }}
+                  />
+                </div>
 
-          <button className="login-btn" onClick={() => onSubmit()}>
-            Sign up
-          </button>
+                <button
+                  type="submit"
+                  className="login-btn"
+                  disabled={isSubmitting || !isValid || !dirty}
+                >
+                  Sign up
+                </button>
+              </Form>
+            )}
+          </Formik>
         </div>
       </div>
     </div>

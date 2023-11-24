@@ -6,7 +6,7 @@ const userProfileSchema = new Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   emailVerified: { type: Boolean, required: true },
-  dateOfBirth: { type: String, required: true },
+  dateOfBirth: { type: Date, required: true },
   gender: { type: String, required: true },
   phoneNumber: { type: String },
   identificationProof: { type: String },
@@ -14,6 +14,7 @@ const userProfileSchema = new Schema({
   city: { type: String },
   state: { type: String },
   country: { type: String },
+  age: { type: String },
   interestedActivity: [
     {
       type: String,
@@ -43,7 +44,7 @@ const userProfileSchema = new Schema({
       ref: "itinerary",
     },
   ],
-  savedPosts:[
+  savedPosts: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "post",
