@@ -29,7 +29,8 @@ const {
   filterPosts,
   updateLikes,
   addComment,
-} = require('./modules/postModule');
+  delPost,
+} = require("./modules/postModule");
 const {
   updateUserPreference,
   findUserByEmail,
@@ -77,10 +78,11 @@ router.delete('/notification/:id', deleteNotification);
 router.get('/notification/:id', getNotifications);
 
 //Post routes
-router.post('/addPost', upload.any(), addPost);
-router.get('/getPosts', getPosts);
-router.get('/filterPosts', filterPosts);
-router.post('/likePost/:postId', updateLikes);
+router.post("/addPost", upload.any(), addPost);
+router.get("/getPosts", getPosts);
+router.get("/filterPosts", filterPosts);
+router.post("/likePost/:postId", updateLikes);
+router.delete("/deletePost/:postId", delPost);
 //user Router
 router.put('/pref', updateUserPreference);
 router.post('/user/email', findUserByEmail);

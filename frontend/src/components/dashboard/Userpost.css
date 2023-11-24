@@ -9,6 +9,7 @@
   flex-direction: column;
   justify-content: space-between;
   margin-bottom: 10px;
+ 
 }
 
 .user-info {
@@ -30,7 +31,7 @@
 }
 
 .post-content {
-  margin-top: 20px;
+  margin-top: 10px;
 }
 .post-container {
   background-color: white;
@@ -95,11 +96,41 @@
   border-radius: 4px;
 }
 .icon {
-  color: #f75940; /* Set the icon color */
+  /* Set the icon color */
+  fill: transparent !important; /* Override any existing fill property */
+  stroke: #f75940; /* Set the stroke (border) color */
+  stroke-width: 30; 
   margin-left: 5px; /* Space between icons */
   cursor: pointer; /* Change cursor to indicate clickable */
-  font-size: 20px; /* Change cursor to indicate clickable */
+  font-size: 20px;
+  color: transparent; /* Icons are transparent by default */
+  cursor: pointer; /* Change cursor to indicate clickable */
   /* Add more styles if needed */
+}
+/* .icon.like-icon path,
+.icon.follow-icon path {
+  fill: transparent !important; 
+  stroke: #f75940; 
+  stroke-width: 30; 
+} */
+
+
+.like-icon.liked,
+.follow-icon.followed {
+  color: #f75940;/* Fill with orange when liked or followed */
+}
+.like-icon.liked svg,
+.follow-icon.followed svg {
+  fill: currentColor;
+}
+.follow-icon.followed {
+  /* Style when followed */
+  color: #f75940; /* Fill with orange when followed */
+}
+
+/* Additional style to ensure SVG is filled for Font Awesome icons */
+.follow-icon.followed svg {
+  fill: currentColor;
 }
 
 .top-right-icons {
@@ -216,8 +247,22 @@
   border-radius: 100px;
   cursor: pointer;
   font-size: 12px;
-  white-space: nowrap; /* Prevents text wrapping */
+  white-space: nowrap; 
+ /* Prevents text wrapping */
 }
+.view-itinerary-btn{
+  width: fit-content;
+  margin-top: 10px;
+  background-color: #f75940;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 100px;
+  cursor: pointer;
+  font-size: 12px;
+  white-space: nowrap; 
+}
+
 
 .create-post-btn:hover, .create-itinerary-btn:hover {
   background-color: #FF7F50; /* Slightly darker orange on hover */

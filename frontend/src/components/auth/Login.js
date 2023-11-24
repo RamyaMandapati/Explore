@@ -1,29 +1,33 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { login } from '../../actions/auth';
-import './Login.css';
-import logo from '../../logo.png';
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../../actions/auth";
+import "./Login.css";
+import logo from "../../logo.png";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
 
 export const Login = ({ history }) => {
   const dispatch = useDispatch();
   const { isAuthenticated, user } = useSelector((state) => state.auth);
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-  });
+  // const [formData, setFormData] = useState({
+  //   email: "",
+  //   password: "",
+  // });
   // //const successlogin = '';
-  const { email, password } = formData;
+  // const { email, password } = formData;
 
-  const onChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-  const onSubmit = () => {
-    //e.preventDefault();
-    //console.log("HI");
-    //return <Redirect to="/register" />;
-    dispatch(login({ email, password }));
-  };
+  // const onChange = (e) => {
+  //   setFormData({ ...formData, [e.target.name]: e.target.value });
+  // };
+  // const onSubmit = () => {
 
+  //   dispatch(login({ email, password }));
+  // };
+
+  const SigninSchema = Yup.object().shape({
+    email: Yup.string().email("Invalid email").required("Required"),
+    password: Yup.string().min(6, "Too Short!").required("Required"),
+  });
   const onSignUp = () => {
     history.push('/register');
   };
@@ -65,33 +69,69 @@ export const Login = ({ history }) => {
             <div className='overlay'></div>
           </div>
         </div>
-        <div className='login-section'>
-          <h1 style={{ marginBottom: '20px', fontSize: '2em' }}>
-            Welcome Back!
-          </h1>
-          <div className='form-group'>
-            <label>Email</label>
-            <input
-              type='email'
-              placeholder='name@gmail.com'
-              name='email'
-              value={email}
-              onChange={(e) => onChange(e)}
-            />
-          </div>
-          <div className='form-group'>
-            <label>Password</label>
-            <input
-              type='password'
-              placeholder='6+ characters'
-              name='password'
-              value={password}
-              onChange={(e) => onChange(e)}
-            />
-          </div>
-          <button className='login-btn' onClick={() => onSubmit()}>
-            Login
-          </button>
+        <div className="login-section">
+          <Formik
+            initialValues={{
+              email: "",
+              password: "",
+            }}
+            validationSchema={SigninSchema}
+            onSubmit={(values, { setSubmitting }) => {
+              dispatch(login(values));
+              setSubmitting(false);
+            }}
+          >
+            {({ isSubmitting, isValid, dirty }) => (
+              <Form className="form-group">
+                <h1
+                  style={{
+                    marginBottom: "20px",
+                    fontSize: "2em",
+                    textAlign: "left",
+                  }}
+                >
+                  Welcome Back!
+                </h1>
+                <div className="form-group">
+                  <label>Email</label>
+                  <Field
+                    type="email"
+                    placeholder="name@gmail.com"
+                    name="email"
+                    // value={email}
+                    // onChange={(e) => onChange(e)}
+                  />
+                  <ErrorMessage
+                    name="email"
+                    component="div"
+                    style={{ color: "red" }}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Password</label>
+                  <Field
+                    type="password"
+                    placeholder="6+ characters"
+                    name="password"
+                    // value={password}
+                    // onChange={(e) => onChange(e)}
+                  />
+                  <ErrorMessage
+                    name="password"
+                    component="div"
+                    style={{ color: "red" }}
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="login-btn"
+                  disabled={isSubmitting || !isValid || !dirty}
+                >
+                  Sign in
+                </button>
+              </Form>
+            )}
+          </Formik>
         </div>
       </div>
     </div>

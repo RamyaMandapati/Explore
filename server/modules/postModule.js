@@ -18,7 +18,7 @@ const addPost = async (req, res) => {
       location,
       fromDate,
       toDate,
-      iteneraryId,
+      itineraryId,
       tags,
       minAge,
       maxAge,
@@ -35,7 +35,7 @@ const addPost = async (req, res) => {
       location,
       fromDate,
       toDate,
-      iteneraryId,
+      itineraryId,
       tags,
       minAge,
       maxAge,
@@ -54,9 +54,9 @@ const addPost = async (req, res) => {
 
 const getPosts = async (req, res) => {
   try {
-    const posts = await Post.find().populate("user").populate({
-      path: "comments.user",
-      // Only include the userName field
+    const posts = await Post.find().populate('user').populate({
+      path: 'comments.user',
+ // Only include the userName field
     });
     res.json(posts);
   } catch (error) {
@@ -64,6 +64,17 @@ const getPosts = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+const delPost= async(req,res)=>{
+  try{
+    const postId=req.params.postId;
+    const deletedPost=await Post.findByIdAndDelete(postId);
+    res.status(200).json(deletedPost);
+  }catch(error){
+    console.error("Error deleting post:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
 
 // Filter posts based on criteria (e.g., trip type or status)
 const filterPosts = async (req, res) => {
@@ -154,4 +165,5 @@ module.exports = {
   filterPosts,
   updateLikes,
   addComment,
+  delPost,
 };

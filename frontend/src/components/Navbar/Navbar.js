@@ -172,10 +172,10 @@ const Navbar = () => {
     axios
       .post('/logout')
       .then((response) => {
-        dispatch({ type: 'LOGOUT' });
-        if (history) {
-          history.push('/');
-        }
+        dispatch({ type: "LOGOUT" });
+      })
+      .then(() => {
+        history.push("/");
       })
       .catch((error) => {
         console.log(error);

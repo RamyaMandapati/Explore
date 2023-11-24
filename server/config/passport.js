@@ -17,6 +17,21 @@ module.exports = (passport) => {
     done(null, user);
   });
 
+  function getAgeCategory(birthdate) {
+    const today = new Date();
+    let age = today.getFullYear() - birthdate.getFullYear();
+    const m = today.getMonth() - birthdate.getMonth();
+
+    if (m < 0 || (m === 0 && today.getDate() < birthdate.getDate())) {
+      age--;
+    }
+
+    if (age >= 50) return "50+";
+    if (age >= 41) return "41-50";
+    if (age >= 31) return "31-40";
+    if (age >= 20) return "20-30";
+    return "Under 20";
+  }
   passport.use(
     "local-signup",
     new LocalStrategy(
@@ -40,6 +55,8 @@ module.exports = (passport) => {
             false
           );
         } else {
+          const birthdate = new Date(req.body.dateOfBirth);
+          const ageCategory = await getAgeCategory(birthdate);
           const userPassword = generateHash(password);
           const data = {
             email: email,
@@ -48,6 +65,7 @@ module.exports = (passport) => {
             emailVerified: true,
             dateOfBirth: req.body.dateOfBirth,
             gender: req.body.gender,
+            age: ageCategory,
           };
           const newUser = await userModel.create(data);
           if (newUser) {

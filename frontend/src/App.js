@@ -16,7 +16,7 @@ import { positions, transitions, Provider as AlertProvider } from 'react-alert';
 import AlertTemplate from 'react-alert-template-basic';
 import { useSelector } from 'react-redux';
 import ItinerarySelection from './components/itinerary/itinerarySelection';
-import ItineraryCreation from './components/itinerary/itineraryCreation';
+import MapComponent from './components/itinerary/mapComponent';
 import ItineraryCalendarPage from './components/itinerary/itineraryCalendarPage';
 import Navbar from './components/Navbar/Navbar';
 import Register from './components/auth/Register';
@@ -61,8 +61,8 @@ const App = () => {
         {isAuthenticated && <Navbar />}
 
         <Fragment>
-          <Route exact path='/plan' component={ItinerarySelection}></Route>
-          <Route exact path='/itinerary' component={ItineraryCreation}></Route>
+          <Route exact path="/plan" component={ItinerarySelection}></Route>
+          <Route exact path="/itinerary" component={MapComponent}></Route>
           <Route
             exact
             path='/itinerary/:itineraryId'

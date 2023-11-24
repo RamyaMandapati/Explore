@@ -149,6 +149,7 @@ h4 {
 }
 
 .form-group input,
+.formik-field,
 .select-but {
   width: 100%;
   height: 45px;
@@ -198,4 +199,9 @@ h4 {
 .login-nav-btn {
   border-bottom: 2px solid #f75940;
   color: #f75940;
+}
+
+.login-btn:disabled {
+  opacity: 0.9;
+  cursor: not-allowed;
 }

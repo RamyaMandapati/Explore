@@ -1,57 +1,57 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
-const postSchema = new Schema({
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'user', // Reference to the User model for the post's author
-    required: true,
-  },
-  tripCountry: { type: String },
-  tripState: { type: String },
-  location: { type: String },
-  fromDate: { type: Date },
-  toDate: { type: Date },
-  imageUrls: [
-    {
-      type: String,
-    },
-  ],
-  title: { type: String },
-  description: { type: String },
-  itineraryID: { type: Number },
-  budget: { type: Number },
-  likes: [
-    {
+  const mongoose = require("mongoose");
+  const Schema = mongoose.Schema;
+  const postSchema = new Schema({
+    user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'user', // Reference to users who liked the post
+      ref: "user", // Reference to the User model for the post's author
+      required:true,
     },
-  ],
-  comments: [
-    {
-      user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'user', // Reference to the user who made the comment
-        required: true,
-      },
-      text: {
+    tripCountry: { type: String },
+    tripState: { type: String },
+    location: { type: String },
+    fromDate: { type: Date },
+    toDate: { type: Date },
+    imageUrls: [
+      {
         type: String,
-        required: true,
       },
-      createdAt: {
-        type: Date,
-        default: Date.now,
+    ],
+    title: { type: String },
+    description: { type: String },
+    itineraryId: { type: mongoose.Schema.Types.ObjectId, ref: "itinerary" },
+    budget: { type: Number },
+    likes: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user", // Reference to users who liked the post
       },
+    ],
+    comments: [
+      {
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "user", // Reference to the user who made the comment
+          required: true,
+        },
+        text: {
+          type: String,
+          required: true,
+        },
+        createdAt: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
+    tags: [{ type: String }],
+    createdAt: {
+      type: Date,
+      default: Date.now,
     },
-  ],
-  tags: [{ type: String }],
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-  genderPref: { type: String },
-  minAge: { type: Number },
-  maxAge: { type: Number },
-  budget: { type: Number },
-});
+    genderPref: { type: String },
+    minAge: { type: Number },
+    maxAge: { type: Number },
+    budget: { type: Number },
+  });
 
 module.exports = mongoose.model('post', postSchema);

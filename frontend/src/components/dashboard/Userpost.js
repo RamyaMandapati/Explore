@@ -33,6 +33,30 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
       setShowMenu(index);
     }
   };
+
+  const handleDeletePost = async (postId) => {
+    try {
+      // API call to delete the post
+      const response = await axios.delete(
+        `http://localhost:4000/api/deletePost/${postId}`,
+        {
+          data: { userId: user._id },
+        }
+      );
+      // Handle the successful deletion here
+      console.log(response.data.message);
+      // Optionally, update the posts state to reflect the deletion
+      setPosts((currentPosts) =>
+        currentPosts.filter((post) => post._id !== postId)
+      );
+    } catch (error) {
+      // Handle the error here
+      console.error(
+        "Error deleting post:",
+        error.response?.data?.message || error.message
+      );
+    }
+  };
   const handleSavePost = async (postId) => {
     setShowMenu(null);
     const currentUserId = user._id; // Replace with actual logic to retrieve current user ID
@@ -49,16 +73,12 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
     }
   };
 
-  const handleEditPost = (postId) => {
-    // Implementation to edit the post
-    // This might involve setting a state with the post's data and opening a modal or another page for editing
-  };
-
-  const handleDeletePost = (postId) => {
-    // Implementation to delete the post
-  };
   const navigateToNewPost = () => {
     history.push("/newPost");
+  };
+
+  const navigateToNewItinerary = () => {
+    history.push("/plan");
   };
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "short", day: "numeric" };
@@ -118,8 +138,8 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
         : true)
     );
   });
-  const handleCommentClick = (index) => {
-    setShowCommentsForPost(showCommentsForPost === index ? null : index);
+  const handleCommentClick = (postId) => {
+    setShowCommentsForPost(showCommentsForPost === postId ? null : postId);
   };
   const handleLike = async (postId) => {
     const userId = user._id; // The current user's ID
@@ -144,13 +164,10 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
     }
   };
 
-  const handleCommentChange = (text, index) => {
-    setNewComment({ ...newComment, [index]: text });
+  const handleCommentChange = (text, postId) => {
+    setNewComment({ ...newComment, [postId]: text });
   };
-  const submitComment = async (index, commentText) => {
-    const postId = posts[index]._id; // ID of the post being commented on
-    const userId = user._id; // The current user's ID
-
+  const submitComment = async (postId, commentText) => {
     if (!commentText.trim()) {
       return; // Avoid sending empty comments
     }
@@ -159,23 +176,26 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
       const response = await axios.post(
         `http://localhost:4000/api/addComment/${postId}`,
         {
-          userId,
+          userId: user._id,
           text: commentText,
         }
       );
 
-      console.log(response.data);
-
-      // Update the state to include the new comment
-      const updatedPosts = [...posts];
-      updatedPosts[index].comments.push({
-        user,
-        text: commentText,
-        createdAt: new Date(),
-      });
-
-      setPosts(updatedPosts);
-      setNewComment({ ...newComment, [index]: "" }); // Clear the comment input field
+      setPosts((currentPosts) =>
+        currentPosts.map((post) => {
+          if (post._id === postId) {
+            return {
+              ...post,
+              comments: [
+                ...post.comments,
+                { user, text: commentText, createdAt: new Date() },
+              ],
+            };
+          }
+          return post;
+        })
+      );
+      setNewComment({ ...newComment, [postId]: "" }); // Clear the comment input field
     } catch (error) {
       console.error("Error adding comment:", error);
     }
@@ -200,26 +220,27 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
           </button>
           <button
             className="create-itinerary-btn"
-            onClick={navigateToItineraryPlan}
+            onClick={navigateToNewItinerary}
           >
             Create Itinerary
           </button>
         </div>
       </div>
       {filteredPosts
-        .slice()
+        ?.slice()
         .reverse()
         .map((post, index) => (
-          <div key={index} className="user-post">
+          <div key={post._id} className="user-post">
             <div className="top-right-icons">
-              {!user.following.includes(post.user?._id) && (
-                <FontAwesomeIcon
-                  icon={faUserPlus}
-                  className="icon follow-icon"
-                  onClick={() => handleFollow(post.user?._id)}
-                  style={{ marginRight: "10px" }}
-                />
-              )}
+              <FontAwesomeIcon
+                icon={faUserPlus}
+                className={`icon follow-icon ${
+                  user.following.includes(post.user?._id) ? "followed" : ""
+                }`}
+                onClick={() => handleFollow(post.user?._id)}
+                style={{ marginRight: "10px" }}
+              />
+
               <FontAwesomeIcon
                 icon={faEllipsisV}
                 onClick={() => toggleMenu(index)}
@@ -227,7 +248,7 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
               {showMenu === index && (
                 <div className="post-menu">
                   <div onClick={() => handleSavePost(post._id)}>Save Post</div>
-                  <div onClick={() => handleEditPost(post._id)}>Edit Post</div>
+
                   <div onClick={() => handleDeletePost(post._id)}>
                     Delete Post
                   </div>
@@ -244,7 +265,7 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
                 <h3>{post.user?.userName || "username"}</h3>
               </div>
             </div>
-            <p style={{ marginTop: "10px" }}>
+            <p style={{ marginTop: "10px", marginBottom: "10px" }}>
               <span role="img" aria-label="location">
                 📍
               </span>
@@ -286,7 +307,16 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
                 )}
               </div>
             </div>
-
+            {post.itineraryId && (
+              <button
+                className="view-itinerary-btn"
+                onClick={() =>
+                  (window.location.href = `/itinerary/${post.itineraryId}`)
+                }
+              >
+                View Itinerary
+              </button>
+            )}
             <div className="user-preferences">
               <div className="post-content">
                 <p>{post.description}</p>
@@ -313,7 +343,9 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
             <div className="bottom-right-icons">
               <FontAwesomeIcon
                 icon={faThumbsUp}
-                className="icon like-icon"
+                className={`icon like-icon ${
+                  post.likes.includes(user._id) ? "liked" : ""
+                }`}
                 onClick={() => handleLike(post._id)}
               />
               <FontAwesomeIcon
@@ -330,18 +362,20 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
                   type="text"
                   className="comment-input"
                   placeholder="Write a comment..."
-                  value={newComment[index] || ""}
-                  onChange={(e) => handleCommentChange(e.target.value, index)}
+                  value={newComment[post._id] || ""}
+                  onChange={(e) =>
+                    handleCommentChange(e.target.value, post._id)
+                  }
                   onKeyPress={(e) =>
                     e.key === "Enter"
-                      ? submitComment(index, newComment[index])
+                      ? submitComment(post._id, newComment[post._id])
                       : null
                   }
                 />
                 <FontAwesomeIcon
                   icon={faPaperPlane}
                   className="comment-submit-arrow"
-                  onClick={() => submitComment(index, newComment[index])}
+                  onClick={() => submitComment(post._id, newComment[post._id])}
                 />
               </div>
             )}
