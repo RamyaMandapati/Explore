@@ -34,7 +34,9 @@ const {
   updateUserPreference,
   findUserByEmail,
   updateFollowers,
-} = require('./modules/userModule');
+  findUserById,
+  savePost,
+} = require("./modules/userModule");
 
 const { editMember } = require('./modules/groupModule');
 const {
@@ -46,21 +48,29 @@ const {
   unfollowUser,
 } = require('./modules/userProfileModule');
 
-// itinerary related routes
-router.post('/itinerary', addItinerary);
-router.get('/itinerary/:id', isLoggedIn, getItineraryById);
-router.get('/itinerary', getItineraries);
-router.get('/itinerary/user/:id', getItineraryByUserId);
-router.put('/itinerary/members', itineraryMembers);
-router.put('/itinerary/requestmember', itineraryAccessRequest);
-router.put('/itinerary/like', itineraryLikeCount);
-router.put('/itinerary/dislike', removeItineraryLikeCount);
-router.put('/itinerary/rating', itineraryRating);
-router.post('/follow/:userIdToFollow', updateFollowers);
-router.put('/users/favitinerary', favoriteItinerary);
-router.put('/users/delfavitinerary', deletefavoriteItinerary);
-router.post('/itinerary/openai', generate);
+const {
+  getConversationTwoUserIds,
+  saveConversation,
+  getConversation,
+} = require("./modules/conversationModule");
 
+const { saveMessage, getMessages } = require("./modules/messageModule");
+
+// itinerary related routes
+router.post("/itinerary", addItinerary);
+router.get("/itinerary/:id", isLoggedIn, getItineraryById);
+router.get("/itinerary", getItineraries);
+router.get("/itinerary/user/:id", getItineraryByUserId);
+router.put("/itinerary/members", itineraryMembers);
+router.put("/itinerary/requestmember", itineraryAccessRequest);
+router.put("/itinerary/like", itineraryLikeCount);
+router.put("/itinerary/dislike", removeItineraryLikeCount);
+router.put("/itinerary/rating", itineraryRating);
+router.post("/follow/:userIdToFollow", updateFollowers);
+router.put("/users/favitinerary", favoriteItinerary);
+router.put("/users/delfavitinerary", deletefavoriteItinerary);
+router.post("/itinerary/openai", generate);
+router.post("/savePost/:postId", savePost);
 //notification related routes
 router.put('/notification', readNotification);
 router.delete('/notification/:id', deleteNotification);
@@ -74,6 +84,7 @@ router.post('/likePost/:postId', updateLikes);
 //user Router
 router.put('/pref', updateUserPreference);
 router.post('/user/email', findUserByEmail);
+router.get("/user/:userId", findUserById);
 
 // profile
 router.post('/profile/review/:profileId', saveUserReview);
@@ -86,9 +97,24 @@ router.put('/profile/follow/:userId', followUser);
 router.put('/profile/unfollow/:userId', unfollowUser);
 
 //groupRouter
-router.post('/group/editmember', editMember);
-router.post('/addComment/:postId', addComment);
-router.get('/session', isLoggedIn, async (req, res, next) => {
+router.post("/group/editmember", editMember);
+router.post("/addComment/:postId", addComment);
+
+// conversation Router
+
+router.post("/conversation", saveConversation);
+router.get("/conversation/:userId", getConversation);
+router.get(
+  "/conversation/:firstUserId/:secondUserId",
+  getConversationTwoUserIds
+);
+
+//message router
+
+router.post("/messages", saveMessage);
+router.get("/messages/:conversationId", getMessages);
+
+router.get("/session", isLoggedIn, async (req, res, next) => {
   if (req.user) {
     const { user } = req;
     res.json({

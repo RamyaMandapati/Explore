@@ -51,12 +51,11 @@
   /* text-align: left; */
 }
 
-.drop-down-menu2{
+.drop-down-menu2 {
   left: 340px;
   top: -100px;
   transform: translate3d(0px, -140px, 0px);
   text-align: center;
-
 }
 .p-3 {
   padding: 16px !important;

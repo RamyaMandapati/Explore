@@ -5,7 +5,7 @@ import './Filters.css';
 // Filters.js
 function Filter({ onGenderFilterChange, onAgeFilterChange,  genderFilter, ageFilter, budgetFilter,onBudgetFilterChange }) {
     return (
-      <div className="filters">
+      <div className="filters-container">
         <h3 style={{marginBottom:"20px"}}>Filters</h3>
         <div className="filter-item">
   <label>Gender:</label>
@@ -22,7 +22,7 @@ function Filter({ onGenderFilterChange, onAgeFilterChange,  genderFilter, ageFil
 
 <div className="filter-item">
   <label>Age:</label>
-  <select value={ageFilter} onChange={(e) => onAgeFilterChange(e.target.value)}>
+  <select style={{marginLeft:"35px"}}value={ageFilter} onChange={(e) => onAgeFilterChange(e.target.value)}>
     <option value="">Any</option>
     <option value="20-30">20-30</option>
     <option value="31-40">31-40</option>

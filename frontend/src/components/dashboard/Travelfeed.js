@@ -9,9 +9,9 @@ import Contacts from './contacts.js';
 import { useState, useEffect } from 'react';
 
 function Travelfeed() {
-  const [genderFilter, setGenderFilter] = useState('');
-  const [ageFilter, setAgeFilter] = useState('');
-  const [budgetFilter, setBudgetFilter] = useState('');
+  const [genderFilter, setGenderFilter] = useState("");
+  const [ageFilter, setAgeFilter] = useState("");
+  const [budgetFilter, setBudgetFilter] = useState("");
 
   // Handlers to update the filters
   const handleGenderFilterChange = (newGender) => {
@@ -26,9 +26,13 @@ function Travelfeed() {
     setBudgetFilter(budget);
   };
   return (
-    <div className='dashboard'>
-      <div className='feed-container'>
-        <div className='filters'>
+    <div className="dashboard">
+      {/* <div className="navbar" style={{backgroundColor:"white"}}>
+      <Navbar />
+   </div> */}
+
+      <div className="feed-container">
+        <div className="filters">
           <Filters
             onGenderFilterChange={handleGenderFilterChange}
             onAgeFilterChange={handleAgeFilterChange}
@@ -38,11 +42,11 @@ function Travelfeed() {
             budgetFilter={budgetFilter}
           />
         </div>
-        <div className='main-content'>
-          <div className='itineraries'>
+        <div className="main-content">
+          <div className="itineraries">
             <PopularItineraries />
           </div>
-          <div className='userposts'>
+          <div className="userposts">
             <UserPosts
               genderFilter={genderFilter}
               ageFilter={ageFilter}
@@ -50,7 +54,7 @@ function Travelfeed() {
             />
           </div>
         </div>
-        <div className='contacts'>
+        <div className="contacts">
           <Contacts />
         </div>
       </div>

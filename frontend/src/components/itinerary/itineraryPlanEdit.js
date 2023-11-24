@@ -150,6 +150,20 @@ export const ItineraryPlanEdit = ({ history }) => {
       );
       tempDate.add(1, "days"); // Move to the next day
     }
+    if (!momentStartDate.isSame(momentEndDate)) {
+      dateArray.push(
+        momentEndDate.format("dddd") + ", " + momentEndDate.format("MMMM Do")
+      );
+    }
+    // while (true) {
+    //   dateArray.push(
+    //     tempDate.format("dddd") + ", " + tempDate.format("MMMM Do")
+    //   );
+    //   if (tempDate.isSame(endDate)) {
+    //     break; // Exit the loop if tempDate is the same as endDate
+    //   }
+    //   tempDate.add(1, "days");
+    // }
   }
 
   const [tripName, setTripName] = React.useState("");
@@ -347,7 +361,7 @@ export const ItineraryPlanEdit = ({ history }) => {
         bounds.extend(position);
       });
       map.fitBounds(bounds);
-      map.setZoom(12);
+      // map.setZoom(12);
     } else {
       // If no marker positions, set the center and zoom to your default values
       map.setCenter(center);
@@ -421,7 +435,7 @@ export const ItineraryPlanEdit = ({ history }) => {
           userId: user && user._id,
           members,
         }),
-      });
+      }).then(history.push(`/itinerary/${itineraryId}`));
       handleAddMemberClose();
     } catch (e) {
       console.log(e);
@@ -442,13 +456,17 @@ export const ItineraryPlanEdit = ({ history }) => {
   ) => {
     setItinerary((prevItinerary) => {
       const updatedItinerary = [...prevItinerary];
+      let newPlaceIndex = 0;
 
       if (!updatedItinerary[dateIndexToAddLocation]) {
         updatedItinerary[dateIndexToAddLocation] = {
           day: dateIndexToAddLocation + 1,
           places: [selectedLocation],
         };
+        newPlaceIndex = 0;
       } else {
+        newPlaceIndex = updatedItinerary[dateIndexToAddLocation].places.length;
+
         updatedItinerary[dateIndexToAddLocation] = {
           ...updatedItinerary[dateIndexToAddLocation],
           places: [
@@ -457,10 +475,11 @@ export const ItineraryPlanEdit = ({ history }) => {
           ],
         };
       }
+      toggleBoxVisibility(dateIndexToAddLocation, newPlaceIndex);
 
       return updatedItinerary;
     });
-
+    console.log("openbox", openBoxIndices);
     // const positions = calculateMarkerPositions(itinerary);
     // setMarkerPositions(positions);
   };
@@ -1301,6 +1320,10 @@ export const ItineraryPlanEdit = ({ history }) => {
                                                   onCancel={() =>
                                                     setSelectedTime(null)
                                                   }
+                                                  initialStartTime={
+                                                    place.startTime
+                                                  }
+                                                  initialEndTime={place.endTime}
                                                 />
                                               )}
                                           </div>

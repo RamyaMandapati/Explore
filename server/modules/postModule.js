@@ -1,11 +1,11 @@
-const Post = require('../models/post.js'); // Assuming you have a Post model
-const multer = require('multer');
+const Post = require("../models/post.js"); // Assuming you have a Post model
+const multer = require("multer");
 const upload = multer();
 // Create a new post
 const addPost = async (req, res) => {
   try {
-    // console.log('Request body:', req.body);
-    // console.log('Request files:', req.files);
+    console.log("Request body:", req.body);
+    console.log("Request files:", req.files);
 
     const {
       title,
@@ -15,15 +15,15 @@ const addPost = async (req, res) => {
       tripCountry,
       imageUrls,
       tripState,
-      locationName,
+      location,
       fromDate,
       toDate,
       iteneraryId,
       tags,
       minAge,
       maxAge,
+      budget,
     } = req.body;
-
     const newPost = new Post({
       title,
       description,
@@ -32,13 +32,14 @@ const addPost = async (req, res) => {
       tripCountry,
       imageUrls,
       tripState,
-      locationName,
+      location,
       fromDate,
       toDate,
       iteneraryId,
       tags,
       minAge,
       maxAge,
+      budget,
     });
 
     const savedPost = await newPost.save();
@@ -50,9 +51,13 @@ const addPost = async (req, res) => {
 };
 
 // Get all posts
+
 const getPosts = async (req, res) => {
   try {
-    const posts = await Post.find().populate('user');
+    const posts = await Post.find().populate("user").populate({
+      path: "comments.user",
+      // Only include the userName field
+    });
     res.json(posts);
   } catch (error) {
     console.error('Error fetching posts:', error);
@@ -89,12 +94,12 @@ const updateLikes = async (req, res) => {
     const post = await Post.findById(postId);
 
     if (!post) {
-      return res.status(404).send('Post not found');
+      return res.status(404).send("Post not found");
     }
 
     // Check if the user has already liked the post
     if (post.likes.includes(userId)) {
-      return res.status(400).send('User already liked this post');
+      return res.status(400).send("User already liked this post");
     }
 
     // Add the user's ID to the likes array
@@ -103,9 +108,9 @@ const updateLikes = async (req, res) => {
     // Save the updated post
     await post.save();
 
-    res.status(200).send('Post liked successfully');
+    res.status(200).send("Post liked successfully");
   } catch (error) {
-    res.status(500).send('Server error');
+    res.status(500).send("Server error");
   }
 };
 
@@ -115,13 +120,13 @@ const addComment = async (req, res) => {
   const { userId, text } = req.body; // userId is the ID of the user making the comment
 
   if (!text) {
-    return res.status(400).send('Comment text is required');
+    return res.status(400).send("Comment text is required");
   }
 
   try {
     const post = await Post.findById(postId);
     if (!post) {
-      return res.status(404).send('Post not found');
+      return res.status(404).send("Post not found");
     }
 
     // Create a new comment object
@@ -137,9 +142,9 @@ const addComment = async (req, res) => {
     // Save the updated post
     await post.save();
 
-    res.status(200).json({ message: 'Comment added successfully', post });
+    res.status(200).json({ message: "Comment added successfully", post });
   } catch (error) {
-    res.status(500).send('Server error');
+    res.status(500).send("Server error");
   }
 };
 

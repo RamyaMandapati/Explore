@@ -1,11 +1,13 @@
 /* eslint-disable no-unused-vars */
-import logo from './logo.svg';
-import './App.css';
-import React from 'react';
+import logo from "./logo.svg";
+import "./App.css";
+import React from "react";
+import { useState, useEffect } from "react";
+
 //import Reactdom from 'reactdom';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
-import { Fragment, useEffect } from 'react';
+import { Fragment } from 'react';
 // import { Landing } from './components/layout/Landing';
 import { Provider } from 'react-redux';
 import store from './store';
@@ -26,15 +28,23 @@ import Newpost from './components/Newpost/Newpost.js';
 import { loadUser } from './actions/auth';
 import ItineraryPlanEdit from './components/itinerary/itineraryPlanEdit';
 import { Profile } from './components/user/User';
-
+import Messenger from "./components/Messenger/messenger.js";
+import socket from "./utils/socket.js";
 // import Footer from "./components/layout/Footer";
 // if(localStorage.token){
 //   setAuthToken(localStorage.token);
 // }
 
 const App = () => {
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
+  const [socketUser, setSocketUser] = useState("");
 
+  // if (user && user._id) {
+  //   socket?.emit("newSocketUser", user._id);
+  //   socket.on("socketUserInfo", (data) => {
+  //     setSocketUser(data);
+  //   });
+  // }
   // const userid = user && user._id;
   useEffect(() => {
     store.dispatch(loadUser());
@@ -63,9 +73,10 @@ const App = () => {
             path='/itineraryedit/:itineraryId'
             component={ItineraryPlanEdit}
           ></Route>
-          <Route exact path='/register' component={Register}></Route>
-          <Route exact path='/preference' component={Preferences}></Route>
-          <Route exact path='/' component={Login}></Route>
+          <Route exact path="/register" component={Register}></Route>
+          <Route exact path="/preference" component={Preferences}></Route>
+          <Route exact path="/" component={Login}></Route>
+          <Route exact path="/messenger" component={Messenger}></Route>
 
           <Route exact path='/navbar' component={Navbar}></Route>
           <Route exact path='/travelFeed' component={Travelfeed}></Route>

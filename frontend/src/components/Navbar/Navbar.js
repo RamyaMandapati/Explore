@@ -1,26 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faComments, faBell } from '@fortawesome/free-solid-svg-icons'; // Import the messenger icon
-import './Navbar.css'; // You can create a CSS file for styling
-import logo from '../../logo.png';
-import profile from '../../images/profile.svg';
-import { Travelfeed } from '../dashboard/Travelfeed.js';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
-import { LOGOUT } from '../../actions/types';
-import { useHistory } from 'react-router-dom';
-import { loadUser } from '../../actions/auth';
-import Menu from '@mui/material/Menu';
-import io from 'socket.io-client';
+import React, { useState, useEffect } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faComments, faBell } from "@fortawesome/free-solid-svg-icons"; // Import the messenger icon
+import "./Navbar.css"; // You can create a CSS file for styling
+import logo from "../../logo.png";
+import profile from "../../profilepic.jpeg";
+import { Travelfeed } from "../dashboard/Travelfeed.js";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { LOGOUT } from "../../actions/types";
+import { useHistory } from "react-router-dom";
+import { loadUser } from "../../actions/auth";
+import Menu from "@mui/material/Menu";
+import io from "socket.io-client";
 
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import Divider from '@mui/material/Divider';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import Badge from '@mui/material/Badge';
-import ListItemIcon from '@mui/material/ListItemIcon';
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import Divider from "@mui/material/Divider";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
+import Badge from "@mui/material/Badge";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import socket from "./../../utils/socket";
 
 const Navbar = () => {
   const history = useHistory();
@@ -48,20 +49,13 @@ const Navbar = () => {
     setAnchorNotification(null);
   };
 
-  const [socketUser, setSocketUser] = useState('');
-  const [socket, setSocket] = useState(null);
+  const [socketUser, setSocketUser] = useState("");
 
   useEffect(() => {
-    const newSocket = io('http://localhost:5001');
-    setSocket(newSocket);
-    return () => {
-      newSocket.disconnect();
-    };
-  }, []);
-  useEffect(() => {
     if (user && user._id && socket) {
-      socket?.emit('newSocketUser', user._id);
-      socket.on('socketUserInfo', (data) => {
+      console.log(socket);
+      socket?.emit("newSocketUser", user._id);
+      socket.on("socketUserInfo", (data) => {
         setSocketUser(data);
       });
       socket.emit('requestNotifications', {
@@ -76,8 +70,7 @@ const Navbar = () => {
       });
 
       return () => {
-        socket.off('socketUserInfo');
-        socket.off('getNotifications');
+        socket.off("getNotifications");
       };
     }
   }, [user, socket]);
@@ -100,9 +93,8 @@ const Navbar = () => {
       };
     }
   }, [socket]);
-
-  // console.log(notifications);
-  const handleNotification = async (notificationId) => {
+  console.log(notifications);
+  const handleNotification = async (notificationId, itineraryId) => {
     axios
       .put('/api/notification', { notificationId: notificationId })
       .then((response) => {
@@ -112,6 +104,8 @@ const Navbar = () => {
             (notification) => notification._id !== responseData._id
           );
           setUnreadNotifications(updatedUnreadNotifications);
+
+          history.push(`/itinerary/${itineraryId}`);
           window.location.reload();
         }
       })
@@ -188,6 +182,10 @@ const Navbar = () => {
       });
   };
 
+  const handleMessages = () => {
+    history.push("/messenger");
+  };
+
   return (
     <div className='navbar'>
       <div className='navbar-left'>
@@ -235,7 +233,12 @@ const Navbar = () => {
               >
                 <ListItem alignItems='flex-start'>
                   <ListItemButton
-                    onClick={() => handleNotification(notification._id)}
+                    onClick={() =>
+                      handleNotification(
+                        notification._id,
+                        notification.itineraryId
+                      )
+                    }
                   >
                     <ListItemText
                       primary={
@@ -295,8 +298,8 @@ const Navbar = () => {
           </Menu>
         </div>
 
-        <div className='messenger-icon'>
-          <FontAwesomeIcon icon={faComments} size='lg' />
+        <div className="messenger-icon" onClick={handleMessages}>
+          <FontAwesomeIcon icon={faComments} size="lg" />
         </div>
 
         <div className='relative'>

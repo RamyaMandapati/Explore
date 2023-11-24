@@ -51,6 +51,12 @@ const userProfileSchema = new Schema({
       ref: 'itinerary',
     },
   ],
+  savedPosts:[
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "post",
+    },
+  ],
   postsCreated: [
     {
       type: mongoose.Schema.Types.ObjectId,
