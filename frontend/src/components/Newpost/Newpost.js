@@ -44,7 +44,17 @@ const Newpost = () => {
     libraries: ["drawing", "places", "geometry"],
   });
   const history = useHistory();
+  const [minToDate, setMinToDate] = useState("");
+  const [selectedItineraryId, setSelectedItineraryId] = useState("");
 
+  // Handler to update minToDate when fromdate changes
+  const handleFromDateChange = (event) => {
+    setMinToDate(event.target.value);
+  };
+  const handleItineraryChange = (e) => {
+    setSelectedItineraryId(e.target.value);
+  };
+  const today = new Date().toISOString().split("T")[0];
   const onLoad = (autoC) => setAutocomplete(autoC);
   const onPlaceChanged = () => {
     if (autocomplete !== null) {
@@ -124,7 +134,7 @@ const Newpost = () => {
       formData.append("budget", event.target.budget.value);
       formData.append("minAge", event.target.minAge.value);
       formData.append("maxAge", event.target.maxAge.value);
-      formData.append("itineraryId", event.target.itineraries.value);
+      formData.append("itineraryId", selectedItineraryId);
 
       // Append the URLs of uploaded images
       imageUrls.forEach((url) => formData.append("imageUrls", url));

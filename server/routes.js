@@ -29,6 +29,7 @@ const {
   filterPosts,
   updateLikes,
   addComment,
+  delPost,
 } = require("./modules/postModule");
 const {
   updateUserPreference,
@@ -73,6 +74,7 @@ router.post("/addPost", upload.any(), addPost);
 router.get("/getPosts", getPosts);
 router.get("/filterPosts", filterPosts);
 router.post("/likePost/:postId", updateLikes);
+router.delete("/deletePost/:postId", delPost);
 //user Router
 router.put("/pref", updateUserPreference);
 router.post("/user/email", findUserByEmail);

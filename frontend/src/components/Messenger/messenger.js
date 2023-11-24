@@ -123,7 +123,7 @@ export default function Messenger() {
             className="chatMenuWrapper"
             style={{ borderRight: "2px solid #f3f4f5" }}
           >
-            <h2>Chats</h2>
+            <h2 style={{fontSize:"25px", marginBottom:"20px"}}>Chats</h2>
             <input placeholder="Search for friends" className="chatMenuInput" />
 
             <div className="conversationBox">
@@ -131,9 +131,12 @@ export default function Messenger() {
                 {conversations.map((c) => (
                   <div onClick={() => setCurrentChat(c)}>
                     <Conversation conversation={c} currentUser={user} />
+                    
                   </div>
+                  
                 ))}
               </div>
+              
               <div></div>
             </div>
           </div>
