@@ -1,12 +1,12 @@
 // Dashboard.js
-import React from "react";
-import Filters from "./Filters";
-import PopularItineraries from "./Popularitineraries";
-import Navbar from "../Navbar/Navbar";
-import "./Travelfeed.css";
-import UserPosts from "./Userpost";
-import Contacts from "./contacts.js";
-import { useState, useEffect } from "react";
+import React from 'react';
+import Filters from './Filters';
+import PopularItineraries from './Popularitineraries';
+import Navbar from '../Navbar/Navbar';
+import './Travelfeed.css';
+import UserPosts from './Userpost';
+import Contacts from './contacts.js';
+import { useState, useEffect } from 'react';
 
 function Travelfeed() {
   const [genderFilter, setGenderFilter] = useState("");

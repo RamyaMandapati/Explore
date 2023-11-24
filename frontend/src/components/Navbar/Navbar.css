@@ -7,8 +7,8 @@
   align-items: center;
   background-color: #ffffff; /* Facebook blue */
   padding: 0px 20px;
-
-  position: fixed;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
   top: 0;
   left: 0;
   right: 0;

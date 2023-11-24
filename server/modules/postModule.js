@@ -45,8 +45,8 @@ const addPost = async (req, res) => {
     const savedPost = await newPost.save();
     res.status(201).json(savedPost);
   } catch (error) {
-    console.error("Error creating a post:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    console.error('Error creating a post:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
@@ -60,8 +60,8 @@ const getPosts = async (req, res) => {
     });
     res.json(posts);
   } catch (error) {
-    console.error("Error fetching posts:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    console.error('Error fetching posts:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
@@ -91,8 +91,8 @@ const filterPosts = async (req, res) => {
     const filteredPosts = await Post.find(filter);
     res.json(filteredPosts);
   } catch (error) {
-    console.error("Error filtering posts:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    console.error('Error filtering posts:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 //app.post('/likePost/:postId', async (req, res) => {

@@ -37,41 +37,41 @@ export const Register = ({ history }) => {
 
   useEffect(() => {
     if (isAuthenticated && user) {
-      history.push("/preference");
+      history.push('/preference');
     }
   }, [history, isAuthenticated, user]);
 
   const onSignUp = () => {
-    history.push("/register");
+    history.push('/register');
   };
 
   const onLogin = () => {
-    history.push("/");
+    history.push('/');
   };
 
   return (
-    <div className="login-cont">
-      <div className="nav-flex">
-        <img className="logo-img" src={logo} alt="Logo" />
-        <div className="add-flex ">
-          <button className="login-nav-btn" onClick={() => onSignUp()}>
+    <div className='login-cont'>
+      <div className='nav-flex'>
+        <img className='logo-img' src={logo} alt='Logo' />
+        <div className='add-flex '>
+          <button className='login-nav-btn' onClick={() => onSignUp()}>
             Signup
           </button>
           <button
-            className="signup-nav-btn"
-            style={{ marginLeft: "24px", marginRight: "36px" }}
+            className='signup-nav-btn'
+            style={{ marginLeft: '24px', marginRight: '36px' }}
             onClick={() => onLogin()}
           >
             Login
           </button>
         </div>
       </div>
-      <div className="container" style={{ alignItems: "flex-start" }}>
-        <div className="space-top">
-          <div className="image-section">
+      <div className='container login' style={{ alignItems: 'flex-start' }}>
+        <div className='space-top'>
+          <div className='image-section'>
             <h1>Adventure awaits!</h1>
             {/* <h1 id="h2-header"> awaits! Plan now.</h1> */}
-            <div className="overlay"></div>
+            <div className='overlay'></div>
           </div>
         </div>
         <div className="login-section sign-up-section">

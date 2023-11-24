@@ -54,4 +54,4 @@
     budget: { type: Number },
   });
 
-  module.exports = mongoose.model("post", postSchema);
+module.exports = mongoose.model('post', postSchema);
