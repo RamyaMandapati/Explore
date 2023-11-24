@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
-// const url = "mongodb+srv://ramyamandapati:5PEfzBanJMGhROvh@cluster0.fogofum.mongodb.net/";
-const url = 'mongodb://localhost:27017/dbtest';
+const url = "mongodb+srv://ramyamandapati:5PEfzBanJMGhROvh@cluster0.fogofum.mongodb.net/";
+// const url = 'mongodb://localhost:27017/dbtest';
 
 async function main() {
   // Use connect method to connect to the server using mongoose
