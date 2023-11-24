@@ -33,21 +33,28 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
       setShowMenu(index);
     }
   };
-  
+
   const handleDeletePost = async (postId) => {
     try {
-
       // API call to delete the post
-      const response = await axios.delete(`http://localhost:4000/api/deletePost/${postId}`, {
-        data: { userId: user._id }
-      });
+      const response = await axios.delete(
+        `http://localhost:4000/api/deletePost/${postId}`,
+        {
+          data: { userId: user._id },
+        }
+      );
       // Handle the successful deletion here
       console.log(response.data.message);
       // Optionally, update the posts state to reflect the deletion
-      setPosts(currentPosts => currentPosts.filter(post => post._id !== postId));
+      setPosts((currentPosts) =>
+        currentPosts.filter((post) => post._id !== postId)
+      );
     } catch (error) {
       // Handle the error here
-      console.error("Error deleting post:", error.response?.data?.message || error.message);
+      console.error(
+        "Error deleting post:",
+        error.response?.data?.message || error.message
+      );
     }
   };
   const handleSavePost = async (postId) => {
@@ -66,11 +73,12 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
     }
   };
 
- 
-
-  
   const navigateToNewPost = () => {
     history.push("/newPost");
+  };
+
+  const navigateToNewItinerary = () => {
+    history.push("/plan");
   };
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "short", day: "numeric" };
@@ -155,7 +163,6 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
       console.error("Error liking post:", error);
     }
   };
-  
 
   const handleCommentChange = (text, postId) => {
     setNewComment({ ...newComment, [postId]: text });
@@ -166,18 +173,29 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
     }
 
     try {
-      const response = await axios.post(`http://localhost:4000/api/addComment/${postId}`, {
-        userId: user._id,
-        text: commentText
-      });
-  
-      setPosts(currentPosts => currentPosts.map(post => {
-        if (post._id === postId) {
-          return { ...post, comments: [...post.comments, { user, text: commentText, createdAt: new Date() }] };
+      const response = await axios.post(
+        `http://localhost:4000/api/addComment/${postId}`,
+        {
+          userId: user._id,
+          text: commentText,
         }
-        return post;
-      }));
-      setNewComment({ ...newComment, [postId]: '' }); // Clear the comment input field
+      );
+
+      setPosts((currentPosts) =>
+        currentPosts.map((post) => {
+          if (post._id === postId) {
+            return {
+              ...post,
+              comments: [
+                ...post.comments,
+                { user, text: commentText, createdAt: new Date() },
+              ],
+            };
+          }
+          return post;
+        })
+      );
+      setNewComment({ ...newComment, [postId]: "" }); // Clear the comment input field
     } catch (error) {
       console.error("Error adding comment:", error);
     }
@@ -187,39 +205,56 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
     history.push(`/plan`);
   };
   return (
-    
-      <div className="main-content">
-       <div className="navbar-center">
-       <input
-    type="text"
-    placeholder="Search..."
-    value={searchTerm}
-    onChange={(e) => setSearchTerm(e.target.value)}
-    className="search-input"
-  />
-   <div className="button-container">
-  <button className="create-post-btn" onClick={navigateToNewPost}>Create Post</button>
-  <button className="create-itinerary-btn">Create Itinerary</button>
-</div>
+    <div className="main-content">
+      <div className="navbar-center">
+        <input
+          type="text"
+          placeholder="Search..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="search-input"
+        />
+        <div className="button-container">
+          <button className="create-post-btn" onClick={navigateToNewPost}>
+            Create Post
+          </button>
+          <button
+            className="create-itinerary-btn"
+            onClick={navigateToNewItinerary}
+          >
+            Create Itinerary
+          </button>
+        </div>
+      </div>
+      {filteredPosts
+        ?.slice()
+        .reverse()
+        .map((post, index) => (
+          <div key={post._id} className="user-post">
+            <div className="top-right-icons">
+              <FontAwesomeIcon
+                icon={faUserPlus}
+                className={`icon follow-icon ${
+                  user.following.includes(post.user?._id) ? "followed" : ""
+                }`}
+                onClick={() => handleFollow(post.user?._id)}
+                style={{ marginRight: "10px" }}
+              />
 
-      </div> 
-      {filteredPosts?.slice().reverse().map((post, index) => (
+              <FontAwesomeIcon
+                icon={faEllipsisV}
+                onClick={() => toggleMenu(index)}
+              />
+              {showMenu === index && (
+                <div className="post-menu">
+                  <div onClick={() => handleSavePost(post._id)}>Save Post</div>
 
-        <div key={post._id} className="user-post">
-          <div className="top-right-icons">
-          
-      <FontAwesomeIcon icon={faUserPlus} className={`icon follow-icon ${user.following.includes(post.user?._id) ? "followed" : ""}`}
-        onClick={() => handleFollow(post.user?._id)} style={{marginRight:"10px"}}/>
-    
-            <FontAwesomeIcon icon={faEllipsisV} onClick={() => toggleMenu(index)} />
-            {showMenu === index && (
-              <div className="post-menu">
-                <div onClick={() => handleSavePost(post._id)}>Save Post</div>
-                
-                <div onClick={() => handleDeletePost(post._id)}>Delete Post</div>
-              </div>
-            )}
-          </div>
+                  <div onClick={() => handleDeletePost(post._id)}>
+                    Delete Post
+                  </div>
+                </div>
+              )}
+            </div>
 
             <div className="user-info">
               <img
@@ -230,7 +265,7 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
                 <h3>{post.user?.userName || "username"}</h3>
               </div>
             </div>
-            <p style={{ marginTop: "10px" , marginBottom:"10px"}}>
+            <p style={{ marginTop: "10px", marginBottom: "10px" }}>
               <span role="img" aria-label="location">
                 📍
               </span>
@@ -273,13 +308,15 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
               </div>
             </div>
             {post.itineraryId && (
-          <button
-          className="view-itinerary-btn"
-          onClick={() => window.location.href = `/itinerary/${post.itineraryId}`}
-        >
-          View Itinerary
-        </button>
-    )}
+              <button
+                className="view-itinerary-btn"
+                onClick={() =>
+                  (window.location.href = `/itinerary/${post.itineraryId}`)
+                }
+              >
+                View Itinerary
+              </button>
+            )}
             <div className="user-preferences">
               <div className="post-content">
                 <p>{post.description}</p>
@@ -287,59 +324,71 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
               <p>
                 📅 {formatDate(post.fromDate)} - {formatDate(post.toDate)}
               </p>
-            <p>Age Preference: {post.minAge}-{post.maxAge}</p>
-            <p>Gender Preference: {post.genderPref || 'None'}</p>
-            <p>Budget: {post.budget}$</p>
-          </div>
-          <div className="post-interactions">
-            <span className="likes">
-              
-              {post.likes.length} likes{/* Replace with the actual like count */}
-            </span>
-            <span className="comments">
-              
-              {post.comments.length} comments {/* Replace with the actual comment count */}
-            </span>
-          </div>
-          <div className="bottom-right-icons">
-            <FontAwesomeIcon icon={faThumbsUp} className={`icon like-icon ${post.likes.includes(user._id) ? "liked" : ""}`} onClick={() => handleLike(post._id)}/>
-            <FontAwesomeIcon icon={faComment} className="icon comment-icon" onClick={() => handleCommentClick(index)}/>
-          </div>
-         
-          {showCommentsForPost === index && (
-            
-            <div className="comment-input-section">
-              <hr></hr>
-              <input
-  type="text"
-  className="comment-input"
-  placeholder="Write a comment..."
-  value={newComment[post._id] || ''}
-  onChange={(e) => handleCommentChange(e.target.value, post._id)}
-  onKeyPress={(e) => e.key === 'Enter' ? submitComment(post._id, newComment[post._id]) : null}
-/>
+              <p>
+                Age Preference: {post.minAge}-{post.maxAge}
+              </p>
+              <p>Gender Preference: {post.genderPref || "None"}</p>
+              <p>Budget: {post.budget}$</p>
+            </div>
+            <div className="post-interactions">
+              <span className="likes">
+                {post.likes.length} likes
+                {/* Replace with the actual like count */}
+              </span>
+              <span className="comments">
+                {post.comments.length} comments{" "}
+                {/* Replace with the actual comment count */}
+              </span>
+            </div>
+            <div className="bottom-right-icons">
               <FontAwesomeIcon
-  icon={faPaperPlane}
-  className="comment-submit-arrow"
-  onClick={() => submitComment(post._id, newComment[post._id])}
-/>
+                icon={faThumbsUp}
+                className={`icon like-icon ${
+                  post.likes.includes(user._id) ? "liked" : ""
+                }`}
+                onClick={() => handleLike(post._id)}
+              />
+              <FontAwesomeIcon
+                icon={faComment}
+                className="icon comment-icon"
+                onClick={() => handleCommentClick(index)}
+              />
+            </div>
 
-            </div>
-          )}
-              {/* Existing comments */}
-              {post.comments.map((comment, commentIndex) => (
-  <div key={commentIndex} className="comment">
-    <strong>{comment.user.userName || "Anonymous"}: </strong>{comment.text}
-    {/* You can format and display the timestamp as well */}
-  </div>
-))}
-           
-            </div>
-        
-       
-        
-      
-      ))}
+            {showCommentsForPost === index && (
+              <div className="comment-input-section">
+                <hr></hr>
+                <input
+                  type="text"
+                  className="comment-input"
+                  placeholder="Write a comment..."
+                  value={newComment[post._id] || ""}
+                  onChange={(e) =>
+                    handleCommentChange(e.target.value, post._id)
+                  }
+                  onKeyPress={(e) =>
+                    e.key === "Enter"
+                      ? submitComment(post._id, newComment[post._id])
+                      : null
+                  }
+                />
+                <FontAwesomeIcon
+                  icon={faPaperPlane}
+                  className="comment-submit-arrow"
+                  onClick={() => submitComment(post._id, newComment[post._id])}
+                />
+              </div>
+            )}
+            {/* Existing comments */}
+            {post.comments.map((comment, commentIndex) => (
+              <div key={commentIndex} className="comment">
+                <strong>{comment.user.userName || "Anonymous"}: </strong>
+                {comment.text}
+                {/* You can format and display the timestamp as well */}
+              </div>
+            ))}
+          </div>
+        ))}
     </div>
   );
 };
