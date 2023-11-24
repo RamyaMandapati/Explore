@@ -173,9 +173,9 @@ const Navbar = () => {
       .post("/logout")
       .then((response) => {
         dispatch({ type: "LOGOUT" });
-        if (history) {
-          history.push("/");
-        }
+      })
+      .then(() => {
+        history.push("/");
       })
       .catch((error) => {
         console.log(error);
