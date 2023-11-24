@@ -33,6 +33,7 @@
 
 .messagechat.own {
   align-items: flex-end;
+  justify-content: flex-end;
 }
 
 .messagechat.own .messageText {

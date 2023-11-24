@@ -2,10 +2,11 @@
   font:inherit;
   display: flex;
   justify-content: center;
-  /* align-items: center; */
+   
   height: 100%;
   background-color: #f2f3f7;
-   
+  min-height: 1000px;
+  
     /* Additional styling */
 }
 
@@ -14,9 +15,11 @@
   display: flex;
   margin-top: 60px;
   /* justify-content: space-between; Add space between main content and filters */
+  min-width: 1200px;
   max-width: 1200px;
   gap: 5px; /* Use full width */
   background-color: #f2f3f7;
+  min-height: 1000px;
    /* Center horizontally */
    
   
