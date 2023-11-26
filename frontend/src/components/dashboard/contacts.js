@@ -7,7 +7,7 @@ import { loadUser } from "../../actions/auth";
 import { useState, useEffect } from "react";
 import profilephoto from "../../profilepic.jpeg";
 import axios from "axios";
-const Contacts = () => {
+const Contacts = ({ history }) => {
   const [contacts, setContacts] = useState([]);
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
@@ -34,23 +34,23 @@ const Contacts = () => {
       });
   }, [dispatch, user]);
 
-  // const handleMessage = (receiverId) => {
-  //   axios
-  //     .post(`/api/conversation`, {
-  //       senderId: user && user._id,
-  //       receiverId: userId,
-  //     })
-  //     .then((response) => {
-  //       // Handle the response
-  //       console.log(response.data);
-  //       setContacts(response.data?.followers);
-  //       console.log(contacts);
-  //     })
-  //     .catch((error) => {
-  //       // Handle the error
-  //       console.error("There was an error!", error);
-  //     });
-  // };
+  const handleMessage = (receiverId) => {
+    axios
+      .post(`/api/conversation`, {
+        senderId: user && user._id,
+        receiverId: receiverId,
+      })
+      .then((response) => {
+        console.log("response");
+        if (response.data) {
+          history.push(`/messenger/${response.data._id}`);
+        }
+      })
+      .catch((error) => {
+        // Handle the error
+        console.error("There was an error!", error);
+      });
+  };
 
   return (
     <div className="contacts">
@@ -61,7 +61,7 @@ const Contacts = () => {
             <li
               key={contact._id}
               className="contact-item"
-              // onClick={() => handleMessage(contact._id)}
+              onClick={() => handleMessage(contact._id)}
             >
               <img src={contact.profilePhoto || profilephoto} />
               <span>{contact?.userName}</span>
@@ -71,7 +71,11 @@ const Contacts = () => {
         <h2 style={{ marginTop: "30px" }}>Suggested contacts</h2>
         <ul>
           {contacts?.map((contact) => (
-            <li key={contact._id} className="contact-item">
+            <li
+              key={contact._id}
+              className="contact-item"
+              onClick={() => handleMessage(contact._id)}
+            >
               <img src={contact.profilePhoto || profilephoto} />
               <span>{contact?.userName}</span>
             </li>

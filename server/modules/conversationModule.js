@@ -1,14 +1,42 @@
 const Conversation = require("../models/conversation");
 const Message = require("../models/message");
 
-const saveConversation = async (req, res) => {
-  const newConversation = new Conversation({
-    members: [req.body.senderId, req.body.receiverId],
-  });
+// const saveConversation = async (req, res) => {
+//   const newConversation = new Conversation({
+//     members: [req.body.senderId, req.body.receiverId],
+//   });
 
+//   try {
+//     const savedConversation = await newConversation.save();
+//     res.status(200).json(savedConversation);
+//   } catch (err) {
+//     res.status(500).json(err);
+//   }
+// };
+
+const saveConversation = async (req, res) => {
   try {
-    const savedConversation = await newConversation.save();
-    res.status(200).json(savedConversation);
+    // Extract senderId and receiverId from the request body
+    const { senderId, receiverId } = req.body;
+
+    // Check if a conversation between these two users already exists
+    let conversation = await Conversation.findOne({
+      members: { $all: [senderId, receiverId] },
+    }).populate("members", "userName email profilePhoto");
+
+    // If the conversation doesn't exist, create a new one
+    if (!conversation) {
+      const newConversation = new Conversation({
+        members: [senderId, receiverId],
+      });
+      conversation = await newConversation.save();
+      conversation = await conversation
+        .populate("members", "userName email profilePhoto")
+        .execPopulate();
+    }
+
+    // Return the conversation (newly created or existing)
+    res.status(200).json(conversation);
   } catch (err) {
     res.status(500).json(err);
   }
@@ -27,6 +55,17 @@ const getConversation = async (req, res) => {
   }
 };
 
+//get conv by Id
+const getConversationById = async (req, res) => {
+  try {
+    const conversation = await Conversation.findOne({
+      _id: req.params.conversationId,
+    }).populate("members", "userName email profilePhoto");
+    res.status(200).json(conversation);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
 // get conv includes two userId
 
 const getConversationTwoUserIds = async (req, res) => {
@@ -73,4 +112,5 @@ module.exports = {
   getConversation,
   getConversationTwoUserIds,
   getUnreadMessageCount,
+  getConversationById,
 };

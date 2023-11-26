@@ -36,6 +36,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import Stack from "@mui/material/Stack";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { uploadImages } from "../../utils/cloudImage";
+import { CustomCheckbox, StyledFormControl } from "./CustomComponents";
 
 const libraries = ["drawing", "places", "geometry"];
 const Form = styled.form`
@@ -725,6 +726,16 @@ export const ItineraryCreation = ({ history, isLoaded }) => {
 
                                   setItinerary([]);
                                 }}
+                                sx={{
+                                  "& .MuiInputLabel-root.Mui-focused": {
+                                    color: "#aeb6f3",
+                                  },
+                                  "& .MuiOutlinedInput-root.Mui-focused": {
+                                    "& > fieldset": {
+                                      borderColor: "#aeb6f3",
+                                    },
+                                  },
+                                }}
                                 // onChange={(e) => setStartDate(e)}
                               />
                             </DemoContainer>
@@ -742,39 +753,48 @@ export const ItineraryCreation = ({ history, isLoaded }) => {
                                   setEndDate(newValue);
                                 }}
                                 error={errorDate}
+                                sx={{
+                                  "& .MuiInputLabel-root.Mui-focused": {
+                                    color: "#aeb6f3",
+                                  },
+                                  "& .MuiOutlinedInput-root.Mui-focused": {
+                                    "& > fieldset": {
+                                      borderColor: "#aeb6f3",
+                                    },
+                                  },
+                                }}
                               />
                             </DemoContainer>
                           </LocalizationProvider>
                         </Stack>
                         <div>
-                          <InputLabel
-                            id="demo-multiple-checkbox-label"
-                            sx={{ mt: 1 }}
-                          >
-                            Interests
-                          </InputLabel>
-                          <Select
-                            labelId="demo-multiple-checkbox-label"
-                            id="demo-multiple-checkbox"
-                            multiple
-                            value={interests}
-                            label="intersts"
-                            onChange={handleChange}
-                            InputProps={{ sx: { height: 45 } }}
-                            input={<OutlinedInput label="Interests" />}
-                            renderValue={(selected) => selected.join(", ")}
-                            sx={{ width: 540 }}
-                            MenuProps={MenuProps}
-                          >
-                            {names.map((name) => (
-                              <MenuItem key={name} value={name}>
-                                <Checkbox
-                                  checked={interests.indexOf(name) > -1}
-                                />
-                                <ListItemText primary={name} />
-                              </MenuItem>
-                            ))}
-                          </Select>
+                          <StyledFormControl sx={{ mt: 3 }}>
+                            <InputLabel id="demo-multiple-checkbox-label">
+                              Interests
+                            </InputLabel>
+                            <Select
+                              labelId="demo-multiple-checkbox-label"
+                              id="demo-multiple-checkbox"
+                              multiple
+                              value={interests}
+                              label="intersts"
+                              onChange={handleChange}
+                              InputProps={{ sx: { height: 45 } }}
+                              input={<OutlinedInput label="Interests" />}
+                              renderValue={(selected) => selected.join(", ")}
+                              sx={{ width: 540 }}
+                              MenuProps={MenuProps}
+                            >
+                              {names.map((name) => (
+                                <MenuItem key={name} value={name}>
+                                  <CustomCheckbox
+                                    checked={interests.indexOf(name) > -1}
+                                  />
+                                  <ListItemText primary={name} />
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </StyledFormControl>
                         </div>
                         <TextField
                           className="plan__location"
@@ -791,7 +811,18 @@ export const ItineraryCreation = ({ history, isLoaded }) => {
                               </InputAdornment>
                             ),
                           }}
-                          sx={{ width: 540, mt: 3 }}
+                          sx={{
+                            width: 540,
+                            mt: 3,
+                            "& .MuiInputLabel-root.Mui-focused": {
+                              color: "#aeb6f3",
+                            },
+                            "& .MuiOutlinedInput-root.Mui-focused": {
+                              "& > fieldset": {
+                                borderColor: "#aeb6f3",
+                              },
+                            },
+                          }}
                         />
                         {errorDate ? (
                           <Error>

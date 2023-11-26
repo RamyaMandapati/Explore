@@ -20,7 +20,7 @@ export const loadUser = () => async (dispatch) => {
     });
   } catch (err) {
     const errors = err.response.data.errors;
-    alert(err.response.data.message);
+    // alert(err.response.data.message);
     dispatch({
       type: AUTH_ERROR,
     });

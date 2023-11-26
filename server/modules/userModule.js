@@ -1,5 +1,6 @@
 const user = require("../models/user");
 const mongoose = require("mongoose");
+const { followNotification } = require("./notificationModule");
 // update Preference
 const updateUserPreference = async (req, res) => {
   try {
@@ -20,7 +21,7 @@ const updateUserPreference = async (req, res) => {
     if (updatedUserPreference) {
       res.status(200).json({ success: true, data: updatedUserPreference });
     } else {
-      res.status(404).json({ success: false, message: 'user not found' });
+      res.status(404).json({ success: false, message: "user not found" });
     }
   } catch (e) {
     console.log(e);
@@ -52,7 +53,7 @@ const findUserByEmail = async (req, res) => {
     const userDetail = await user.findOne({ email }).populate("followers");
     if (!userDetail) {
       return res.status(400).send({
-        error: 'No user with this email has account with us',
+        error: "No user with this email has account with us",
       });
     }
     return res.status(200).send(userDetail);
@@ -96,6 +97,7 @@ const updateFollowers = async (req, res) => {
       { new: true, session }
     );
 
+    followNotification(currentUserId, userIdToFollow, "FOLLOW");
     // Commit the transaction
     await session.commitTransaction();
     session.endSession();

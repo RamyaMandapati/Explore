@@ -1,3 +1,5 @@
+const mongoose = require("mongoose");
+
 const MessageNotificationSchema = new mongoose.Schema({
   conversationId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -12,8 +14,7 @@ const MessageNotificationSchema = new mongoose.Schema({
     default: 0,
   },
   lastMessage: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "message",
+    type: String,
   },
   // You can add more fields if needed
 });

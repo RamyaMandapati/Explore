@@ -110,7 +110,7 @@ const followNotification = async (userId, member, action) => {
       message: message,
     });
 
-    const createdNotifications = await notificationModel.insertMany(
+    const createdNotifications = await notification.insertMany(
       notificationList
     );
     for (const notification of createdNotifications) {
