@@ -4,18 +4,18 @@ import {
   UPDATE_NOTIFICATION,
 } from "../actions/types";
 const initialState = {
-  notifications: [],
+  messageNotifications: [],
   error: null,
 };
 
 export const notificationReducer = (state = initialState, action) => {
   switch (action.type) {
     case "FETCH_NOTIFICATIONS_SUCCESS":
-      return { ...state, notifications: action.payload };
+      return { ...state, messageNotifications: action.payload };
     case "FETCH_NOTIFICATIONS_FAILURE":
       return { ...state, error: action.error };
     case "UPDATE_NOTIFICATION":
-      const notificationIndex = state.notifications.findIndex(
+      const notificationIndex = state.messageNotifications.findIndex(
         (notification) => notification._id === action.payload._id
       );
 
@@ -23,15 +23,16 @@ export const notificationReducer = (state = initialState, action) => {
         // Update existing notification
         return {
           ...state,
-          notifications: state.notifications.map((notification, index) =>
-            index === notificationIndex ? action.payload : notification
+          messageNotifications: state.messageNotifications.map(
+            (notification, index) =>
+              index === notificationIndex ? action.payload : notification
           ),
         };
       } else {
         // Add new notification
         return {
           ...state,
-          notifications: [...state.notifications, action.payload],
+          messageNotifications: [...state.messageNotifications, action.payload],
         };
       }
     default:

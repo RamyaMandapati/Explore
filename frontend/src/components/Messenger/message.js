@@ -1,13 +1,21 @@
 import "./message.css";
 import { format } from "timeago.js";
+import { useSelector } from "react-redux";
 
-export default function Message({ message, own }) {
+export default function Message({ message, own, otherMember }) {
+  const { user } = useSelector((state) => state.auth);
+
   return (
     <div className={own ? "messagechat own" : "messagechat"}>
       <div className="messageTop">
         <img
           className="messageImg"
-          src="https://images.pexels.com/photos/3686769/pexels-photo-3686769.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
+          src={
+            own
+              ? user && user.profilePhoto
+              : otherMember.profilePhoto ||
+                "https://res.cloudinary.com/dylqg3itm/image/upload/v1700327154/explore/default-avatar-profile-icon-of-social-media-user-vector_gqejru.jpg"
+          }
           alt=""
         />
         <p className="messageText">{message && message.text}</p>

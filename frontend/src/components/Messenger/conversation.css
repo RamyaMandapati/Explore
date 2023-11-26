@@ -4,11 +4,15 @@
   padding: 10px;
   cursor: pointer;
   margin-top: 10px;
-  border-bottom: 2px solid #f3f4f5
+  border-bottom: 2px solid #f3f4f5;
+  position: relative;
 }
 
 .conversation:hover {
-  background-color: rgb(245, 243, 243);
+  background-color: #e9f5ff; /* Change this to your desired blue color */
+  color: #212529;
+  border-radius: 8px;
+  margin-right: 10px;
 }
 
 .conversationImg {
@@ -21,6 +25,32 @@
 
 .conversationName {
   font-weight: 500;
+}
+
+.unreadcounter {
+  width: 10px;
+  height: 10px;
+  background-color: #f75940;
+  border-radius: 50%;
+  padding: 10px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+  font-weight: 700;
+  margin-right: 10%;
+  margin-bottom: 2%;
+  color: #fff;
+}
+
+.conversation.selected {
+  background-color: #e9f5ff; /* Change this to your desired blue color */
+  color: #212529;
+  border-radius: 8px;
+  margin-right: 10px;
 }
 
 @media screen and (max-width: 768px) {
