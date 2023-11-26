@@ -9,7 +9,7 @@ import { notificationReducer } from "./reducers/notificationRed";
 const reducer = combineReducers({
   auth: authReducer,
   itinerary: itineraryplanReducer,
-  notifications: notificationReducer,
+  messageNotifications: notificationReducer,
 });
 
 let initialState = {};

@@ -1161,7 +1161,7 @@ export const ItineraryCreation = ({ history, isLoaded }) => {
                                     <span
                                       class="MarkerIconWithColor__outlined"
                                       style={{
-                                        color: colors[index],
+                                        color: colors[index % colors.length],
                                         stroke: "#d2d6f8",
                                         strokeWidth: "40",
                                       }}
@@ -1571,7 +1571,7 @@ export const ItineraryCreation = ({ history, isLoaded }) => {
                         <span
                           class="MarkerIconWithColor__outlined"
                           style={{
-                            color: colors[index],
+                            color: colors[index % colors.length],
                             stroke: "#fff",
                             strokeWidth: "40",
                           }}
@@ -1604,7 +1604,7 @@ export const ItineraryCreation = ({ history, isLoaded }) => {
                       lng: place.lng,
                     }))}
                     options={{
-                      strokeColor: colors[index], // Color for the line
+                      strokeColor: colors[index % colors.length], // Color for the line
                       strokeOpacity: 0.8,
                       strokeWeight: 5,
                       geodesic: true,

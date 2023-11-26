@@ -20,6 +20,9 @@ export default function Messenger({ history }) {
   const scrollRef1 = useRef();
   const { conversationId } = useParams();
   const dispatch = useDispatch();
+  const { messageNotifications } = useSelector(
+    (state) => state.messageNotifications
+  );
   // const [socketUser, setSocketUser] = useState("");
 
   useEffect(() => {
@@ -67,7 +70,7 @@ export default function Messenger({ history }) {
     }
     console.log("useeff", arrivalMessage);
   }, [arrivalMessage, currentChat]);
-
+  const [selectedConversation, setSelectedConversation] = useState(null);
   // useEffect(() => {
   //   // socket.current.emit("addUser", user._id);
   //   if (socket){
@@ -113,6 +116,7 @@ export default function Messenger({ history }) {
         let res = await axios.get("/api/conversations/" + conversationId);
         if (res) {
           setCurrentChat(res.data);
+          setSelectedConversation(res.data._id);
         }
       } catch (err) {
         console.log(err);
@@ -179,21 +183,42 @@ export default function Messenger({ history }) {
         <div className="chatMenu">
           <div
             className="chatMenuWrapper"
-            style={{ borderRight: "2px solid #f3f4f5" }}
+            style={{ borderRight: "1px solid #d4d4d4" }}
           >
             <h2 style={{ fontSize: "25px", marginBottom: "20px" }}>Chats</h2>
             <SearchMessage />
 
             <div className="conversationBox">
               <div ref={scrollRef1}>
-                {conversations.map((c) => (
+                {/* {conversations.map((c) => (
                   <div onClick={() => handleConversationClick(c)}>
                     <Conversation conversation={c} currentUser={user} />
                   </div>
-                ))}
-              </div>
+                ))} */}
+                {conversations.map((conversation) => {
+                  // Assuming you have a way to find the notification for this conversation
+                  const notification = messageNotifications.find(
+                    (n) => n.conversationId === conversation._id
+                  );
+                  const unreadCount = notification
+                    ? notification.unreadCount
+                    : 0;
 
-              <div></div>
+                  return (
+                    <div
+                      key={conversation._id}
+                      onClick={() => handleConversationClick(conversation)}
+                    >
+                      <Conversation
+                        conversation={conversation}
+                        currentUser={user}
+                        unreadCount={unreadCount}
+                        isSelected={selectedConversation === conversation._id}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
@@ -206,20 +231,29 @@ export default function Messenger({ history }) {
               <>
                 <div
                   style={{
-                    borderBottom: "2px solid #f3f4f5",
+                    // borderBottom: "1px solid #d4d4d4",
                     height: "64px",
-                    backgroundColor: "#f3f4f5",
-                    boxShadow: "0 0 4px rgba(0, 0, 0, 0.2)",
+                    // backgroundColor: "#f3f4f5",
+                    // boxShadow: "0 0 4px rgba(0, 0, 0, 0.2)",
+                    width: "100%",
                     // paddingLeft: "-10px",
                   }}
                 >
                   {otherMember && (
-                    <div className="conversation" style={{ marginTop: 0 }}>
+                    <div
+                      className="conversation"
+                      style={{ marginTop: 0 }}
+                      onClick={() =>
+                        history.push(
+                          `/profile/${otherMember && otherMember._id}`
+                        )
+                      }
+                    >
                       <img
                         className="conversationImg"
                         src={
                           otherMember.profilePhoto ||
-                          "https://res.cloudinary.com/dylqg3itm/image/upload/v1700009042/explore/sf_zjvbxi.jpg"
+                          "https://res.cloudinary.com/dylqg3itm/image/upload/v1700327154/explore/default-avatar-profile-icon-of-social-media-user-vector_gqejru.jpg"
                         }
                         alt={otherMember.userName}
                       />
@@ -236,6 +270,7 @@ export default function Messenger({ history }) {
                         <Message
                           message={m}
                           own={m.sender === (user && user._id)}
+                          otherMember={otherMember && otherMember}
                         />
                       </div>
                     ))}

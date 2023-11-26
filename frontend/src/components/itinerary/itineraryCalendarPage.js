@@ -108,7 +108,15 @@ export const ItineraryCalendarPage = ({ history }) => {
     }
   };
   const hours = Array.from({ length: 24 }, (_, i) => i);
-  const colors = ["#e9f5ff", "#cde6dd", "#F2EFFF", "#f5e7c4"];
+  const colors = [
+    "#e9f5ff",
+    "#cde6dd",
+    "#F2EFFF",
+    "#FFEBD8",
+    "#FDF4F5",
+    "#FAEAB1",
+    "#E4D8DC",
+  ];
 
   const isHourWithinPlaceTimeRange = (hour, startTime, endTime) => {
     const startHour = parseInt(timeTo24HourFormat(startTime).split(":")[0], 10);
@@ -706,7 +714,7 @@ export const ItineraryCalendarPage = ({ history }) => {
                       const gridColumnEnd = timeToGridColumn(
                         placeForHour.endTime
                       );
-                      const cardBackgroundColor = colors[index];
+                      const cardBackgroundColor = colors[index % colors.length];
                       return (
                         <div
                           key={hour}

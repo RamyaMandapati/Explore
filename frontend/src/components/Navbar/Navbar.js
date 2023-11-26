@@ -27,6 +27,13 @@ const Navbar = () => {
   const history = useHistory();
 
   const { user } = useSelector((state) => state.auth);
+  const { messageNotifications } = useSelector(
+    (state) => state.messageNotifications
+  );
+  const totalUnread = messageNotifications.reduce(
+    (sum, n) => (n.unreadCount > 0 ? sum + 1 : sum),
+    0
+  );
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dispatch = useDispatch();
@@ -325,6 +332,7 @@ const Navbar = () => {
 
         <div className="messenger-icon" onClick={handleMessages}>
           <FontAwesomeIcon icon={faComments} size="lg" />
+          {totalUnread > 0 && <div className="counter">{totalUnread}</div>}
         </div>
 
         <div className="relative">
