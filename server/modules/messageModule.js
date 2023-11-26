@@ -1,15 +1,18 @@
 const Message = require("../models/message");
 const func = require("../index");
+const messageNotification = require("../models/messageNotification");
+const { saveMessageNotification } = require("./messageNotificationModule");
 
 //add
 
 const saveMessage = async (req, res) => {
-  const { sender, text, conversationId } = req.body;
+  const { sender, text, conversationId, receiverId } = req.body;
   const newMessage = new Message({ sender, text, conversationId });
 
   try {
     const savedMessage = await newMessage.save();
-    // await func.emitMessage(req.body.receiver, savedMessage);
+    // await func.emitMessage(req.body.receiver, savedMessage);\
+    await saveMessageNotification(conversationId, receiverId, text);
 
     res.status(200).json(savedMessage);
   } catch (err) {
@@ -36,10 +39,17 @@ const messageMarkAsRead = async (req, res) => {
     await Message.updateMany(
       {
         conversationId: req.body.conversationId,
-        sender: { $ne: req.body.userId },
+        sender: { $ne: req.body.receiverId },
       },
-      { $set: { read: true } }
+      { $set: { isRead: true } }
     );
+    let notification = await messageNotification.findOneAndUpdate(
+      { conversationId: req.body.conversationId, userId: req.body.userId },
+      { $set: { unreadCount: 0 } },
+      { new: true }
+    );
+
+    await func.messageNotification(req.body.userId, notification);
     res.status(200).json({ message: "Messages marked as read" });
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });

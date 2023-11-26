@@ -58,10 +58,10 @@ const Navbar = () => {
       socket.on("socketUserInfo", (data) => {
         setSocketUser(data);
       });
-      socket.emit('requestNotifications', {
+      socket.emit("requestNotifications", {
         senderName: user._id,
       });
-      socket.on('getNotifications', (data) => {
+      socket.on("getNotifications", (data) => {
         const unreadNotifications = data.filter(
           (notification) => notification.isRead === false
         );
@@ -77,7 +77,7 @@ const Navbar = () => {
 
   useEffect(() => {
     if (socket) {
-      socket.on('newNotification', (notification) => {
+      socket.on("newNotification", (notification) => {
         // Add the new notification to the state
         setNotifications((prevNotifications) => [
           notification,
@@ -89,14 +89,17 @@ const Navbar = () => {
       });
       // console.log('hey', notifications);
       return () => {
-        socket.off('newNotification');
+        socket.off("newNotification");
       };
     }
   }, [socket]);
   console.log(notifications);
-  const handleNotification = async (notificationId, itineraryId) => {
+  const handleNotificationWithItinerary = async (
+    notificationId,
+    itineraryId
+  ) => {
     axios
-      .put('/api/notification', { notificationId: notificationId })
+      .put("/api/notification", { notificationId: notificationId })
       .then((response) => {
         if (response.data.success) {
           const responseData = response.data.notification;
@@ -114,16 +117,36 @@ const Navbar = () => {
       });
   };
 
+  const handleNotification = async (notificationId, receiverId) => {
+    axios
+      .put("/api/notification", { notificationId: notificationId })
+      .then((response) => {
+        if (response.data.success) {
+          const responseData = response.data.notification;
+          const updatedUnreadNotifications = unreadNotifications.filter(
+            (notification) => notification._id !== responseData._id
+          );
+          setUnreadNotifications(updatedUnreadNotifications);
+
+          history.push(`/profile/${receiverId}`);
+          window.location.reload();
+        }
+      })
+      .catch((error) => {
+        alert(error.response.data.message);
+      });
+  };
+
   const handleAcceptRequest = (e, notificationId, itineraryId, memberId) => {
     e.stopPropagation();
     const data = {
       itineraryId: itineraryId,
       notificationId: notificationId,
-      type: 'ACCEPT',
+      type: "ACCEPT",
       memberId: memberId,
     };
     axios
-      .put('/api/itinerary/members', data)
+      .put("/api/itinerary/members", data)
       .then((response) => {
         if (response.data.success) {
           const responseData = response.data.notification;
@@ -144,11 +167,11 @@ const Navbar = () => {
     const data = {
       itineraryId: itineraryId,
       notificationId: notificationId,
-      type: 'REJECT',
+      type: "REJECT",
       memberId: memberId,
     };
     axios
-      .put('/api/itinerary/members', data)
+      .put("/api/itinerary/members", data)
       .then((response) => {
         if (response.data.success) {
           const responseData = response.data.notification;
@@ -156,7 +179,7 @@ const Navbar = () => {
             (notification) => notification._id !== responseData._id
           );
           setUnreadNotifications(updatedUnreadNotifications);
-          console.log('hello', response.data.success);
+          console.log("hello", response.data.success);
           window.location.reload();
         }
       })
@@ -170,12 +193,9 @@ const Navbar = () => {
   // }, []);
   const logout = () => {
     axios
-      .post('/logout')
+      .post("/logout")
       .then((response) => {
         dispatch({ type: "LOGOUT" });
-      })
-      .then(() => {
-        history.push("/");
       })
       .catch((error) => {
         console.log(error);
@@ -187,38 +207,38 @@ const Navbar = () => {
   };
 
   return (
-    <div className='navbar'>
-      <div className='navbar-left'>
-        <Link to='/TravelFeed'>
-          <img className='logo' src={logo} alt='Logo' />
+    <div className="navbar">
+      <div className="navbar-left">
+        <Link to="/TravelFeed">
+          <img className="logo" src={logo} alt="Logo" />
         </Link>
       </div>
       {/* <div className="navbar-center">
         <input type="text" placeholder="Search for Places, People or Tags" />
       </div> */}
 
-      <div className='message flex items-center p-0'>
-        <div className='messenger-icon' onClick={() => setOpen(!open)}>
+      <div className="message flex items-center p-0">
+        <div className="messenger-icon" onClick={() => setOpen(!open)}>
           <FontAwesomeIcon
             icon={faBell}
-            size='lg'
+            size="lg"
             onClick={handleOpenNotificationMenu}
           />
           {unreadNotifications.length > 0 && (
-            <div className='counter'>{unreadNotifications.length}</div>
+            <div className="counter">{unreadNotifications.length}</div>
           )}
           <Menu
-            sx={{ mt: '45px', maxHeight: '40%' }}
-            id='menu-appbar'
+            sx={{ mt: "45px", maxHeight: "40%" }}
+            id="menu-appbar"
             anchorEl={anchorNotification}
             anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
+              vertical: "top",
+              horizontal: "right",
             }}
             keepMounted
             transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
+              vertical: "top",
+              horizontal: "right",
             }}
             open={Boolean(anchorNotification)}
             onClose={handleCloseNotificationMenu}
@@ -226,18 +246,23 @@ const Navbar = () => {
             {notifications.map((notification) => (
               <List
                 sx={{
-                  width: '100%',
+                  width: "100%",
                   maxWidth: 400,
-                  bgcolor: 'background.paper',
+                  bgcolor: "background.paper",
                 }}
               >
-                <ListItem alignItems='flex-start'>
+                <ListItem alignItems="flex-start">
                   <ListItemButton
                     onClick={() =>
-                      handleNotification(
-                        notification._id,
-                        notification.itineraryId
-                      )
+                      notification.itineraryId
+                        ? handleNotificationWithItinerary(
+                            notification._id,
+                            notification.itineraryId
+                          )
+                        : handleNotification(
+                            notification._id,
+                            notification.senderuserId
+                          )
                     }
                   >
                     <ListItemText
@@ -246,10 +271,10 @@ const Navbar = () => {
                       }
                     />
 
-                    {notification.notificationType === 'ITINERARY_REQUEST' ? (
+                    {notification.notificationType === "ITINERARY_REQUEST" ? (
                       <>
                         <div
-                          className='acceptButton'
+                          className="acceptButton"
                           onClick={(e) =>
                             handleAcceptRequest(
                               e,
@@ -262,7 +287,7 @@ const Navbar = () => {
                           Accept
                         </div>
                         <div
-                          className='rejectButton'
+                          className="rejectButton"
                           onClick={(e) =>
                             handleRejectRequest(
                               e,
@@ -272,7 +297,7 @@ const Navbar = () => {
                             )
                           }
                         >
-                          {' '}
+                          {" "}
                           Reject
                         </div>
                       </>
@@ -282,10 +307,10 @@ const Navbar = () => {
                           <div></div>
                         ) : (
                           <Badge
-                            color='primary'
+                            color="primary"
                             sx={{ paddingLeft: 5 }}
-                            badgeContent=' '
-                            variant='dot'
+                            badgeContent=" "
+                            variant="dot"
                           />
                         )}
                       </ListItemIcon>
@@ -302,28 +327,28 @@ const Navbar = () => {
           <FontAwesomeIcon icon={faComments} size="lg" />
         </div>
 
-        <div className='relative'>
+        <div className="relative">
           <img
-            className='w-10 cursor-pointer rounded-full aspect-square'
+            className="w-10 cursor-pointer rounded-full aspect-square"
             src={user.profilePhoto || profile}
-            alt='Profile'
+            alt="Profile"
             onClick={toggleDropdown}
           />
 
           {isDropdownOpen && (
-            <div className='absolute top-[44px] shadow-md border bg-white -left-24'>
+            <div className="absolute top-[44px] shadow-md border bg-white -left-24">
               <ul>
                 <li>
                   <Link
-                    to='/profile'
-                    className='p-2 hover:bg-gray-100 px-12 block'
+                    to="/profile"
+                    className="p-2 hover:bg-gray-100 px-12 block"
                   >
                     Profile
                   </Link>
                 </li>
-                <li className='p-2 hover:bg-gray-100 px-12 block'>Settings</li>
+                <li className="p-2 hover:bg-gray-100 px-12 block">Settings</li>
                 <li
-                  className='p-2 hover:bg-gray-100 px-12 block'
+                  className="p-2 hover:bg-gray-100 px-12 block"
                   onClick={logout}
                 >
                   Logout

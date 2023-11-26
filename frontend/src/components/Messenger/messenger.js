@@ -4,10 +4,11 @@ import Message from "./message";
 // import ChatOnline from "../../components/chatOnline/ChatOnline";
 import { useState, useRef, useEffect } from "react";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import socket from "./../../utils/socket";
-
-export default function Messenger() {
+import { useParams } from "react-router-dom";
+import SearchMessage from "./SearchMessage";
+export default function Messenger({ history }) {
   const [conversations, setConversations] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -17,7 +18,8 @@ export default function Messenger() {
   const { user } = useSelector((state) => state.auth);
   const scrollRef = useRef();
   const scrollRef1 = useRef();
-
+  const { conversationId } = useParams();
+  const dispatch = useDispatch();
   // const [socketUser, setSocketUser] = useState("");
 
   useEffect(() => {
@@ -39,10 +41,31 @@ export default function Messenger() {
   }, [socket]);
 
   useEffect(() => {
-    arrivalMessage &&
-      currentChat?.members.includes(arrivalMessage.sender) &&
+    const markMessagesAsRead = async () => {
+      const receiverId = currentChat.members.find(
+        (member) => member._id !== (user && user._id)
+      );
+      try {
+        await axios.put("/api/messages/markAsRead", {
+          conversationId: currentChat._id,
+          sender: receiverId,
+          userId: user && user._id,
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    if (
+      arrivalMessage &&
+      currentChat &&
+      currentChat?.members.some(
+        (member) => member._id === arrivalMessage.sender
+      )
+    ) {
       setMessages((prev) => [...prev, arrivalMessage]);
-    console.log("useeff", messages);
+      markMessagesAsRead();
+    }
+    console.log("useeff", arrivalMessage);
   }, [arrivalMessage, currentChat]);
 
   // useEffect(() => {
@@ -84,20 +107,37 @@ export default function Messenger() {
     }
   }, [currentChat]);
 
+  useEffect(() => {
+    const foundConversation = async () => {
+      try {
+        let res = await axios.get("/api/conversations/" + conversationId);
+        if (res) {
+          setCurrentChat(res.data);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    if (conversationId) {
+      foundConversation();
+    }
+  }, [conversationId]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const receiverId = currentChat.members.find(
-      (member) => member !== user._id
+      (member) => member._id !== (user && user._id)
     );
     const message = {
       sender: user && user._id,
       text: newMessage,
       conversationId: currentChat._id,
+      receiverId: receiverId._id,
     };
     socket.emit("sendMessage", {
       senderId: user && user._id,
-      receiverId,
+      receiverId: receiverId._id,
       text: newMessage,
     });
     try {
@@ -109,11 +149,29 @@ export default function Messenger() {
     }
   };
 
+  const handleConversationClick = async (conversation) => {
+    // setCurrentChat(conversation);
+    const receiverId = conversation.members.find(
+      (member) => member._id !== (user && user._id)
+    );
+    try {
+      await axios.put("/api/messages/markAsRead", {
+        conversationId: conversation._id,
+        sender: receiverId,
+        userId: user && user._id,
+      });
+      history.push(`/messenger/${conversation._id}`);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
     scrollRef1.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
-
+  const otherMember =
+    currentChat &&
+    currentChat.members.find((member) => member._id !== (user && user._id));
   return (
     <>
       {/* <Topbar /> */}
@@ -123,20 +181,18 @@ export default function Messenger() {
             className="chatMenuWrapper"
             style={{ borderRight: "2px solid #f3f4f5" }}
           >
-            <h2 style={{fontSize:"25px", marginBottom:"20px"}}>Chats</h2>
-            <input placeholder="Search for friends" className="chatMenuInput" />
+            <h2 style={{ fontSize: "25px", marginBottom: "20px" }}>Chats</h2>
+            <SearchMessage />
 
             <div className="conversationBox">
               <div ref={scrollRef1}>
                 {conversations.map((c) => (
-                  <div onClick={() => setCurrentChat(c)}>
+                  <div onClick={() => handleConversationClick(c)}>
                     <Conversation conversation={c} currentUser={user} />
-                    
                   </div>
-                  
                 ))}
               </div>
-              
+
               <div></div>
             </div>
           </div>
@@ -148,24 +204,31 @@ export default function Messenger() {
           >
             {currentChat ? (
               <>
-                {/* <div
+                <div
                   style={{
-                    // borderBottom: "2px solid #f3f4f5",
+                    borderBottom: "2px solid #f3f4f5",
                     height: "64px",
-                    // backgroundColor: "#f3f4f5",
+                    backgroundColor: "#f3f4f5",
                     boxShadow: "0 0 4px rgba(0, 0, 0, 0.2)",
                     // paddingLeft: "-10px",
                   }}
                 >
-                  <div className="conversation" style={{ marginTop: 0 }}>
-                    <img
-                      className="conversationImg"
-                      src="https://res.cloudinary.com/dylqg3itm/image/upload/v1700009042/explore/sf_zjvbxi.jpg"
-                      alt=""
-                    />
-                    <span className="conversationName">Rakshith</span>
-                  </div>
-                </div> */}
+                  {otherMember && (
+                    <div className="conversation" style={{ marginTop: 0 }}>
+                      <img
+                        className="conversationImg"
+                        src={
+                          otherMember.profilePhoto ||
+                          "https://res.cloudinary.com/dylqg3itm/image/upload/v1700009042/explore/sf_zjvbxi.jpg"
+                        }
+                        alt={otherMember.userName}
+                      />
+                      <span className="conversationName">
+                        {otherMember.userName}
+                      </span>
+                    </div>
+                  )}
+                </div>
                 <div className="chatBoxTop">
                   <div ref={scrollRef}>
                     {messages.map((m) => (
