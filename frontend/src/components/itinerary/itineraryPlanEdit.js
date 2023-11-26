@@ -1183,7 +1183,8 @@ export const ItineraryPlanEdit = ({ history }) => {
                                         <span
                                           class="MarkerIconWithColor__outlined"
                                           style={{
-                                            color: colors[index],
+                                            color:
+                                              colors[index % colors.length],
                                             stroke: "#d2d6f8",
                                             strokeWidth: "40",
                                           }}

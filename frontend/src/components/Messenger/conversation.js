@@ -2,7 +2,12 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import "./conversation.css";
 
-export default function Conversation({ conversation, currentUser }) {
+export default function Conversation({
+  conversation,
+  currentUser,
+  unreadCount,
+  isSelected,
+}) {
   const [user, setUser] = useState(null);
   // const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
@@ -23,13 +28,19 @@ export default function Conversation({ conversation, currentUser }) {
   }, [currentUser, conversation]);
 
   return (
-    <div className="conversation">
+    <div className={`conversation ${isSelected ? "selected" : ""}`}>
       <img
         className="conversationImg"
-        src="https://res.cloudinary.com/dylqg3itm/image/upload/v1700009042/explore/sf_zjvbxi.jpg"
+        src={
+          (user && user.profilePhoto) ||
+          "https://res.cloudinary.com/dylqg3itm/image/upload/v1700327154/explore/default-avatar-profile-icon-of-social-media-user-vector_gqejru.jpg"
+        }
         alt=""
       />
       <span className="conversationName">{user && user.userName}</span>
+      {unreadCount > 0 && (
+        <span className="unreadcounter">{unreadCount}</span> // Displaying unread count
+      )}
     </div>
   );
 }
