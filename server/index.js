@@ -1,21 +1,21 @@
-const express = require('express');
-const cors = require('cors');
-const passport = require('passport');
-const morgan = require('morgan');
-const bodyParser = require('body-parser');
-const session = require('express-session');
+const express = require("express");
+const cors = require("cors");
+const passport = require("passport");
+const morgan = require("morgan");
+const bodyParser = require("body-parser");
+const session = require("express-session");
 const app = express();
-const routes = require('./routes');
+const routes = require("./routes");
 //const {injectModel} = require('./modules/utils');
-require('dotenv').config();
+require("dotenv").config();
 const port = process.env.NODE_LOCAL_PORT || 4000;
-const connect = require('./config/connect');
+const connect = require("./config/connect");
 //const mysqlConnect = require('./config/mysql_connect');
-const jwtSecret = require('./config/jwtConfig');
-const jwt = require('jsonwebtoken');
-const cookieParser = require('cookie-parser');
-const { Server } = require('socket.io');
-const notificationModel = require('./models/notification.js');
+const jwtSecret = require("./config/jwtConfig");
+const jwt = require("jsonwebtoken");
+const cookieParser = require("cookie-parser");
+const { Server } = require("socket.io");
+const notificationModel = require("./models/notification.js");
 
 //For BodyParser
 app.use(
@@ -25,27 +25,27 @@ app.use(
 );
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use(express.static(__dirname + '/public'));
-app.use(morgan('combined'));
+app.use(express.static(__dirname + "/public"));
+app.use(morgan("combined"));
 //app.use(injectModel);
 app.use(cors());
 // For Passport
 app.use(
   session({
-    secret: 'keyboard cat',
+    secret: "keyboard cat",
     resave: true,
     saveUninitialized: true,
   })
 ); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
-app.use('/api', routes);
+app.use("/api", routes);
 COREAPP = {};
 //Sync Database
 
 connect().then(() => {
-  console.log('MongoDB setup complete!');
-  require('./config/passport.js')(passport);
+  console.log("MongoDB setup complete!");
+  require("./config/passport.js")(passport);
 });
 
 // mysqlConnect().then(() => {
@@ -59,13 +59,13 @@ connect().then(() => {
 //   console.log(err, "Something went wrong with the MySQL Database Update!")
 // });
 
-app.post('/signin', (req, res, next) => {
+app.post("/signin", (req, res, next) => {
   passport.authenticate(
-    'local-signin',
+    "local-signin",
     { session: false },
     (err, user, info) => {
       if (err) {
-        console.log('err -> ', err);
+        console.log("err -> ", err);
         return res.status(500).json({ success: false, message: err }); // Send an error response and return to avoid further execution
       }
       if (!user) {
@@ -76,16 +76,16 @@ app.post('/signin', (req, res, next) => {
 
       req.login(user, (error) => {
         if (error) {
-          console.log('error -> ', error);
+          console.log("error -> ", error);
           return res
             .status(500)
-            .json({ success: false, message: 'Error during login' }); // Send an error response and return
+            .json({ success: false, message: "Error during login" }); // Send an error response and return
         }
         const payload = { id: user.id, email: user.email };
         const token = jwt.sign(payload, jwtSecret.secret, {
           expiresIn: 10080000,
         });
-        res.cookie('dc_token', token, { httpOnly: true });
+        res.cookie("dc_token", token, { httpOnly: true });
         res.json({
           info,
           success: true,
@@ -98,10 +98,10 @@ app.post('/signin', (req, res, next) => {
   )(req, res, next);
 });
 
-app.post('/signup', (req, res, next) => {
-  passport.authenticate('local-signup', (err, user, info) => {
+app.post("/signup", (req, res, next) => {
+  passport.authenticate("local-signup", (err, user, info) => {
     if (err) {
-      console.log('err -> ', err);
+      console.log("err -> ", err);
       res.json({ success: false, message: err });
       next();
       return;
@@ -112,16 +112,16 @@ app.post('/signup', (req, res, next) => {
     }
     req.login(user, (error) => {
       if (error) {
-        console.log('error -> ', error);
+        console.log("error -> ", error);
         return res
           .status(500)
-          .json({ success: false, message: 'Error during signup' }); // Send an error response and return
+          .json({ success: false, message: "Error during signup" }); // Send an error response and return
       }
       const payload = { id: user.id, email: user.email };
       const token = jwt.sign(payload, jwtSecret.secret, {
         expiresIn: 10080000,
       });
-      res.cookie('dc_token', token, { httpOnly: true });
+      res.cookie("dc_token", token, { httpOnly: true });
       res.json({
         info,
         success: true,
@@ -133,23 +133,23 @@ app.post('/signup', (req, res, next) => {
   })(req, res, next);
 });
 
-app.post('/logout', (req, res) => {
+app.post("/logout", (req, res) => {
   // req.logOut();
   req.session.destroy(() => {
     // destroy session data
     req.session = null;
-    res.clearCookie('dc_token');
+    res.clearCookie("dc_token");
     res.json({ success: true });
   });
 });
 
-// app.get('*', function (req, res) {
+// app.get("*", function (req, res) {
 //   res.sendFile(`${__dirname}/public/index.html`, (err) => {
-//      if (err) {
+//     if (err) {
 //       console.log(err);
-//        res.end(err.message);
-//      }
-//    });
+//       res.end(err.message);
+//     }
+//   });
 // });
 
 app.listen(port, () => {
@@ -158,7 +158,7 @@ app.listen(port, () => {
 
 const io = new Server({
   cors: {
-    origin: 'http://localhost:3000',
+    origin: "http://localhost:3000",
   },
 });
 
@@ -181,10 +181,23 @@ const getSocketUser = (username) => {
 exports.emitNotification = (userId, notification) => {
   const userSocket = getSocketUser(userId.toString());
   if (userSocket) {
-    io.to(userSocket.socketId).emit('newNotification', notification);
+    io.to(userSocket.socketId).emit("newNotification", notification);
   }
 };
 
+exports.messageNotification = (userId, notification) => {
+  const userSocket = getSocketUser(userId.toString());
+  if (userSocket) {
+    io.to(userSocket.socketId).emit("updateMessageNotification", notification);
+  }
+};
+
+exports.readMessages = (userId, conversationId) => {
+  const userSocket = getSocketUser(userId.toString());
+  if (userSocket) {
+    io.to(userSocket.socketId).emit("readMessages", conversationId);
+  }
+};
 // exports.emitMessage = async (userId, message) => {
 //   const userSocket = await getSocketUser(userId.toString());
 //   console.log(userSocket);
@@ -196,7 +209,7 @@ exports.emitNotification = (userId, notification) => {
 io.on("connect", function (socket) {
   socket.on("newSocketUser", (username) => {
     addSocketUser(username, socket.id);
-    io.emit('socketUserInfo', socket.id);
+    io.emit("socketUserInfo", socket.id);
   });
 
   socket.on("requestNotifications", async ({ senderName }) => {
@@ -210,7 +223,9 @@ io.on("connect", function (socket) {
   });
 
   socket.on("sendMessage", async ({ senderId, receiverId, text }) => {
+    console.log(receiverId);
     const user = await getSocketUser(receiverId);
+    console.log("user", user);
     if (user) {
       io.to(user.socketId).emit("getMessage", {
         senderId,

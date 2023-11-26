@@ -1,5 +1,5 @@
 .itinerary-page-container {
-  margin: 90px auto;
+  margin: 0px auto;
   max-width: 1100px;
   font-family: "Rubik", sans-serif;
   font-weight: 400;
@@ -168,13 +168,14 @@
   height: 36px;
   width: 36px;
   border-radius: 50%;
-  margin-right: -1.1rem;
-  border: 3px solid #fdf2e9;
+  /* margin-right: -1.3rem; */
+  border: 2px solid #fdf2e9;
 }
 
 .user-count {
   height: 36px;
   width: 36px;
+  max-width: 100%;
   border-radius: 50%;
   border: 3px solid #fdf2e9;
   background-color: #fff;

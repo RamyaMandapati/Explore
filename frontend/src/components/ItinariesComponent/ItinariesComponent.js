@@ -56,7 +56,7 @@ const ItinerariesComponent = ({ history }) => {
 
   return (
     <div className="itineraries-main">
-      <Navbar />
+      {/* <Navbar /> */}
       <section className="search-section">
         <input
           type="text"

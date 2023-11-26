@@ -7,7 +7,7 @@
 .itineraryselection,
 .itinerarycreation {
   max-width: 1000px;
-  margin: 120px auto;
+  margin: 60px auto;
   font-family: "Rubik", sans-serif;
   font-weight: 400;
   color: #212529;
@@ -17,7 +17,7 @@
 
 .itinerarycreation {
   max-width: 1200px;
-  margin: 90px auto;
+  margin: 0px auto;
   display: flex;
   /* align-items: flex-start;
   justify-content: center; */
@@ -230,6 +230,7 @@ h2 {
   position: absolute;
   top: 16px;
   right: 64px;
+  background-color: #fff;
 }
 .btn-d:hover {
   background-color: rgba(254, 255, 255, 0.658);

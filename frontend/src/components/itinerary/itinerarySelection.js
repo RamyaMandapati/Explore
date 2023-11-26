@@ -19,7 +19,8 @@ import InputAdornment from "@mui/material/InputAdornment";
 import styled from "styled-components";
 import { ITINERARY_PLAN_DETAILS } from "../../actions/types";
 import { useDispatch, useSelector } from "react-redux";
-
+import { FormControl } from "@mui/material";
+import { CustomCheckbox, StyledFormControl } from "./CustomComponents";
 let autoComplete;
 
 const loadScript = (url, callback) => {
@@ -199,7 +200,16 @@ export const ItinerarySelection = ({ history }) => {
             setLocationError(false);
             setLocation(e.target.value);
           }}
-          sx={{ mb: 2 }}
+          // sx={{ mb: 2 }}
+          sx={{
+            "& .MuiInputLabel-root.Mui-focused": { color: "#aeb6f3" },
+            "& .MuiOutlinedInput-root.Mui-focused": {
+              "& > fieldset": {
+                borderColor: "#aeb6f3",
+              },
+            },
+            mb: 2,
+          }}
         />
       </div>
       <>
@@ -214,6 +224,14 @@ export const ItinerarySelection = ({ history }) => {
                   defaultValue={startDate}
                   label="Start Date"
                   onChange={(e) => setStartDate(e)}
+                  sx={{
+                    "& .MuiInputLabel-root.Mui-focused": { color: "#aeb6f3" },
+                    "& .MuiOutlinedInput-root.Mui-focused": {
+                      "& > fieldset": {
+                        borderColor: "#aeb6f3",
+                      },
+                    },
+                  }}
                 />
               </DemoContainer>
             </LocalizationProvider>
@@ -227,36 +245,43 @@ export const ItinerarySelection = ({ history }) => {
                   label="End Date"
                   onChange={(e) => setEndDate(e)}
                   error={errorDate}
+                  sx={{
+                    "& .MuiInputLabel-root.Mui-focused": { color: "#aeb6f3" },
+                    "& .MuiOutlinedInput-root.Mui-focused": {
+                      "& > fieldset": {
+                        borderColor: "#aeb6f3",
+                      },
+                    },
+                  }}
                 />
               </DemoContainer>
             </LocalizationProvider>
           </Stack>
           <div>
-            <InputLabel id="demo-multiple-checkbox-label" sx={{ mt: 1 }}>
-              Interests
-            </InputLabel>
-            <Select
-              labelId="demo-multiple-checkbox-label"
-              id="demo-multiple-checkbox"
-              multiple
-              value={interests}
-              label="intersts"
-              onChange={handleChange}
-              InputProps={{ sx: { height: 45 } }}
-              input={<OutlinedInput label="Interests" />}
-              renderValue={(selected) => selected.join(", ")}
-              sx={{ width: 540 }}
-              MenuProps={MenuProps}
-              required
-              error={errorInterests}
-            >
-              {names.map((name) => (
-                <MenuItem key={name} value={name}>
-                  <Checkbox checked={interests.indexOf(name) > -1} />
-                  <ListItemText primary={name} />
-                </MenuItem>
-              ))}
-            </Select>
+            <StyledFormControl sx={{ mt: 3 }}>
+              <InputLabel>Interests</InputLabel>
+              <Select
+                multiple
+                value={interests}
+                onChange={handleChange}
+                InputProps={{ sx: { height: 45 } }}
+                input={<OutlinedInput label="Interests" />}
+                renderValue={(selected) => selected.join(", ")}
+                MenuProps={MenuProps}
+                required
+                error={errorInterests}
+                sx={{
+                  width: 540,
+                }}
+              >
+                {names.map((name) => (
+                  <MenuItem key={name} value={name}>
+                    <CustomCheckbox checked={interests.indexOf(name) > -1} />
+                    <ListItemText primary={name} />
+                  </MenuItem>
+                ))}
+              </Select>
+            </StyledFormControl>
           </div>
           <TextField
             className="plan__location"
@@ -276,7 +301,16 @@ export const ItinerarySelection = ({ history }) => {
               ),
             }}
             error={errorBudget}
-            sx={{ width: 540, mt: 3 }}
+            sx={{
+              width: 540,
+              mt: 3,
+              "& .MuiInputLabel-root.Mui-focused": { color: "#aeb6f3" },
+              "& .MuiOutlinedInput-root.Mui-focused": {
+                "& > fieldset": {
+                  borderColor: "#aeb6f3",
+                },
+              },
+            }}
           />
           {errorLocation || errorDate || errorBudget || errorInterests ? (
             <Error>
