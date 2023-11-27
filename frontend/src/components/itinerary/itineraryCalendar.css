@@ -215,6 +215,7 @@
 .a-tag:hover {
   text-decoration: underline;
   color: #f75940;
+  cursor: pointer;
 }
 
 .ml-4 {

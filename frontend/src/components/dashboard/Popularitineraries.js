@@ -5,7 +5,7 @@ import personImage from "./person1.jpeg"; // Default image if not provided by th
 import placeImage from "./person2.jpeg"; // Default image if not provided by the API
 import { Link } from "react-router-dom";
 //import itinariesComponent from '../itinariesComponent/itinariesComponent';
-const PopularItineraries = () => {
+const PopularItineraries = ({ history }) => {
   const [itineraries, setItineraries] = useState([]);
 
   useEffect(() => {
@@ -26,11 +26,15 @@ const PopularItineraries = () => {
   return (
     <div className="popular-container">
       <div>
-        <h5 style={{ fontSize: "16px" }}>Popular itineraries</h5>
+        <h2 style={{ fontSize: "16px" }}>Popular Itineraries</h2>
       </div>
       <div className="popular-itineraries">
         {itineraries.map((itinerary, index) => (
-          <div className="itinerary-card" key={itinerary._id || index}>
+          <div
+            className="itinerary-card"
+            key={itinerary._id || index}
+            onClick={() => history.push(`/itinerary/${itinerary._id}`)}
+          >
             <img
               src={itinerary.imageUrl || placeImage}
               alt={`${itinerary.name}'s place`}

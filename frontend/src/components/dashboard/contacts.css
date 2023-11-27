@@ -5,10 +5,10 @@
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   /* ... other styles ... */
-  position: absolute;
+  /* position: absolute; */
   /* Assuming your navbar height is around 60px */
   width: 225px;
-  position: fixed;
+  /* position: fixed; */
 
   /* ... other styles ... */
 
@@ -16,7 +16,7 @@
 }
 
 .contacts-container h2 {
-  font-size: 18px;
+  font-size: 16px;
   margin-bottom: 20px;
 }
 
@@ -31,6 +31,7 @@
 .contact-item:hover {
   text-decoration: underline;
   color: #f75940;
+  cursor: pointer;
 }
 
 .contact-item img {

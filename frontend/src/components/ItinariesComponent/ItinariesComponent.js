@@ -67,7 +67,7 @@ const ItinerariesComponent = ({ history }) => {
         />
       </section>
       <section className="itineraries-section">
-        <h3>Itineraries</h3>
+        <h2 style={{ fontSize: "18px" }}>Travel Itineraries</h2>
         {itineraries.map((itinerary, index) => (
           <div
             key={index}
