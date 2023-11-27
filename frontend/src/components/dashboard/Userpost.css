@@ -1,5 +1,5 @@
 .user-post {
-  font:inherit;
+  font: inherit;
   background-color: #ffffff;
   padding: 20px;
   border-radius: 10px;
@@ -9,7 +9,6 @@
   flex-direction: column;
   justify-content: space-between;
   margin-bottom: 10px;
- 
 }
 
 .user-info {
@@ -27,7 +26,6 @@
 .user-preferences p {
   font-family: inherit;
   font-size: 14px;
-  
 }
 
 .post-content {
@@ -39,8 +37,6 @@
   border-radius: 8px;
   /* Add other styles as needed */
 }
-
-
 
 .post-images-container {
   display: grid;
@@ -99,7 +95,7 @@
   /* Set the icon color */
   fill: transparent !important; /* Override any existing fill property */
   stroke: #f75940; /* Set the stroke (border) color */
-  stroke-width: 30; 
+  stroke-width: 30;
   margin-left: 5px; /* Space between icons */
   cursor: pointer; /* Change cursor to indicate clickable */
   font-size: 20px;
@@ -114,10 +110,9 @@
   stroke-width: 30; 
 } */
 
-
 .like-icon.liked,
 .follow-icon.followed {
-  color: #f75940;/* Fill with orange when liked or followed */
+  color: #f75940; /* Fill with orange when liked or followed */
 }
 .like-icon.liked svg,
 .follow-icon.followed svg {
@@ -136,29 +131,39 @@
 .top-right-icons {
   position: absolute;
   top: 10px;
- 
-  right: 20px;
-  
 
+  right: 20px;
 }
 
 .bottom-right-icons {
   align-self: flex-end; /* Align to the right */
-  margin-top: auto; 
+  margin-top: auto;
 }
 
-.fa-lg { font-size: 1.33em; } /* ~18px if base is 14px */
-.fa-2x { font-size: 2em; } /* ~28px if base is 14px */
-.fa-3x { font-size: 3em; }
+.userPostName:hover {
+  text-decoration: underline;
+  color: #f75940;
+  cursor: pointer;
+}
+.fa-lg {
+  font-size: 1.33em;
+} /* ~18px if base is 14px */
+.fa-2x {
+  font-size: 2em;
+} /* ~28px if base is 14px */
+.fa-3x {
+  font-size: 3em;
+}
 
 .post-interactions {
   display: flex;
   justify-content: flex-start; /* Align to the right */
   align-items: center;
-   /* Add some padding */
+  /* Add some padding */
 }
 
-.likes, .comments {
+.likes,
+.comments {
   display: flex;
   align-items: center;
   margin-right: 15px;
@@ -181,7 +186,7 @@
 .comment-input-section {
   display: flex;
   align-items: center;
-  margin-top: 8px; 
+  margin-top: 8px;
 }
 
 .comment-input {
@@ -195,14 +200,13 @@
 }
 
 .comment-submit-arrow {
-  
   right: 10px; /* Distance from the right edge of the input */
   top: 50%; /* Align to the middle vertically */
   transform: translateY(-50%); /* Center vertically */
   color: #f75940; /* Blue color for the icon, or choose your own */
   cursor: pointer;
   font-size: medium;
-  margin-top:10px
+  margin-top: 10px;
 }
 .navbar-center {
   display: flex;
@@ -211,15 +215,13 @@
   gap: 10px; /* Optional: adds space between children */
 }
 .navbar-center input[type="text"] {
-  
   padding: 8px 8px;
   font-size: 14px;
   border-radius: 10px;
   width: 50%;
-  height : 20px;
+  height: 20px;
   background-color: #ffffff;
   margin-bottom: 10px; /* Facebook search bar background */
-  
 }
 .search-input {
   flex-grow: 1; /* Allows the search input to fill the space */
@@ -239,7 +241,8 @@
   gap: 10px; /* Spacing between the buttons */
 }
 
-.create-post-btn, .create-itinerary-btn {
+.create-post-btn,
+.create-itinerary-btn {
   background-color: #f75940;
   color: white;
   border: none;
@@ -247,10 +250,10 @@
   border-radius: 100px;
   cursor: pointer;
   font-size: 12px;
-  white-space: nowrap; 
- /* Prevents text wrapping */
+  white-space: nowrap;
+  /* Prevents text wrapping */
 }
-.view-itinerary-btn{
+.view-itinerary-btn {
   width: fit-content;
   margin-top: 10px;
   background-color: #f75940;
@@ -260,12 +263,12 @@
   border-radius: 100px;
   cursor: pointer;
   font-size: 12px;
-  white-space: nowrap; 
+  white-space: nowrap;
 }
 
-
-.create-post-btn:hover, .create-itinerary-btn:hover {
-  background-color: #FF7F50; /* Slightly darker orange on hover */
+.create-post-btn:hover,
+.create-itinerary-btn:hover {
+  background-color: #ff7f50; /* Slightly darker orange on hover */
 }
 /* Style for existing comments, if necessary */
 .post-menu {
@@ -276,7 +279,7 @@
   border: 1px solid #ccc;
   border-radius: 4px;
   width: 150px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   z-index: 10;
 }
 
@@ -288,4 +291,3 @@
 .post-menu div:hover {
   background-color: #f7f7f7;
 }
-

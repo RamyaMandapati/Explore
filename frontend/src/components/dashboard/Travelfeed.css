@@ -1,62 +1,54 @@
-.dashboard{
-  font:inherit;
+.dashboard {
+  font: inherit;
   display: flex;
   justify-content: center;
-   
+
   height: 100%;
   background-color: #f2f3f7;
   min-height: 1000px;
-  
-    /* Additional styling */
-}
 
+  /* Additional styling */
+}
 
 .feed-container {
   display: flex;
-  margin-top: 60px;
+  margin: 0 auto;
+  /* margin-top: 60px; */
   /* justify-content: space-between; Add space between main content and filters */
-  min-width: 1200px;
-  max-width: 1200px;
+  width: 1200px;
+  /* max-width: 1200px; */
   gap: 5px; /* Use full width */
   background-color: #f2f3f7;
   min-height: 1000px;
-   /* Center horizontally */
-   
-  
+  /* Center horizontally */
 }
 
 .filters {
-  
-  margin-top: 60px;
+  margin-top: 20px;
   flex-basis: 20%;
-  
-  
- 
-  
+  padding: 10px;
 }
 .main-content {
-  flex-basis: 55%; /* Adjust based on desired width */
+  flex-basis: 60%; /* Adjust based on desired width */
   display: flex;
   padding: 10px;
   flex-direction: column;
-  gap:0px;
+  gap: 0px;
   /* flex-grow: 1;
   overflow-y: auto; */
-   /*For spacing between components, adjust as necessary*/
+  /*For spacing between components, adjust as necessary*/
 }
 
 .contacts {
   flex-basis: 20%;
-  
+
   margin-top: 20px;
-  height:max-content;
+  padding: 10px;
+  height: max-content;
   width: 200px;
-  margin-left: 10px;
-  
-  
-  
+  /* margin-left: 10px; */
+
   /* top: 0; 
   height: calc(100vh - 80);  */
   /* overflow-y: auto;  */
 }
-

@@ -1,20 +1,20 @@
 /* Filters Container */
-.filters-container{
-  font:inherit; /* This is a common font, you may need to adjust if using a different one */
+.filters-container {
+  font: inherit; /* This is a common font, you may need to adjust if using a different one */
   padding: 20px;
   background-color: #ffffff; /* This assumes a white background */
   border-radius: 10px; /* For rounded edges */
   /* Approximated width */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
   flex-basis: 20%;
-  margin-left: 10px;
-  height:max-content;
-  width: fit-content;
+  /* margin-left: 10px; */
+  height: max-content;
+  width: 225px;
   top: 0; /* Adjust as necessary to account for any navbar height */
   height: calc(100vh - 100); /* Adjust height as necessary */
-  overflow-y  : auto;
-  margin-top: 100px;
-  position:fixed;
+  /* overflow-y: auto; */
+  /* margin-top: 100px; */
+  /* position:fixed; */
 }
 
 /* Filters Header */
@@ -38,7 +38,7 @@
 .filters select {
   padding: 10px; /* Spacing inside the input */
   margin-bottom: 15px;
-  margin-left:10px; /* Spacing between filter items */
+  margin-left: 10px; /* Spacing between filter items */
   border: 1px solid #ddd; /* Light gray border */
   border-radius: 5px; /* Slightly rounded edges */
   font-size: 12px;

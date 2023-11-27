@@ -53,35 +53,33 @@ const Contacts = ({ history }) => {
   };
 
   return (
-    <div className="contacts">
-      <div className="contacts-container">
-        <h2>Contacts</h2>
-        <ul>
-          {contacts?.map((contact) => (
-            <li
-              key={contact._id}
-              className="contact-item"
-              onClick={() => handleMessage(contact._id)}
-            >
-              <img src={contact.profilePhoto || profilephoto} />
-              <span>{contact?.userName}</span>
-            </li>
-          ))}
-        </ul>
-        <h2 style={{ marginTop: "30px" }}>Suggested contacts</h2>
-        <ul>
-          {contacts?.map((contact) => (
-            <li
-              key={contact._id}
-              className="contact-item"
-              onClick={() => handleMessage(contact._id)}
-            >
-              <img src={contact.profilePhoto || profilephoto} />
-              <span>{contact?.userName}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
+    <div className="contacts-container">
+      <h2>Contacts</h2>
+      <ul>
+        {contacts?.map((contact) => (
+          <li
+            key={contact._id}
+            className="contact-item"
+            onClick={() => handleMessage(contact._id)}
+          >
+            <img src={contact.profilePhoto || profilephoto} />
+            <span>{contact?.userName}</span>
+          </li>
+        ))}
+      </ul>
+      <h2 style={{ marginTop: "30px" }}>Suggested contacts</h2>
+      <ul>
+        {contacts?.map((contact) => (
+          <li
+            key={contact._id}
+            className="contact-item"
+            onClick={() => handleMessage(contact._id)}
+          >
+            <img src={contact.profilePhoto || profilephoto} />
+            <span>{contact?.userName}</span>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
