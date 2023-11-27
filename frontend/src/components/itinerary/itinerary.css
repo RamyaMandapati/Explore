@@ -24,7 +24,7 @@
 }
 
 .itinerarybox {
-  max-width: 540px;
+  width: 540px;
 }
 .itinerarybox,
 .searchbox {
@@ -47,7 +47,7 @@
   position: relative;
 }
 .itinerarybox1 {
-  max-width: 540px;
+  width: 540px;
   margin: 0 auto;
 }
 input {
@@ -165,9 +165,8 @@ h2 {
 }
 
 .itinerarymap {
-  max-width: 460px;
-  position: fixed;
-  right: 31px;
+  width: 460px;
+  position: sticky;
 }
 .itineraryimage {
   max-width: 740px;

@@ -262,7 +262,13 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
                 className="profile-image-user"
               />
               <div>
-                <h3>{post.user?.userName || "username"}</h3>
+                <h2
+                  className="userPostName"
+                  style={{ fontSize: "16px" }}
+                  onClick={() => history.push(`/profile/${post.user?._id}`)}
+                >
+                  {post.user?.userName || "username"}
+                </h2>
               </div>
             </div>
             <p style={{ marginTop: "10px", marginBottom: "10px" }}>

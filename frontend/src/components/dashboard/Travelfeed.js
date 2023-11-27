@@ -44,7 +44,7 @@ function Travelfeed({ history }) {
         </div>
         <div className="main-content">
           <div className="itineraries">
-            <PopularItineraries />
+            <PopularItineraries history={history} />
           </div>
           <div className="userposts">
             <UserPosts

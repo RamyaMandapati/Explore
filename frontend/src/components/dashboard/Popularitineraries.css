@@ -1,11 +1,10 @@
-.popular-container{
-  
+.popular-container {
   position: relative;
   background-color: #ffffff;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   padding-left: 20px;
-  margin-top: 30px;
+  margin-top: 20px;
   padding-top: 20px;
 }
 
@@ -15,7 +14,7 @@
   flex-wrap: nowrap; /* Prevents the cards from wrapping to the next line */
   overflow-x: auto;
   padding: 20px 0;
-  
+
   justify-content: flex-start; /* Starts the cards from the beginning */
 }
 
@@ -70,7 +69,7 @@
   font-weight: bold;
 }
 .see-all-link {
-   /* Position it anywhere you want */
+  /* Position it anywhere you want */
   top: 0; /* Align to the top edge of the container */
   right: 0; /* Align to the right edge of the container */
   margin-right: 30px; /* Adjust the margin as needed */
@@ -81,13 +80,15 @@
   color: black; /* Optional: link uses current text color */
   cursor: pointer;
   font-size: x-small; /* Changes cursor to pointer to indicate it's clickable */
+  font-weight: 700;
+  text-decoration: underline;
 }
+
 .navbar-center input[type="text"] {
-  
   padding: 8px 12px;
   font-size: 16px;
   border-radius: 10px;
   width: 50%;
-  height : 40px;
+  height: 40px;
   background-color: #f0f2f5; /* Facebook search bar background */
 }
