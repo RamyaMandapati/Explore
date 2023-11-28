@@ -104,7 +104,7 @@ export const ItineraryPlanEdit = ({ history }) => {
   let { itineraryId } = useParams();
 
   const [image, setImage] = useState(
-    "https://media.timeout.com/images/105770969/1372/772/image.jpg"
+    "https://res.cloudinary.com/dylqg3itm/image/upload/v1701137748/explore/wp5553545-afternoon-venice-grand-canal-wallpapers_ghqvns.jpg"
   );
 
   const [map, setMap] = React.useState(null);
@@ -269,6 +269,22 @@ export const ItineraryPlanEdit = ({ history }) => {
   const [isLoading, setLoading] = useState(false);
   const [errorLocation, setLocationError] = useState(false);
   const [startingLocation, setStartingLocation] = useState("");
+  const validateItineraryTimes = (itinerary) => {
+    for (let index = 0; index < itinerary.length; index++) {
+      const day = itinerary[index];
+      if (day?.places) {
+        for (let placeIndex = 0; placeIndex < day.places.length; placeIndex++) {
+          const place = day.places[placeIndex];
+          if (!place.startTime || !place.endTime) {
+            // If any place is missing time, return false
+            return false;
+          }
+        }
+      }
+    }
+    // All places have start and end time
+    return true;
+  };
 
   useEffect(() => {
     let responseData;
@@ -299,7 +315,9 @@ export const ItineraryPlanEdit = ({ history }) => {
         console.log(err);
       }
     };
-    getItinerary();
+    if (itineraryId) {
+      getItinerary();
+    }
     console.log("api", responseData);
   }, []);
 
@@ -313,33 +331,37 @@ export const ItineraryPlanEdit = ({ history }) => {
   }, [startDate, endDate]);
 
   const onSubmit = () => {
-    const data = {
-      itineraryId: itineraryId,
-      itineraryName: tripName,
-      destination: destination,
-      startDate: startDate,
-      endDate: endDate,
-      budget: budget,
-      itineraryList: itinerary,
-      interests: interests,
-      userId: user && user._id,
-      members: members,
-      nonmembers: nonmembers,
-      startingLocation: startingLocation,
-      imageUrl: imageUrl,
-    };
-    axios
-      .post("/api/itinerary", data)
-      .then((response) => {
-        if (response.data.success) {
-          history.push(`/itinerary/${itineraryId}`);
-        }
-      })
-      .catch((error) => {
-        alert(error.response.data.message);
-      });
+    if (!validateItineraryTimes(itinerary)) {
+      alert("Please fill in the time for each place in your itinerary.");
+      return; // Prevent submission
+    } else {
+      const data = {
+        itineraryId: itineraryId,
+        itineraryName: tripName,
+        destination: destination,
+        startDate: startDate,
+        endDate: endDate,
+        budget: budget,
+        itineraryList: itinerary,
+        interests: interests,
+        userId: user && user._id,
+        members: members,
+        nonmembers: nonmembers,
+        startingLocation: startingLocation,
+        imageUrl: imageUrl,
+      };
+      axios
+        .post("/api/itinerary", data)
+        .then((response) => {
+          if (response.data.success) {
+            history.push(`/itinerary/${itineraryId}`);
+          }
+        })
+        .catch((error) => {
+          alert(error.response.data.message);
+        });
+    }
   };
-
   useEffect(() => {
     getImage();
   }, []);
@@ -1596,7 +1618,7 @@ export const ItineraryPlanEdit = ({ history }) => {
               onUnmount={onUnmount}
               // onClick={placeClicked}
             >
-              {itinerary &&
+              {/* {itinerary &&
                 itinerary.map((itineraryItem, index) =>
                   itineraryItem?.places.map((place, placeIndex) => (
                     <OverlayView
@@ -1639,7 +1661,71 @@ export const ItineraryPlanEdit = ({ history }) => {
                       </div>
                     </OverlayView>
                   ))
-                )}
+                )} */}
+              {itinerary &&
+                itinerary.map((itineraryItem, index) => (
+                  <React.Fragment key={index}>
+                    {itineraryItem?.places.map((place, placeIndex) => (
+                      <OverlayView
+                        position={{ lat: place.lat, lng: place.lng }}
+                        mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+                      >
+                        <div className="marker-container">
+                          <span
+                            class="MarkerIconWithColor marker-svg"
+                            style={{ fontSize: "2rem" }}
+                          >
+                            <span class="MarkerIconWithColor__label MarkerIconWithColor__labelLarge">
+                              {placeIndex + 1}
+                            </span>
+                            <span
+                              class="MarkerIconWithColor__outlined"
+                              style={{
+                                color: colors[index % colors.length],
+                                stroke: "#fff",
+                                strokeWidth: "40",
+                              }}
+                            >
+                              <svg
+                                aria-hidden="true"
+                                focusable="false"
+                                data-prefix="fas"
+                                data-icon="location-pin"
+                                class="svg-inline--fa  svg-inline--fa-icon fa-location-pin fa-w-12 "
+                                role="img"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 384 512"
+                              >
+                                <path
+                                  fill="currentColor"
+                                  d="M384 192c0 87.4-117 243-168.3 307.2c-12.3 15.3-35.1 15.3-47.4 0C117 435 0 279.4 0 192C0 86 86 0 192 0S384 86 384 192z"
+                                ></path>
+                              </svg>
+                            </span>
+                          </span>
+                        </div>
+                      </OverlayView>
+                    ))}
+
+                    {itineraryItem?.places.length > 1 && (
+                      <Polyline
+                        path={itineraryItem?.places.map((place) => ({
+                          lat: place.lat,
+                          lng: place.lng,
+                        }))}
+                        options={{
+                          strokeColor: colors[index % colors.length], // Color for the line
+                          strokeOpacity: 0.8,
+                          strokeWeight: 5,
+                          geodesic: true,
+                          clickable: true,
+
+                          // Additional options can be added here
+                        }}
+                      />
+                    )}
+                  </React.Fragment>
+                ))}
             </GoogleMap>
           ) : (
             ""
