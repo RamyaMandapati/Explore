@@ -4,7 +4,6 @@ import "./contacts.css";
 import profilephoto from "../../profilepic.jpeg";
 import { useDispatch, useSelector } from "react-redux";
 import { loadUser } from "../../actions/auth";
-
 const Contacts = ({ history }) => {
   const [contacts, setContacts] = useState([]);
   const [suggestedContacts, setSuggestedContacts] = useState([]);

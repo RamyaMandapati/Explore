@@ -97,7 +97,7 @@ export const ItineraryCalendarPage = ({ history }) => {
       const imgProps = pdf.getImageProperties(imgData);
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-      console.log("heightwidth", pdfWidth, pdfHeight);
+
       pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
       pdf.save(`${itinerarydet && itinerarydet.itineraryName}.pdf`);
 
