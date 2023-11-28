@@ -136,6 +136,7 @@ const Newpost = () => {
       formData.append("budget", event.target.budget.value);
       formData.append("minAge", event.target.minAge.value);
       formData.append("maxAge", event.target.maxAge.value);
+      formData.append("genderPref", event.target.gender.value);
       formData.append("providedItineraryId", selectedItineraryId);
 
       // Append the URLs of uploaded images
