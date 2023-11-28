@@ -35,9 +35,10 @@ function Filter({
           onChange={(e) => onAgeFilterChange(e.target.value)}
         >
           <option value="">Any</option>
+          <option value="10-20">10-20</option>
           <option value="20-30">20-30</option>
-          <option value="31-40">31-40</option>
-          <option value="41-50">41-50</option>
+          <option value="30-40">30-40</option>
+          <option value="40-50">40-50</option>
           <option value="50+">50+</option>
         </select>
       </div>

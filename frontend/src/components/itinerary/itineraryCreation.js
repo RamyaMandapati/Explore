@@ -155,16 +155,17 @@ export const ItineraryCreation = ({ history }) => {
 
       settripStartDate(momentstartDate.format("MM/DD"));
       settripEndDate(momentendDate.format("MM/DD"));
-      while (tempDate <= momentendDate) {
-        tempDateArray.push(
-          tempDate.format("dddd") + ", " + tempDate.format("MMMM Do")
-        );
-        tempDate.add(1, "days"); // Move to the next day
-      }
-      if (!momentstartDate.isSame(momentendDate)) {
+      if (momentstartDate.isSame(momentendDate)) {
         tempDateArray.push(
           momentendDate.format("dddd") + ", " + momentendDate.format("MMMM Do")
         );
+      } else {
+        while (tempDate <= momentendDate) {
+          tempDateArray.push(
+            tempDate.format("dddd") + ", " + tempDate.format("MMMM Do")
+          );
+          tempDate.add(1, "days"); // Move to the next day
+        }
       }
       setDateArray(tempDateArray);
     }

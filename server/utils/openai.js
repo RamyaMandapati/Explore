@@ -3,12 +3,6 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 
-// const configuration = new Configuration({
-//   apiKey: "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",
-// });
-const openai = new OpenAI({
-  apiKey: "",
-});
 const model = "text-davinci-003";
 const completions = 5;
 const options = {

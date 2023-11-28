@@ -30,14 +30,16 @@ const saveConversation = async (req, res) => {
         members: [senderId, receiverId],
       });
       conversation = await newConversation.save();
-      conversation = await conversation
-        .populate("members", "userName email profilePhoto")
-        .execPopulate();
+      conversation = await conversation.populate(
+        "members",
+        "userName email profilePhoto"
+      );
     }
 
     // Return the conversation (newly created or existing)
     res.status(200).json(conversation);
   } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 };

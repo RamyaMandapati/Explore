@@ -1,5 +1,5 @@
-const Post = require("../models/post.js"); 
-const mongoose = require('mongoose');// Assuming you have a Post model
+const Post = require("../models/post.js");
+const mongoose = require("mongoose"); // Assuming you have a Post model
 const multer = require("multer");
 const upload = multer();
 // Create a new post
@@ -26,9 +26,10 @@ const addPost = async (req, res) => {
       budget,
     } = req.body;
     const itineraryId =
-    req.body.providedItineraryId && mongoose.Types.ObjectId.isValid(req.body.providedItineraryId)
-      ? mongoose.Types.ObjectId(req.body.providedItineraryId)
-      : undefined;
+      req.body.providedItineraryId &&
+      mongoose.Types.ObjectId.isValid(req.body.providedItineraryId)
+        ? new mongoose.Types.ObjectId(req.body.providedItineraryId)
+        : undefined;
     const newPost = new Post({
       title,
       description,
@@ -50,8 +51,8 @@ const addPost = async (req, res) => {
     const savedPost = await newPost.save();
     res.status(201).json(savedPost);
   } catch (error) {
-    console.error('Error creating a post:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error("Error creating a post:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
@@ -59,27 +60,27 @@ const addPost = async (req, res) => {
 
 const getPosts = async (req, res) => {
   try {
-    const posts = await Post.find().populate('user').populate({
-      path: 'comments.user',
- // Only include the userName field
+    const posts = await Post.find().populate("user").populate({
+      path: "comments.user",
+      // Only include the userName field
     });
     res.json(posts);
   } catch (error) {
-    console.error('Error fetching posts:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error("Error fetching posts:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
-const delPost= async(req,res)=>{
-  try{
-    const postId=req.params.postId;
-    const deletedPost=await Post.findByIdAndDelete(postId);
+const delPost = async (req, res) => {
+  try {
+    const postId = req.params.postId;
+    const deletedPost = await Post.findByIdAndDelete(postId);
     res.status(200).json(deletedPost);
-  }catch(error){
+  } catch (error) {
     console.error("Error deleting post:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
-}
+};
 
 // Filter posts based on criteria (e.g., trip type or status)
 const filterPosts = async (req, res) => {
@@ -96,8 +97,8 @@ const filterPosts = async (req, res) => {
     const filteredPosts = await Post.find(filter);
     res.json(filteredPosts);
   } catch (error) {
-    console.error('Error filtering posts:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error("Error filtering posts:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 //app.post('/likePost/:postId', async (req, res) => {
