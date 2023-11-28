@@ -1578,69 +1578,70 @@ export const ItineraryCreation = ({ history }) => {
             onUnmount={onUnmount}
             // onClick={placeClicked}
           >
-            {itinerary.map((itineraryItem, index) => (
-              <React.Fragment key={index}>
-                {itineraryItem?.places.map((place, placeIndex) => (
-                  <OverlayView
-                    position={{ lat: place.lat, lng: place.lng }}
-                    mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
-                  >
-                    <div className="marker-container">
-                      <span
-                        class="MarkerIconWithColor marker-svg"
-                        style={{ fontSize: "2rem" }}
-                      >
-                        <span class="MarkerIconWithColor__label MarkerIconWithColor__labelLarge">
-                          {placeIndex + 1}
-                        </span>
+            {itinerary &&
+              itinerary.map((itineraryItem, index) => (
+                <React.Fragment key={index}>
+                  {itineraryItem?.places.map((place, placeIndex) => (
+                    <OverlayView
+                      position={{ lat: place.lat, lng: place.lng }}
+                      mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+                    >
+                      <div className="marker-container">
                         <span
-                          class="MarkerIconWithColor__outlined"
-                          style={{
-                            color: colors[index % colors.length],
-                            stroke: "#fff",
-                            strokeWidth: "40",
-                          }}
+                          class="MarkerIconWithColor marker-svg"
+                          style={{ fontSize: "2rem" }}
                         >
-                          <svg
-                            aria-hidden="true"
-                            focusable="false"
-                            data-prefix="fas"
-                            data-icon="location-pin"
-                            class="svg-inline--fa  svg-inline--fa-icon fa-location-pin fa-w-12 "
-                            role="img"
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 384 512"
+                          <span class="MarkerIconWithColor__label MarkerIconWithColor__labelLarge">
+                            {placeIndex + 1}
+                          </span>
+                          <span
+                            class="MarkerIconWithColor__outlined"
+                            style={{
+                              color: colors[index % colors.length],
+                              stroke: "#fff",
+                              strokeWidth: "40",
+                            }}
                           >
-                            <path
-                              fill="currentColor"
-                              d="M384 192c0 87.4-117 243-168.3 307.2c-12.3 15.3-35.1 15.3-47.4 0C117 435 0 279.4 0 192C0 86 86 0 192 0S384 86 384 192z"
-                            ></path>
-                          </svg>
+                            <svg
+                              aria-hidden="true"
+                              focusable="false"
+                              data-prefix="fas"
+                              data-icon="location-pin"
+                              class="svg-inline--fa  svg-inline--fa-icon fa-location-pin fa-w-12 "
+                              role="img"
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 384 512"
+                            >
+                              <path
+                                fill="currentColor"
+                                d="M384 192c0 87.4-117 243-168.3 307.2c-12.3 15.3-35.1 15.3-47.4 0C117 435 0 279.4 0 192C0 86 86 0 192 0S384 86 384 192z"
+                              ></path>
+                            </svg>
+                          </span>
                         </span>
-                      </span>
-                    </div>
-                  </OverlayView>
-                ))}
+                      </div>
+                    </OverlayView>
+                  ))}
 
-                {itineraryItem?.places.length > 1 && (
-                  <Polyline
-                    path={itineraryItem?.places.map((place) => ({
-                      lat: place.lat,
-                      lng: place.lng,
-                    }))}
-                    options={{
-                      strokeColor: colors[index % colors.length], // Color for the line
-                      strokeOpacity: 0.8,
-                      strokeWeight: 5,
-                      geodesic: true,
-                      clickable: true,
+                  {itineraryItem?.places.length > 1 && (
+                    <Polyline
+                      path={itineraryItem?.places.map((place) => ({
+                        lat: place.lat,
+                        lng: place.lng,
+                      }))}
+                      options={{
+                        strokeColor: colors[index % colors.length], // Color for the line
+                        strokeOpacity: 0.8,
+                        strokeWeight: 5,
+                        geodesic: true,
+                        clickable: true,
 
-                      // Additional options can be added here
-                    }}
-                  />
-                )}
-              </React.Fragment>
-            ))}
+                        // Additional options can be added here
+                      }}
+                    />
+                  )}
+                </React.Fragment>
+              ))}
           </GoogleMap>
         ) : (
           ""
