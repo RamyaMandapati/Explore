@@ -14,11 +14,11 @@ const Activities = ({ isLoading, profile }) => {
   return (
     <div id='activity' className='bg-white p-8 my-4 rounded-md'>
       <p className='text-xl mb-2 text-left font-bold'>My Interests</p>
-      <ul className='flex gap-4 text-center'>
+      <ul className='grid grid-cols-4 gap-4'>
         {activities.map((ac, i) => (
           <p
             key={i}
-            className='bg-gray-200 w-1/4 rounded-md text-orange-600 font-bold p-2 px-4'
+            className='bg-gray-200 text-center rounded-md text-orange-600 font-bold p-2 px-4'
           >
             {ac}
           </p>
@@ -26,7 +26,7 @@ const Activities = ({ isLoading, profile }) => {
       </ul>
 
       <div className='text-right'>
-        {!viewAll && (
+        {profile.interestedActivity.length > 3 && !viewAll && (
           <button
             onClick={() => setviewAll(true)}
             className='uppercase inline-block mt-4 text-blue-400 '

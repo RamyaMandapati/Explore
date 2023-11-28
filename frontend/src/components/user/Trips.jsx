@@ -51,7 +51,7 @@ const Trips = ({ isLoading, profile }) => {
         ))}
       </ul>
       <div className='text-right'>
-        {!viewAll && (
+        {profile.tripsCreated.length > 3 && !viewAll && (
           <button
             onClick={() => setviewAll(true)}
             className='uppercase inline-block mt-4 text-blue-400 '

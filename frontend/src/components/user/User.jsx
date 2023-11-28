@@ -193,26 +193,24 @@ export const Profile = () => {
                       ) : (
                         <ul className='flex my-2 gap-4 items-center'>
                           <div className='flex items-center text-lg'>
-                            {profile.userReviews.map((review, i) => (
-                              <div key={i}>
-                                {Array.from({ length: 5 }).map((_, i) => (
-                                  <span
-                                    key={i}
-                                    className={
-                                      i + 1 <= review.userRating
-                                        ? 'star selected'
-                                        : 'star'
-                                    }
-                                  >
-                                    &#9733;
-                                  </span>
-                                ))}
-                              </div>
+                            {Array.from({ length: 5 }).map((_, i) => (
+                              <span
+                                key={i}
+                                className={
+                                  i + 1 <=
+                                  getAverageRatings(profile.userReviews)
+                                    ? 'star selected'
+                                    : 'star'
+                                }
+                              >
+                                &#9733;
+                              </span>
                             ))}
                           </div>
 
                           <p className='font-bold'>
-                            {getAverageRatings(profile.userReviews)} Ratings{' '}
+                            {getAverageRatings(profile.userReviews).toFixed(1)}{' '}
+                            Ratings{' '}
                             <span className='text-orange-600'>
                               ({profile?.userReviews.length} reviews)
                             </span>

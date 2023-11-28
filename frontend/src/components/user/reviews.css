@@ -45,7 +45,7 @@
 .profile {
   /* position: relative;
     top: 0; */
-  margin: 2em auto;
+  padding: 2em 0;
 }
 
 .modal-input {

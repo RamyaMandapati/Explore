@@ -27,7 +27,7 @@ const Posts = ({ isLoading, profile }) => {
       </div>
 
       <div className='text-right'>
-        {profile.postsCreated.length > 3 && (
+        {profile.postsCreated.length > 3 && !viewAll && (
           <button
             onClick={() => setviewAll(true)}
             className='uppercase inline-block mt-4 text-blue-400 '
