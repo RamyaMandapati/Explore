@@ -513,6 +513,105 @@ const getUserByEmail = async (email) => {
 };
 
 // add the review
+// const saveUserReview = async (req, res) => {
+//   try {
+//     // console.log(req.body);
+//     const { profileId } = req.params;
+//     const { user: userId, review, userRating } = req.body;
+//     const userFound = await User.findById(profileId);
+
+//     // console.log(userFound);
+
+//     const reviewedUser = await User.findById(userId);
+
+//     userFound.userReviews.push({
+//       user: reviewedUser,
+//       review,
+//       userRating,
+//     });
+
+//     await userFound.save();
+
+//     return res.status(200).json(userFound);
+//   } catch (error) {
+//     console.log(error);
+//     throw new Error("Unable to find the user: " + error.message);
+//   }
+// };
+
+// const followUser = async (req, res) => {
+//   const { userId } = req.params;
+//   const { userToFollowId } = req.body;
+
+//   try {
+//     const user = await User.findById(userId);
+//     const userToFollow = await User.findById(userToFollowId);
+
+//     if (!user || !userToFollow) {
+//       return res.status(404).json({ message: 'User not found' });
+//     }
+
+//     if (!user.following.includes(userToFollowId)) {
+//       user.following.push(userToFollowId);
+//       userToFollow.followers.push(userId);
+
+//       let trips = await Itinerary.find({
+//         createdBy: userToFollow._id,
+//       }).sort('-createdAt');
+
+//       let posts = await Post.find({
+//         user: userToFollow._id,
+//       }).sort('-createdAt');
+
+//       userToFollow.postsCreated = posts;
+//       userToFollow.tripsCreated = trips;
+
+//       await user.save();
+//       await userToFollow.save();
+
+//       return res.status(200).json(userToFollow);
+//     } else {
+//       return res.status(400).json({ message: 'User is already followed' });
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Internal Server Error' });
+//   }
+// };
+
+// const unfollowUser = async (req, res) => {
+//   const { userId } = req.params;
+//   const { userToUnfollowId } = req.body;
+
+//   try {
+//     const user = await User.findById(userId);
+//     const userToUnfollow = await User.findById(userToUnfollowId);
+
+//     if (!user || !userToUnfollow) {
+//       return res.status(404).json({ message: "User not found" });
+//     }
+
+//     if (user.following.includes(userToUnfollowId)) {
+//       user.following = user.following.filter(
+//         (id) => id.toString() !== userToUnfollowId
+//       );
+//       userToUnfollow.followers = userToUnfollow.followers.filter(
+//         (id) => id.toString() !== userId
+//       );
+
+//       await user.save();
+//       await userToUnfollow.save();
+
+//       return res.status(200).json(userToUnfollow);
+//     } else {
+//       return res.status(400).json({ message: "User is not followed" });
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: "Internal Server Error" });
+//   }
+// };
+
 const saveUserReview = async (req, res) => {
   try {
     // console.log(req.body);
@@ -522,20 +621,22 @@ const saveUserReview = async (req, res) => {
 
     // console.log(userFound);
 
-    const reviewedUser = await User.findById(userId);
-
     userFound.userReviews.push({
-      user: reviewedUser,
+      user: userId,
       review,
       userRating,
     });
 
     await userFound.save();
 
-    return res.status(200).json(userFound);
+    const userAfterReview = await User.findById(profileId).populate(
+      'userReviews.user'
+    );
+
+    return res.status(200).json(userAfterReview);
   } catch (error) {
     console.log(error);
-    throw new Error("Unable to find the user: " + error.message);
+    throw new Error('Unable to find the user: ' + error.message);
   }
 };
 
@@ -545,26 +646,39 @@ const followUser = async (req, res) => {
 
   try {
     const user = await User.findById(userId);
-    const userToFollow = await User.findById(userToFollowId);
+    const userToFollow = await User.findById(userToFollowId).populate(
+      'userReviews.user'
+    );
 
     if (!user || !userToFollow) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: 'User not found' });
     }
 
     if (!user.following.includes(userToFollowId)) {
       user.following.push(userToFollowId);
       userToFollow.followers.push(userId);
 
+      let trips = await Itinerary.find({
+        createdBy: userToFollow._id,
+      }).sort('-createdAt');
+
+      let posts = await Post.find({
+        user: userToFollow._id,
+      }).sort('-createdAt');
+
+      userToFollow.postsCreated = posts;
+      userToFollow.tripsCreated = trips;
+
       await user.save();
       await userToFollow.save();
-      await followNotification(userId, userToFollowId, "FOLLOW");
+
       return res.status(200).json(userToFollow);
     } else {
-      return res.status(400).json({ message: "User is already followed" });
+      return res.status(400).json({ message: 'User is already followed' });
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Internal Server Error" });
+    res.status(500).json({ message: 'Internal Server Error' });
   }
 };
 
@@ -574,10 +688,12 @@ const unfollowUser = async (req, res) => {
 
   try {
     const user = await User.findById(userId);
-    const userToUnfollow = await User.findById(userToUnfollowId);
+    const userToUnfollow = await User.findById(userToUnfollowId).populate(
+      'userReviews.user'
+    );
 
     if (!user || !userToUnfollow) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: 'User not found' });
     }
 
     if (user.following.includes(userToUnfollowId)) {
@@ -588,16 +704,27 @@ const unfollowUser = async (req, res) => {
         (id) => id.toString() !== userId
       );
 
+      let trips = await Itinerary.find({
+        createdBy: userToUnfollow._id,
+      }).sort('-createdAt');
+
+      let posts = await Post.find({
+        user: userToUnfollow._id,
+      }).sort('-createdAt');
+
+      userToUnfollow.postsCreated = posts;
+      userToUnfollow.tripsCreated = trips;
+
       await user.save();
       await userToUnfollow.save();
 
       return res.status(200).json(userToUnfollow);
     } else {
-      return res.status(400).json({ message: "User is not followed" });
+      return res.status(400).json({ message: 'User is not followed' });
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Internal Server Error" });
+    res.status(500).json({ message: 'Internal Server Error' });
   }
 };
 
