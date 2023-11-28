@@ -1,55 +1,50 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "./contacts.css";
-import person1 from "./person1.jpeg";
-import person2 from "./person2.jpeg";
+import profilephoto from "../../profilepic.jpeg";
 import { useDispatch, useSelector } from "react-redux";
 import { loadUser } from "../../actions/auth";
-import { useState, useEffect } from "react";
-import profilephoto from "../../profilepic.jpeg";
-import axios from "axios";
-const Contacts = ({ history }) => {
+
+const Contacts = ({ history }{ history }) => {
   const [contacts, setContacts] = useState([]);
+  const [suggestedContacts, setSuggestedContacts] = useState([]);
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
-  console.log(user._id);
-  const userId = user._id;
-  const email = user.email;
 
   useEffect(() => {
     if (!user) {
       dispatch(loadUser());
     }
-    console.log(email);
-    axios
-      .post(`http://localhost:4000/api/user/email`, { email: user.email })
-      .then((response) => {
-        // Handle the response
-        console.log(response.data);
+
+    // Fetching followers
+    axios.post(`http://localhost:4000/api/user/email`, { email: user.email })
+      .then(response => {
         setContacts(response.data?.followers);
-        console.log(contacts);
       })
-      .catch((error) => {
-        // Handle the error
-        console.error("There was an error!", error);
-      });
+      .catch(error => console.error("Error fetching followers", error));
+
+    // Fetching suggested contacts based on interestedActivity
+    axios.post(`http://localhost:4000/api/users/interestedActivity`, { interestedActivity: user.interestedActivity, userId: user._id  })
+      .then(response => {
+        console.log(response.data);
+        const filteredContacts = response.data.filter(contact => contact._id !== user._id);
+        setSuggestedContacts(filteredContacts);
+      })
+      .catch(error => console.error("Error fetching suggested contacts", error));
+
   }, [dispatch, user]);
 
   const handleMessage = (receiverId) => {
-    axios
-      .post(`/api/conversation`, {
-        senderId: user && user._id,
-        receiverId: receiverId,
-      })
-      .then((response) => {
-        console.log("response");
-        if (response.data) {
-          history.push(`/messenger/${response.data._id}`);
-        }
-      })
-      .catch((error) => {
-        // Handle the error
-        console.error("There was an error!", error);
-      });
+    axios.post(`/api/conversation`, {
+      senderId: user && user._id,
+      receiverId: receiverId,
+    })
+    .then(response => {
+      if (response.data) {
+        history.push(`/messenger/${response.data._id}`);
+      }
+    })
+    .catch(error => console.error("Error creating conversation", error));
   };
 
   return (
@@ -57,25 +52,17 @@ const Contacts = ({ history }) => {
       <h2>Contacts</h2>
       <ul>
         {contacts?.map((contact) => (
-          <li
-            key={contact._id}
-            className="contact-item"
-            onClick={() => handleMessage(contact._id)}
-          >
-            <img src={contact.profilePhoto || profilephoto} />
+          <li key={contact._id} className="contact-item" onClick={() => handleMessage(contact._id)}>
+            <img src={contact.profilePhoto || profilephoto} alt="Profile" />
             <span>{contact?.userName}</span>
           </li>
         ))}
       </ul>
-      <h2 style={{ marginTop: "30px" }}>Suggested contacts</h2>
+      <h2 style={{ marginTop: "30px" }}>Suggested Contacts</h2>
       <ul>
-        {contacts?.map((contact) => (
-          <li
-            key={contact._id}
-            className="contact-item"
-            onClick={() => handleMessage(contact._id)}
-          >
-            <img src={contact.profilePhoto || profilephoto} />
+        {suggestedContacts?.map((contact) => (
+          <li key={contact._id} className="contact-item" onClick={() => handleMessage(contact._id)}>
+            <img src={contact.profilePhoto || profilephoto} alt="Profile" />
             <span>{contact?.userName}</span>
           </li>
         ))}

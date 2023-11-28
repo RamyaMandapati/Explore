@@ -1,4 +1,5 @@
-const Post = require("../models/post.js"); // Assuming you have a Post model
+const Post = require("../models/post.js"); 
+const mongoose = require('mongoose');// Assuming you have a Post model
 const multer = require("multer");
 const upload = multer();
 // Create a new post
@@ -18,12 +19,16 @@ const addPost = async (req, res) => {
       location,
       fromDate,
       toDate,
-      itineraryId,
+      
       tags,
       minAge,
       maxAge,
       budget,
     } = req.body;
+    const itineraryId =
+    req.body.providedItineraryId && mongoose.Types.ObjectId.isValid(req.body.providedItineraryId)
+      ? mongoose.Types.ObjectId(req.body.providedItineraryId)
+      : undefined;
     const newPost = new Post({
       title,
       description,

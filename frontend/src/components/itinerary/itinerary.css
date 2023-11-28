@@ -92,6 +92,9 @@ input {
   border-radius: 100px;
 }
 
+.aibutton {
+  width: 180px;
+}
 .planbutton:disabled,
 .Button.Button__withLabel:disabled {
   opacity: 0.5;

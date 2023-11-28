@@ -47,11 +47,15 @@ export const ItineraryTime = ({
   };
 
   const handleSave = () => {
-    onSave(startTime, endTime);
-    // Clear the selected option, start time, and end time
-    setSelectedOption("");
-    setStartTime("");
-    setEndTime("");
+    if (startTime && endTime) {
+      onSave(startTime, endTime);
+      // Clear the selected option, start time, and end time
+      setSelectedOption("");
+      setStartTime("");
+      setEndTime("");
+    } else {
+      setIsTimeValid(false);
+    }
   };
 
   const handleClear = () => {
