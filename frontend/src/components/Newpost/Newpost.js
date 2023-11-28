@@ -45,6 +45,7 @@ const Newpost = () => {
   });
   const history = useHistory();
   const [minToDate, setMinToDate] = useState("");
+
   const [selectedItineraryId, setSelectedItineraryId] = useState("");
   const [fromDate, setFromDate] = useState("");
 
