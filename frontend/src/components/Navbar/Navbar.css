@@ -35,7 +35,16 @@
   height: 40px;
   background-color: #f0f2f5; /* Facebook search bar background */
 }
-
+/* .dropdown {
+  position: absolute;
+  top: 60px;
+  right: 20px;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  display: none;
+  margin-right: 140px;
+} */
 /* Messenger icon styles */
 .messenger-icon {
   color: rgb(111, 107, 107);
@@ -76,40 +85,55 @@
   position: relative;
   margin-right: 140px;
 }
+/* Corrected class selector for profile-container */
+.profile-container {
+  position: relative; /* Important for absolute positioning of dropdown */
+  background-color: white;
+}
+
+/* Hide dropdown initially */
+.profile-container .dropdown {
+  display: none;
+}
+
+/* Show dropdown on hover of the container */
+.profile-container:hover .dropdown {
+  display: block;
+}
 
 /* Dropdown styles */
 .dropdown {
   position: absolute;
-  top: 60px;
-  right: 20px;
-  background-color: white;
+  top: 40px;
+  right: 15px;
+  background-color: white !important; /* Ensure background is white */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 4px;
   display: none;
-  margin-right: 140px;
+  z-index: 1001; /* Make sure it's on top of other elements */
 }
 
-.dropdown ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
+/* ... other styles ... */
 
-.dropdown li {
-  padding: 10px;
+
+/* Hover effect for each dropdown menu item */
+.dropdown li:hover {
+  background-color: #f2f2f2; /* Change the color as per your theme */
   cursor: pointer;
 }
+
 
 /* Show dropdown when profile image is clicked */
 .profile:hover .dropdown {
   display: block;
+  background-color: white;
 }
 
 /* Hover effects for profile image and messenger icon */
-.profile:hover .profile-image,
+/* .profile:hover .profile-image,
 .messenger-icon:hover {
   transform: scale(1.1);
-}
+} */
 .message {
   display: flex;
   gap: 20px;
@@ -133,3 +157,11 @@
   font-weight: 500;
   color: #212529;
 }
+/* Hover effect for menu items */
+.navbar .user-profile-menu li:hover {
+  background-color: #f2f2f2; /* Change the color as per your theme */
+  cursor: pointer;
+}
+
+
+

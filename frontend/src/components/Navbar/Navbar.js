@@ -335,7 +335,7 @@ const Navbar = () => {
           {totalUnread > 0 && <div className="counter">{totalUnread}</div>}
         </div>
 
-        <div className="relative">
+        <div className="profile-container relative">
           <img
             className="w-10 cursor-pointer rounded-full aspect-square"
             src={user.profilePhoto || profile}
@@ -343,27 +343,27 @@ const Navbar = () => {
             onClick={toggleDropdown}
           />
 
-          {isDropdownOpen && (
-            <div className="absolute top-[44px] shadow-md border bg-white -left-24">
-              <ul>
+          
+            <div className="dropdown absolute top-[44px] shadow-md border bg-white -left-24">
+              <ul >
                 <li>
                   <Link
                     to="/profile"
-                    className="p-2 hover:bg-gray-100 px-12 block"
+                    className="p-2 px-12 block"
                   >
                     Profile
                   </Link>
                 </li>
-                <li className="p-2 hover:bg-gray-100 px-12 block">Settings</li>
+                <li className="p-2 px-12 block">Settings</li>
                 <li
-                  className="p-2 hover:bg-gray-100 px-12 block"
+                  className="p-2 px-12 block"
                   onClick={logout}
                 >
                   Logout
                 </li>
               </ul>
             </div>
-          )}
+          
         </div>
       </div>
     </div>

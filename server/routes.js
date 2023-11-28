@@ -37,6 +37,7 @@ const {
   updateFollowers,
   findUserById,
   savePost,
+  interestedActivity,
 } = require("./modules/userModule");
 
 const { editMember } = require("./modules/groupModule");
@@ -80,6 +81,7 @@ router.put("/users/favitinerary", favoriteItinerary);
 router.put("/users/delfavitinerary", deletefavoriteItinerary);
 router.post("/itinerary/openai", generate);
 router.post("/savePost/:postId", savePost);
+router.post("/users/interestedActivity", interestedActivity);
 //notification related routes
 router.put("/notification", readNotification);
 router.delete("/notification/:id", deleteNotification);
