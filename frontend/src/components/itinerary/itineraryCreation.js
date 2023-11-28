@@ -56,7 +56,7 @@ const style = {
   p: 4,
 };
 
-export const ItineraryCreation = ({ history, isLoaded }) => {
+export const ItineraryCreation = ({ history }) => {
   const names = [
     "Hiking",
     "Nightlife",
@@ -102,7 +102,7 @@ export const ItineraryCreation = ({ history, isLoaded }) => {
   const [map, setMap] = React.useState(null);
 
   const [imageUrl, setImageUrl] = useState(
-    "https://media.timeout.com/images/105770969/1372/772/image.jpg"
+    "https://res.cloudinary.com/dylqg3itm/image/upload/v1701137748/explore/wp5553545-afternoon-venice-grand-canal-wallpapers_ghqvns.jpg"
   );
   const [itinerary, setItinerary] = useState([]);
 
@@ -126,6 +126,23 @@ export const ItineraryCreation = ({ history, isLoaded }) => {
   const [tripEndDate, settripEndDate] = useState("");
 
   const [dateArray, setDateArray] = useState([]);
+
+  const validateItineraryTimes = (itinerary) => {
+    for (let index = 0; index < itinerary.length; index++) {
+      const day = itinerary[index];
+      if (day?.places) {
+        for (let placeIndex = 0; placeIndex < day.places.length; placeIndex++) {
+          const place = day.places[placeIndex];
+          if (!place.startTime || !place.endTime) {
+            // If any place is missing time, return false
+            return false;
+          }
+        }
+      }
+    }
+    // All places have start and end time
+    return true;
+  };
 
   useEffect(() => {
     if (startDate && endDate) {
@@ -179,6 +196,9 @@ export const ItineraryCreation = ({ history, isLoaded }) => {
         itineraryplandet.location &&
           itineraryplandet.location.split(",")[0].trim()
       );
+      setItinerary(
+        (itineraryplandet.itineraryList && itineraryplandet.itineraryList) || []
+      );
       setInterests(itineraryplandet.interests);
       setBudget(itineraryplandet.budget);
       setStartDate(itineraryplandet.startDate && itineraryplandet.startDate);
@@ -195,11 +215,11 @@ export const ItineraryCreation = ({ history, isLoaded }) => {
     }
   }, []);
 
-  // const { isLoaded } = useJsApiLoader({
-  //   id: "google-map-script",
-  //   googleMapsApiKey: "AIzaSyAUmGqs6vCSNoKHWwvYfifpkOJ5lZLrUBo",
-  //   libraries,
-  // });
+  const { isLoaded } = useJsApiLoader({
+    id: "google-map-script",
+    googleMapsApiKey: "AIzaSyAUmGqs6vCSNoKHWwvYfifpkOJ5lZLrUBo",
+    libraries,
+  });
 
   const [buttonStates, setButtonStates] = useState(
     Array(dateArray.length).fill(false)
@@ -291,11 +311,11 @@ export const ItineraryCreation = ({ history, isLoaded }) => {
     (state) => state.itinerary.itinerarysavedet
   );
 
-  useEffect(() => {
-    if (itinerarysavedet && itinerarysavedet._id) {
-      history.push(`/itinerary/${itinerarysavedet && itinerarysavedet._id}`);
-    }
-  }, [itinerarysavedet]);
+  // useEffect(() => {
+  //   if (itinerarysavedet && itinerarysavedet._id) {
+  //     history.push(`/itinerary/${itinerarysavedet && itinerarysavedet._id}`);
+  //   }
+  // }, [itinerarysavedet]);
   const [errorDate, setDateError] = useState(false);
   const [editItinerary, setEditItinerary] = React.useState(false);
   const handleEditItineraryOpen = () => setEditItinerary(true);
@@ -314,30 +334,35 @@ export const ItineraryCreation = ({ history, isLoaded }) => {
     );
   };
   const onSubmit = () => {
-    const data = {
-      itineraryName: tripName,
-      destination: destination,
-      startDate: moment(startDate.$d),
-      endDate: moment(endDate.$d),
-      budget: budget,
-      itineraryList: itinerary,
-      interests: interests,
-      userId: user && user._id,
-      members: members,
-      nonmembers: nonmembers,
-      startingLocation: startingLocation,
-      imageUrl: imageUrl,
-    };
-    axios
-      .post("/api/itinerary", data)
-      .then((response) => {
-        if (response.data.success) {
-          dispatch(itinerarySave(response.data.itinerary));
-        }
-      })
-      .catch((error) => {
-        alert(error.response.data.message);
-      });
+    if (!validateItineraryTimes(itinerary)) {
+      alert("Please fill in the time for each place in your itinerary.");
+      return; // Prevent submission
+    } else {
+      const data = {
+        itineraryName: tripName,
+        destination: destination,
+        startDate: moment(startDate.$d),
+        endDate: moment(endDate.$d),
+        budget: budget,
+        itineraryList: itinerary,
+        interests: interests,
+        userId: user && user._id,
+        members: members,
+        nonmembers: nonmembers,
+        startingLocation: startingLocation,
+        imageUrl: imageUrl,
+      };
+      axios
+        .post("/api/itinerary", data)
+        .then((response) => {
+          if (response.data.success) {
+            history.push(`/itinerary/${response.data.itinerary._id}`);
+          }
+        })
+        .catch((error) => {
+          alert(error.response.data.message);
+        });
+    }
   };
 
   // useEffect(() => {
@@ -847,7 +872,7 @@ export const ItineraryCreation = ({ history, isLoaded }) => {
                   className="btn btn-2"
                   style={{ backgroundColor: "#dee2e6" }}
                 >
-                  I
+                  {user && user.userName.charAt(0)}
                 </button>
                 <button className="btn btn-3" onClick={handleAddMemberOpen}>
                   <svg

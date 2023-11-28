@@ -7,7 +7,7 @@ dotenv.config();
 //   apiKey: "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",
 // });
 const openai = new OpenAI({
-  apiKey: "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",
+  apiKey: "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",
 });
 const model = "text-davinci-003";
 const completions = 5;

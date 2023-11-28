@@ -20,13 +20,13 @@ export const ItineraryCalendarPage = ({ history }) => {
   let { itineraryId } = useParams();
   const [isLoading, setLoading] = useState(false);
   const [locationImage, setLocationImage] = useState(
-    "https://media.timeout.com/images/105770969/1372/772/image.jpg"
+    "https://res.cloudinary.com/dylqg3itm/image/upload/v1701137748/explore/wp5553545-afternoon-venice-grand-canal-wallpapers_ghqvns.jpg"
   );
   const { user } = useSelector((state) => state.auth);
 
   const [placeImages, setPlaceImages] = useState({});
   const [profileImage, setProfileImage] = useState(
-    "https://media.timeout.com/images/105770969/1372/772/image.jpg"
+    "https://res.cloudinary.com/dylqg3itm/image/upload/v1701137748/explore/wp5553545-afternoon-venice-grand-canal-wallpapers_ghqvns.jpg"
   );
   const itinerarydet = useSelector((state) => state.itinerary.itinerarydet);
   const itineraryData = itinerarydet && itinerarydet.itineraryList;
@@ -55,7 +55,7 @@ export const ItineraryCalendarPage = ({ history }) => {
             const imageURL = await fetchImageForPlace(place.placeName);
             images[place.placeName] = imageURL
               ? imageURL
-              : "https://media.timeout.com/images/105770969/1372/772/image.jpg";
+              : "https://res.cloudinary.com/dylqg3itm/image/upload/v1701137748/explore/wp5553545-afternoon-venice-grand-canal-wallpapers_ghqvns.jpg";
           }
         }
 
@@ -93,11 +93,11 @@ export const ItineraryCalendarPage = ({ history }) => {
       });
       const imgData = canvas.toDataURL("image/png");
 
-      const pdf = new jsPDF("portrait", "pt", "a4");
+      const pdf = new jsPDF("portrait", "pt", "a3");
       const imgProps = pdf.getImageProperties(imgData);
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-
+      console.log("heightwidth", pdfWidth, pdfHeight);
       pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
       pdf.save(`${itinerarydet && itinerarydet.itineraryName}.pdf`);
 
@@ -356,7 +356,10 @@ export const ItineraryCalendarPage = ({ history }) => {
                 {itinerarydet && itinerarydet.destination}{" "}
                 {dateArray && dateArray.length} day Trip Plan
               </p>
-              <div className="add-flex mb-2">
+              <div
+                className="add-flex mb-2"
+                style={{ display: "flex", alignItems: "center" }}
+              >
                 <button className="planbutton planbutton3">
                   verified trip plan
                 </button>
@@ -380,8 +383,8 @@ export const ItineraryCalendarPage = ({ history }) => {
                 </span>
               </div>
 
-              <div className="add-flex">
-                <div className="add-flex">
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <div style={{ display: "flex", alignItems: "center" }}>
                   {itinerarydet &&
                     itinerarydet.itineraryAvgRating >= 0 &&
                     [...Array(fullStars)].map((_, index) => (
@@ -630,6 +633,7 @@ export const ItineraryCalendarPage = ({ history }) => {
                       className="planbutton planbutton2"
                       onClick={handleRequest}
                       disabled={itinerarydet.request}
+                      style={{ display: "flex", alignItems: "center" }}
                     >
                       {itinerarydet.request ? "Requested" : "Join"}
                     </button>

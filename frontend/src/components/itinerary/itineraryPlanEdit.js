@@ -104,7 +104,7 @@ export const ItineraryPlanEdit = ({ history }) => {
   let { itineraryId } = useParams();
 
   const [image, setImage] = useState(
-    "https://media.timeout.com/images/105770969/1372/772/image.jpg"
+    "https://res.cloudinary.com/dylqg3itm/image/upload/v1701137748/explore/wp5553545-afternoon-venice-grand-canal-wallpapers_ghqvns.jpg"
   );
 
   const [map, setMap] = React.useState(null);
@@ -269,6 +269,22 @@ export const ItineraryPlanEdit = ({ history }) => {
   const [isLoading, setLoading] = useState(false);
   const [errorLocation, setLocationError] = useState(false);
   const [startingLocation, setStartingLocation] = useState("");
+  const validateItineraryTimes = (itinerary) => {
+    for (let index = 0; index < itinerary.length; index++) {
+      const day = itinerary[index];
+      if (day?.places) {
+        for (let placeIndex = 0; placeIndex < day.places.length; placeIndex++) {
+          const place = day.places[placeIndex];
+          if (!place.startTime || !place.endTime) {
+            // If any place is missing time, return false
+            return false;
+          }
+        }
+      }
+    }
+    // All places have start and end time
+    return true;
+  };
 
   useEffect(() => {
     let responseData;
@@ -299,7 +315,9 @@ export const ItineraryPlanEdit = ({ history }) => {
         console.log(err);
       }
     };
-    getItinerary();
+    if (itineraryId) {
+      getItinerary();
+    }
     console.log("api", responseData);
   }, []);
 
@@ -313,33 +331,37 @@ export const ItineraryPlanEdit = ({ history }) => {
   }, [startDate, endDate]);
 
   const onSubmit = () => {
-    const data = {
-      itineraryId: itineraryId,
-      itineraryName: tripName,
-      destination: destination,
-      startDate: startDate,
-      endDate: endDate,
-      budget: budget,
-      itineraryList: itinerary,
-      interests: interests,
-      userId: user && user._id,
-      members: members,
-      nonmembers: nonmembers,
-      startingLocation: startingLocation,
-      imageUrl: imageUrl,
-    };
-    axios
-      .post("/api/itinerary", data)
-      .then((response) => {
-        if (response.data.success) {
-          history.push(`/itinerary/${itineraryId}`);
-        }
-      })
-      .catch((error) => {
-        alert(error.response.data.message);
-      });
+    if (!validateItineraryTimes(itinerary)) {
+      alert("Please fill in the time for each place in your itinerary.");
+      return; // Prevent submission
+    } else {
+      const data = {
+        itineraryId: itineraryId,
+        itineraryName: tripName,
+        destination: destination,
+        startDate: startDate,
+        endDate: endDate,
+        budget: budget,
+        itineraryList: itinerary,
+        interests: interests,
+        userId: user && user._id,
+        members: members,
+        nonmembers: nonmembers,
+        startingLocation: startingLocation,
+        imageUrl: imageUrl,
+      };
+      axios
+        .post("/api/itinerary", data)
+        .then((response) => {
+          if (response.data.success) {
+            history.push(`/itinerary/${itineraryId}`);
+          }
+        })
+        .catch((error) => {
+          alert(error.response.data.message);
+        });
+    }
   };
-
   useEffect(() => {
     getImage();
   }, []);

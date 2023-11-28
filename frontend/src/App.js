@@ -16,7 +16,6 @@ import { positions, transitions, Provider as AlertProvider } from "react-alert";
 import AlertTemplate from "react-alert-template-basic";
 import { useSelector, useDispatch } from "react-redux";
 import ItinerarySelection from "./components/itinerary/itinerarySelection";
-import MapComponent from "./components/itinerary/mapComponent";
 import ItineraryCalendarPage from "./components/itinerary/itineraryCalendarPage";
 import Navbar from "./components/Navbar/Navbar";
 import Register from "./components/auth/Register";
@@ -32,6 +31,7 @@ import Messenger from "./components/Messenger/messenger.js";
 import socket from "./utils/socket.js";
 import { fetchNotifications } from "./actions/notificationAction";
 import { updateNotification } from "./actions/notificationAction";
+import ItineraryCreation from "./components/itinerary/itineraryCreation.js";
 
 // import Footer from "./components/layout/Footer";
 // if(localStorage.token){
@@ -92,7 +92,7 @@ const App = () => {
           <ProtectedRoute
             exact
             path="/itinerary"
-            component={MapComponent}
+            component={ItineraryCreation}
           ></ProtectedRoute>
           <ProtectedRoute
             exact
