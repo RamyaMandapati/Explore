@@ -214,19 +214,19 @@ const Newpost = () => {
             />
           </Autocomplete>
           <label>Date</label>
-          <input 
-          name="fromdate" 
-          type="date" 
-          min={today} // Set min to today's date
-          value={fromDate}
-          onChange={handleFromDateChange} 
-        /> to 
-        <input 
-          name="todate" 
-          type="date" 
-          min={minToDate} // Set min to the selected from date
-        />
-
+          <input
+            name="fromdate"
+            type="date"
+            min={today} // Set min to today's date
+            value={fromDate}
+            onChange={handleFromDateChange}
+          />{" "}
+          to
+          <input
+            name="todate"
+            type="date"
+            min={minToDate} // Set min to the selected from date
+          />
           <label>Age Preference</label>
           <input name="minAge" type="age" /> to{" "}
           <input name="maxAge" type="age" />
