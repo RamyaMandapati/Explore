@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { loadUser } from "../../actions/auth";
 import profilephoto from "../../images/profilephoto.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import {
   faThumbsUp,
   faComment,
@@ -22,6 +24,7 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
   const dispatch = useDispatch();
   const [searchTerm, setSearchTerm] = useState("");
   const [min, max] = ageFilter.split("-").map(Number);
+  const [minStr, maxStr] = budgetFilter.split("-").map(Number);
   const { user } = useSelector((state) => state.auth);
   const [showMenu, setShowMenu] = useState(null);
   console.log(user._id);
@@ -108,30 +111,38 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
         `http://localhost:4000/api/follow/${userIdToFollow}`,
         { currentUserId }
       );
+      toast.success("Followed successfully!");
       console.log(response.data); // Handle the response appropriately
       // You might want to update the state to reflect the new follow relationship
     } catch (error) {
+      toast.error("Error following user.");
       console.error("Error following user:", error);
       // Handle errors, such as displaying a message to the user
     }
   };
   const parseBudgetFilter = (filter) => {
     if (!filter) return { min: 0, max: Infinity };
+    console.log(filter);
     if (filter === "5000+") return { min: 5000, max: Infinity };
-    const max = parseInt(filter.slice(1), 10);
-    return { min: 0, max };
+    const [minStr, maxStr] = filter.split("-").map(Number);
+   
+    return { min: Number(minStr), max: Number(maxStr) };
   };
-  const { budgetmin, budgetmax } = parseBudgetFilter(budgetFilter);
+  
+  
   const filteredPosts = posts.filter((post) => {
+    
     // Apply gender, age, and country filters
     // You'll need to adjust the logic based on how the age filter is supposed to work
+    
 
+    const postBudget = Number(post.budget);
+    console.log(postBudget);
+    
     return (
       (genderFilter ? post.genderPref === genderFilter : true) &&
       (ageFilter ? post.minAge >= min && post.maxAge <= max : true) &&
-      (budgetFilter
-        ? post.budget >= budgetmin && post.budget <= budgetmax
-        : true) &&
+      (budgetFilter ? postBudget >= minStr && postBudget <= maxStr : true) &&
       (searchTerm
         ? post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
           post.description.toLowerCase().includes(searchTerm.toLowerCase())
@@ -232,6 +243,7 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
         .map((post, index) => (
           <div key={post._id} className="user-post">
             <div className="top-right-icons">
+            {user._id !== post.user?._id && !user.following.includes(post.user?._id) && (
               <FontAwesomeIcon
                 icon={faUserPlus}
                 className={`icon follow-icon ${
@@ -240,7 +252,7 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
                 onClick={() => handleFollow(post.user?._id)}
                 style={{ marginRight: "10px" }}
               />
-
+              )}
               <FontAwesomeIcon
                 icon={faEllipsisV}
                 onClick={() => toggleMenu(index)}

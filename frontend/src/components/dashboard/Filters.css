@@ -36,7 +36,7 @@
 
 /* Individual Filter Input */
 .filters select {
-  padding: 10px; /* Spacing inside the input */
+  padding: 5px; /* Spacing inside the input */
   margin-bottom: 15px;
   margin-left: 10px; /* Spacing between filter items */
   border: 1px solid #ddd; /* Light gray border */

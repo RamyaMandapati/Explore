@@ -126,10 +126,31 @@ const savePost = async (req, res) => {
     });
 };
 
+const interestedActivity = async (req, res) => {
+  try {
+    const { interestedActivity, userId } = req.body;
+    
+    if (!interestedActivity) {
+      return res.status(400).json({ message: "Interested activity is required." });
+    }
+
+    // Assuming interestedActivity is an array of strings
+    const users = await user.find({
+      interestedActivity: { $in: interestedActivity },
+        // Exclude the logged-in user
+    });
+
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+}
+
 module.exports = {
   updateUserPreference,
   findUserByEmail,
   updateFollowers,
   savePost,
   findUserById,
+  interestedActivity,
 };
