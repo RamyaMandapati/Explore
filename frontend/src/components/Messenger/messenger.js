@@ -197,9 +197,11 @@ export default function Messenger({ history }) {
                 ))} */}
                 {conversations.map((conversation) => {
                   // Assuming you have a way to find the notification for this conversation
-                  const notification = messageNotifications.find(
-                    (n) => n.conversationId === conversation._id
-                  );
+                  const notification =
+                    messageNotifications.length !== 0 &&
+                    messageNotifications.find(
+                      (n) => n.conversationId === conversation._id
+                    );
                   const unreadCount = notification
                     ? notification.unreadCount
                     : 0;

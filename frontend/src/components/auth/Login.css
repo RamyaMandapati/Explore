@@ -5,11 +5,11 @@
 }
 
 .pref-cont {
-  margin: 90px auto;
+  margin: 0px auto;
   height: 100vh;
   background-color: #fff;
   border-radius: 10px;
-  font-family: 'Rubik', sans-serif;
+  font-family: "Rubik", sans-serif;
   font-weight: 400;
   color: #212529;
   font-size: 14px;
@@ -60,7 +60,7 @@ h4 {
 }
 
 .login-cont {
-  font-family: 'Rubik', sans-serif;
+  font-family: "Rubik", sans-serif;
   font-weight: 400;
   color: #212529;
   font-size: 14px;
@@ -83,7 +83,7 @@ h4 {
   /* flex: 1; */
   /* background: url("../../images/loginimage.jpg")  */
   background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
-    url('../../images/loginimage.jpg') no-repeat center;
+    url("../../images/loginimage.jpg") no-repeat center;
   background-size: cover;
   padding: 30px;
   position: relative;
@@ -93,7 +93,7 @@ h4 {
 }
 
 .overlay {
-  content: '';
+  content: "";
   position: absolute;
   /* padding: 20px 20px; */
   border-radius: 8px;

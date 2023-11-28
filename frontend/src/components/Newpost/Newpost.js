@@ -46,8 +46,8 @@ const Newpost = () => {
   const history = useHistory();
   const [minToDate, setMinToDate] = useState("");
   const [selectedItineraryId, setSelectedItineraryId] = useState();
-  const [fromDate, setFromDate] = useState(""); 
- 
+  const [fromDate, setFromDate] = useState("");
+
   // Handler to update minToDate when fromdate changes
   const handleFromDateChange = (event) => {
     setFromDate(event.target.value);
@@ -231,8 +231,8 @@ const Newpost = () => {
           <input name="minAge" type="age" /> to{" "}
           <input name="maxAge" type="age" />
           <label>Link itinerary</label>
-          <select name="itineraries">
-            <option value="" onChange={(e)=>handleItineraryChange(e)}>Select an itinerary</option>
+          <select name="itineraries" onChange={(e) => handleItineraryChange(e)}>
+            <option value="">Select an itinerary</option>
             {renderItineraryOptions()}
           </select>
           <label>Budget</label>

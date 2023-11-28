@@ -120,10 +120,10 @@ export const ItinerarySelection = ({ history }) => {
     (itineraryplandet && itineraryplandet.interests) || []
   );
   const [startDate, setStartDate] = useState(
-    (itineraryplandet && itineraryplandet.startDate) || today
+    itineraryplandet && itineraryplandet.startDate
   );
   const [endDate, setEndDate] = useState(
-    (itineraryplandet && itineraryplandet.endDate) || today
+    itineraryplandet && itineraryplandet.endDate
   );
   const [budget, setBudget] = useState(
     (itineraryplandet && itineraryplandet.budget) || ""
