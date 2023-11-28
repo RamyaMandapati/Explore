@@ -18,20 +18,41 @@ const Contacts = ({ history }) => {
     // Fetching followers
     axios.post(`http://localhost:4000/api/user/email`, { email: user.email })
       .then(response => {
-        setContacts(response.data?.followers);
+        const { followers, following } = response.data;
+        console.log(followers, following);
+        const uniqueContactsMap = new Map();
+
+    // Add followers and following to the map
+    [followers, following].flat().forEach(contact => {
+      uniqueContactsMap.set(contact._id, contact);
+    });
+
+    // Convert the map values back to an array
+    const combinedContacts = Array.from(uniqueContactsMap.values());
+    setContacts(combinedContacts);
       })
       .catch(error => console.error("Error fetching followers", error));
+  }, [dispatch, user]);
 
     // Fetching suggested contacts based on interestedActivity
-    axios.post(`http://localhost:4000/api/users/interestedActivity`, { interestedActivity: user.interestedActivity, userId: user._id  })
-      .then(response => {
-        console.log(response.data);
-        const filteredContacts = response.data.filter(contact => contact._id !== user._id);
-        setSuggestedContacts(filteredContacts);
-      })
-      .catch(error => console.error("Error fetching suggested contacts", error));
-
-  }, [dispatch, user]);
+    useEffect(() => {
+      // Make sure this effect runs only when `contacts` is updated
+      if (contacts.length > 0 && user) {
+        axios.post(`http://localhost:4000/api/users/interestedActivity`, { 
+          interestedActivity: user.interestedActivity, 
+          userId: user._id  
+        })
+        .then(response => {
+          console.log(response.data);
+          const contactsIds = new Set(contacts.map(contact => contact._id));
+          const filteredContacts = response.data.filter(contact => 
+            !contactsIds.has(contact._id) && contact._id !== user._id
+          );
+          setSuggestedContacts(filteredContacts);
+        })
+        .catch(error => console.error("Error fetching suggested contacts", error));
+      }
+    }, [contacts, user]);
 
   const handleMessage = (receiverId) => {
     axios.post(`/api/conversation`, {

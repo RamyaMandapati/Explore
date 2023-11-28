@@ -50,7 +50,7 @@ const findUserByEmail = async (req, res) => {
     console.log(req.body.email);
     const { email } = req.body;
 
-    const userDetail = await user.findOne({ email }).populate("followers");
+    const userDetail = await user.findOne({ email }).populate("followers").populate('following');
     if (!userDetail) {
       return res.status(400).send({
         error: "No user with this email has account with us",

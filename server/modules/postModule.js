@@ -19,7 +19,7 @@ const addPost = async (req, res) => {
       location,
       fromDate,
       toDate,
-
+      
       tags,
       minAge,
       maxAge,

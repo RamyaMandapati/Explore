@@ -119,6 +119,7 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
       console.error("Error following user:", error);
       // Handle errors, such as displaying a message to the user
     }
+    window.location.reload();
   };
   const parseBudgetFilter = (filter) => {
     if (!filter) return { min: 0, max: Infinity };
@@ -243,6 +244,7 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
         .map((post, index) => (
           <div key={post._id} className="user-post">
             <div className="top-right-icons">
+            <ToastContainer /> 
             {user._id !== post.user?._id && !user.following.includes(post.user?._id) && (
               <FontAwesomeIcon
                 icon={faUserPlus}
