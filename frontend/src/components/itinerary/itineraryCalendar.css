@@ -23,7 +23,7 @@
   max-width: 1000px;
   padding: 0 20px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, 130px);
+  grid-template-columns: repeat(auto-fit, 140px);
   grid-gap: 10px;
 }
 

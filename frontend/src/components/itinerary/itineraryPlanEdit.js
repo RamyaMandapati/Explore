@@ -146,16 +146,17 @@ export const ItineraryPlanEdit = ({ history }) => {
     tripEndDate = momentEndDate.format("MM/DD");
     let tempDate = moment(momentStartDate);
 
-    while (tempDate <= momentEndDate) {
-      dateArray.push(
-        tempDate.format("dddd") + ", " + tempDate.format("MMMM Do")
-      );
-      tempDate.add(1, "days"); // Move to the next day
-    }
-    if (!momentStartDate.isSame(momentEndDate)) {
+    if (momentStartDate.isSame(momentEndDate)) {
       dateArray.push(
         momentEndDate.format("dddd") + ", " + momentEndDate.format("MMMM Do")
       );
+    } else {
+      while (tempDate <= momentEndDate) {
+        dateArray.push(
+          tempDate.format("dddd") + ", " + tempDate.format("MMMM Do")
+        );
+        tempDate.add(1, "days"); // Move to the next day
+      }
     }
     // while (true) {
     //   dateArray.push(

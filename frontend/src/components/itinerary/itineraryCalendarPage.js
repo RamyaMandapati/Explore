@@ -503,7 +503,7 @@ export const ItineraryCalendarPage = ({ history }) => {
                             marginRight:
                               itinerarydet.members.length +
                                 itinerarydet.nonmembers.length >
-                              2
+                              1
                                 ? "-1.3rem"
                                 : "0",
                           }}

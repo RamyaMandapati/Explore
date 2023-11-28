@@ -30,10 +30,13 @@ const Navbar = () => {
   const { messageNotifications } = useSelector(
     (state) => state.messageNotifications
   );
-  const totalUnread = messageNotifications.reduce(
-    (sum, n) => (n.unreadCount > 0 ? sum + 1 : sum),
-    0
-  );
+  const totalUnread =
+    messageNotifications.length !== 0
+      ? messageNotifications.reduce(
+          (sum, n) => (n.unreadCount > 0 ? sum + 1 : sum),
+          0
+        )
+      : 0;
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dispatch = useDispatch();
@@ -77,6 +80,7 @@ const Navbar = () => {
       });
 
       return () => {
+        socket.off("socketUserInfo");
         socket.off("getNotifications");
       };
     }
@@ -202,6 +206,8 @@ const Navbar = () => {
     axios
       .post("/logout")
       .then((response) => {
+        window.location.reload();
+
         dispatch({ type: "LOGOUT" });
       })
       .catch((error) => {
@@ -343,27 +349,19 @@ const Navbar = () => {
             onClick={toggleDropdown}
           />
 
-          
-            <div className="dropdown absolute top-[44px] shadow-md border bg-white -left-24">
-              <ul >
-                <li>
-                  <Link
-                    to="/profile"
-                    className="p-2 px-12 block"
-                  >
-                    Profile
-                  </Link>
-                </li>
-                <li className="p-2 px-12 block">Settings</li>
-                <li
-                  className="p-2 px-12 block"
-                  onClick={logout}
-                >
-                  Logout
-                </li>
-              </ul>
-            </div>
-          
+          <div className="dropdown absolute top-[44px] shadow-md border bg-white -left-24">
+            <ul>
+              <li>
+                <Link to="/profile" className="p-2 px-12 block">
+                  Profile
+                </Link>
+              </li>
+              <li className="p-2 px-12 block">Settings</li>
+              <li className="p-2 px-12 block" onClick={logout}>
+                Logout
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>

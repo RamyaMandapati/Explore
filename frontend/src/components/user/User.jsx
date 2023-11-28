@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import './reviews.css';
-import { useSelector } from 'react-redux';
-import { FaPencilAlt } from 'react-icons/fa';
-import axios from 'axios';
-import UpdateModal from './UpdateModal';
-import Search from './Search';
-import { Link, useParams } from 'react-router-dom/cjs/react-router-dom.min';
-import Trips from './Trips';
-import Activities from './Activities';
-import Posts from './Posts';
-import Reviews from './Reviews';
+import React, { useEffect, useState } from "react";
+import "./reviews.css";
+import { useSelector } from "react-redux";
+import { FaPencilAlt } from "react-icons/fa";
+import axios from "axios";
+import UpdateModal from "./UpdateModal";
+import Search from "./Search";
+import { Link, useParams } from "react-router-dom/cjs/react-router-dom.min";
+import Trips from "./Trips";
+import Activities from "./Activities";
+import Posts from "./Posts";
+import Reviews from "./Reviews";
 
 const getAverageRatings = (reviews) => {
   return (
@@ -19,26 +19,26 @@ const getAverageRatings = (reviews) => {
 
 const Dashboard = ({ posts, trips, profile }) => {
   return (
-    <div className='bg-white shadow-md p-3 rounded-md'>
-      <h2 className='text-2xl mb-4'>Your Dashboard</h2>
+    <div className="bg-white shadow-md p-3 rounded-md">
+      <h2 className="text-2xl mb-4">Your Dashboard</h2>
 
-      <div className='my-4'>
-        <p className='text-5xl text-orange-600 font-bold'>{profile.views}</p>
+      <div className="my-4">
+        <p className="text-5xl text-orange-600 font-bold">{profile.views}</p>
         <p>views today</p>
       </div>
-      <div className='my-4'>
-        <p className='text-5xl text-orange-600 font-bold'>{posts.length}</p>
+      <div className="my-4">
+        <p className="text-5xl text-orange-600 font-bold">{posts.length}</p>
         <p>posts created</p>
       </div>
-      <div className='my-4'>
-        <p className='text-5xl text-orange-600 font-bold'>{trips.length}</p>
+      <div className="my-4">
+        <p className="text-5xl text-orange-600 font-bold">{trips.length}</p>
         <p>trips created</p>
       </div>
     </div>
   );
 };
 
-export const Profile = () => {
+export const Profile = ({ history }) => {
   const { id } = useParams();
   const { loading, user } = useSelector((state) => state.auth);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -113,62 +113,62 @@ export const Profile = () => {
   }, [id, profile, user]);
 
   return (
-    <div className='bg-gray-100 h-auto'>
-      <div className='container w-[90%] max-w-[1400px] mx-auto profile'>
+    <div className="bg-gray-100 h-auto">
+      <div className="container w-[90%] max-w-[1400px] mx-auto profile">
         {isLoading ? (
-          <div className='flex justify-center items-center w-full'>
-            <div className='w-10 h-10 border-4 animate-spin border-gray-300 border-t-orange-600 rounded-full'></div>
+          <div className="flex justify-center items-center w-full">
+            <div className="w-10 h-10 border-4 animate-spin border-gray-300 border-t-orange-600 rounded-full"></div>
           </div>
         ) : (
-          <div className='w-full flex justify-between gap-8'>
-            <div className='basis-8/12 grow '>
+          <div className="w-full flex justify-between gap-8">
+            <div className="basis-8/12 grow ">
               {/* header   */}
-              <div className='bg-white rounded-md overflow-hidden'>
-                <div className=''>
+              <div className="bg-white rounded-md overflow-hidden">
+                <div className="">
                   <img
                     src={
                       profile.coverPhoto ||
-                      'https://images.pexels.com/photos/3408744/pexels-photo-3408744.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+                      "https://images.pexels.com/photos/3408744/pexels-photo-3408744.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
                     }
-                    className='w-full max-h-[200px] object-cover aspect-video'
-                    alt=''
+                    className="w-full max-h-[200px] object-cover aspect-video"
+                    alt=""
                   />
                 </div>
-                <div className='flex gap-8 px-8 py-4'>
-                  <div className='basis-3/12'>
+                <div className="flex gap-8 px-8 py-4">
+                  <div className="basis-3/12">
                     <img
                       src={
                         profile.profilePhoto
                           ? profile.profilePhoto
-                          : 'https://xsgames.co/randomusers/assets/avatars/male/63.jpg'
+                          : "https://xsgames.co/randomusers/assets/avatars/male/63.jpg"
                       }
-                      alt=''
-                      className='relative -top-[50%] aspect-square object-cover rounded-full border-[10px] border-white block'
+                      alt=""
+                      className="relative -top-[50%] aspect-square object-cover rounded-full border-[10px] border-white block"
                     />
                   </div>
-                  <div id='user-desc' className='grow w-full'>
-                    <div className='flex items-center justify-between gap-4'>
+                  <div id="user-desc" className="grow w-full">
+                    <div className="flex items-center justify-between gap-4">
                       <div>
-                        <h2 className='text-2xl'>
+                        <h2 className="text-2xl">
                           {loading ? null : profile?.userName}
                         </h2>
-                        <p className='text-sm'>
-                          {profile.city && profile.city + ','}{' '}
-                          {profile.state && profile.state + ','}{' '}
+                        <p className="text-sm">
+                          {profile.city && profile.city + ","}{" "}
+                          {profile.state && profile.state + ","}{" "}
                           {profile.country}
                         </p>
                       </div>
                       {isMyProfile ? (
                         <button
-                          title='Edit'
-                          id='edit-btn'
-                          className='p-3 rounded-md hover:bg-gray-200'
+                          title="Edit"
+                          id="edit-btn"
+                          className="p-3 rounded-md hover:bg-gray-200"
                           onClick={(e) => {
-                            console.log('clicked');
+                            console.log("clicked");
                             setIsModalOpen(true);
                           }}
                         >
-                          <FaPencilAlt className='pointer-events-none' />
+                          <FaPencilAlt className="pointer-events-none" />
                         </button>
                       ) : null}
                     </div>
@@ -184,15 +184,15 @@ export const Profile = () => {
                     ) : null}
 
                     {/* short bio */}
-                    <p className='my-2'>{profile?.bio}</p>
+                    <p className="my-2">{profile?.bio}</p>
 
                     {/* ratings */}
                     <div>
                       {profile.userReviews.length === 0 ? (
-                        <p className='pb-2 text-gray-500'>0 Reviews</p>
+                        <p className="pb-2 text-gray-500">0 Reviews</p>
                       ) : (
-                        <ul className='flex my-2 gap-4 items-center'>
-                          <div className='flex items-center text-lg'>
+                        <ul className="flex my-2 gap-4 items-center">
+                          <div className="flex items-center text-lg">
                             {profile.userReviews.map((review, i) => (
                               <div key={i}>
                                 {Array.from({ length: 5 }).map((_, i) => (
@@ -200,8 +200,8 @@ export const Profile = () => {
                                     key={i}
                                     className={
                                       i + 1 <= review.userRating
-                                        ? 'star selected'
-                                        : 'star'
+                                        ? "star selected"
+                                        : "star"
                                     }
                                   >
                                     &#9733;
@@ -211,9 +211,9 @@ export const Profile = () => {
                             ))}
                           </div>
 
-                          <p className='font-bold'>
-                            {getAverageRatings(profile.userReviews)} Ratings{' '}
-                            <span className='text-orange-600'>
+                          <p className="font-bold">
+                            {getAverageRatings(profile.userReviews)} Ratings{" "}
+                            <span className="text-orange-600">
                               ({profile?.userReviews.length} reviews)
                             </span>
                           </p>
@@ -222,18 +222,18 @@ export const Profile = () => {
                     </div>
 
                     {/* followings/followers */}
-                    <div className='flex items-center gap-4 uppercase'>
+                    <div className="flex items-center gap-4 uppercase">
                       <div>
-                        <span className='font-bold'>
+                        <span className="font-bold">
                           {loading ? 0 : profile?.followers.length}
-                        </span>{' '}
+                        </span>{" "}
                         Followers
                       </div>
                       <div>
-                        {' '}
-                        <span className='font-bold'>
+                        {" "}
+                        <span className="font-bold">
                           {loading ? 0 : profile?.following.length}
-                        </span>{' '}
+                        </span>{" "}
                         Following
                       </div>
                     </div>
@@ -244,14 +244,14 @@ export const Profile = () => {
                         {profile.followers.includes(user._id) ? (
                           <button
                             onClick={unFollowUser}
-                            className='bg-white text-orange-500 border border-orange-500  rounded-md p-1 px-4 mt-4'
+                            className="bg-white text-orange-500 border border-orange-500  rounded-md p-1 px-4 mt-4"
                           >
                             Unfollow
                           </button>
                         ) : (
                           <button
                             onClick={followUser}
-                            className='bg-orange-500 border border-orange-500 text-white rounded-md p-1 px-4 mt-4'
+                            className="bg-orange-500 border border-orange-500 text-white rounded-md p-1 px-4 mt-4"
                           >
                             Follow
                           </button>
@@ -262,27 +262,27 @@ export const Profile = () => {
                 </div>
               </div>
               {/* tabs */}
-              <div className='flex my-8 divide-x divide-gray-200 rounded-tl-md rounded-tr-md overflow-hidden bg-white text-base uppercase'>
+              <div className="flex my-8 divide-x divide-gray-200 rounded-tl-md rounded-tr-md overflow-hidden bg-white text-base uppercase">
                 <Link
-                  to='/profile'
-                  className='block basis-1/3  bg-orange-600 text-white py-3 text-center '
+                  to="/profile"
+                  className="block basis-1/3  bg-orange-600 text-white py-3 text-center "
                 >
                   Profile
                 </Link>
                 <a
-                  href='#activity'
-                  className='block basis-1/3  py-3 text-center '
+                  href="#activity"
+                  className="block basis-1/3  py-3 text-center "
                 >
                   Activity & Interests
                 </a>
-                <a href='#trips' className='block basis-1/3  py-3 text-center '>
+                <a href="#trips" className="block basis-1/3  py-3 text-center ">
                   Trips
                 </a>
               </div>
 
               {/* about */}
-              <div className='bg-white p-8 my-4 rounded-md'>
-                <p className='text-xl mb-2 text-left font-bold'>About</p>
+              <div className="bg-white p-8 my-4 rounded-md">
+                <p className="text-xl mb-2 text-left font-bold">About</p>
                 <p>{profile?.about}</p>
               </div>
 
@@ -295,7 +295,7 @@ export const Profile = () => {
               {/* trips */}
               <Trips isLoading={isLoading} profile={profile} />
             </div>
-            <div className='basis-3/12'>
+            <div className="basis-3/12">
               <Search />
               <Dashboard
                 profile={profile}
@@ -307,6 +307,7 @@ export const Profile = () => {
                 profile={profile}
                 setProfile={setProfile}
                 isMyProfile={isMyProfile}
+                history={history}
               />
             </div>
           </div>

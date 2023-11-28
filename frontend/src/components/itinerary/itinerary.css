@@ -169,7 +169,8 @@ h2 {
 
 .itinerarymap {
   width: 460px;
-  position: sticky;
+  position: fixed;
+  right: 32px;
 }
 .itineraryimage {
   max-width: 740px;

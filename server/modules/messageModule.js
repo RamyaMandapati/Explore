@@ -46,7 +46,7 @@ const messageMarkAsRead = async (req, res) => {
     let notification = await messageNotification.findOneAndUpdate(
       { conversationId: req.body.conversationId, userId: req.body.userId },
       { $set: { unreadCount: 0 } },
-      { new: true }
+      { upsert: true, new: true }
     );
 
     await func.messageNotification(req.body.userId, notification);
