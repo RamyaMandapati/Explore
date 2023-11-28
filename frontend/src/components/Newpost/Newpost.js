@@ -45,10 +45,12 @@ const Newpost = () => {
   });
   const history = useHistory();
   const [minToDate, setMinToDate] = useState("");
-  const [selectedItineraryId, setSelectedItineraryId] = useState();
+  const [selectedItineraryId, setSelectedItineraryId] = useState("");
+  const [fromDate, setFromDate] = useState("");
 
   // Handler to update minToDate when fromdate changes
   const handleFromDateChange = (event) => {
+    setFromDate(event.target.value);
     setMinToDate(event.target.value);
   };
   const handleItineraryChange = (e) => {
@@ -212,8 +214,19 @@ const Newpost = () => {
             />
           </Autocomplete>
           <label>Date</label>
-          <input name="fromdate" type="date" /> to{" "}
-          <input name="todate" type="date" />
+          <input
+            name="fromdate"
+            type="date"
+            min={today} // Set min to today's date
+            value={fromDate}
+            onChange={handleFromDateChange}
+          />{" "}
+          to
+          <input
+            name="todate"
+            type="date"
+            min={minToDate} // Set min to the selected from date
+          />
           <label>Age Preference</label>
           <input name="minAge" type="age" /> to{" "}
           <input name="maxAge" type="age" />

@@ -49,10 +49,10 @@ function Filter({
           onChange={(e) => onBudgetFilterChange(e.target.value)}
         >
           <option value="">Any</option>
-          <option value="<500">&lt;500$</option>
-          <option value="<1000">&lt;1000$</option>
-          <option value="<2000">&lt;2000$</option>
-          <option value="<5000">&lt;5000$</option>
+          <option value="0-500">0-500$</option>
+          <option value="501-1000">500$-1000$</option>
+          <option value="1001-2000">1000$-2000$</option>
+          <option value="2000-5000">2000$-5000$</option>
           <option value="5000+">5000$+</option>
         </select>
       </div>
