@@ -260,10 +260,11 @@ const UserPost = ({ genderFilter, ageFilter, budgetFilter }) => {
               {showMenu === index && (
                 <div className="post-menu">
                   <div onClick={() => handleSavePost(post._id)}>Save Post</div>
-
+                  {user._id === post.user?._id && (
                   <div onClick={() => handleDeletePost(post._id)}>
                     Delete Post
                   </div>
+                  )}
                 </div>
               )}
             </div>
