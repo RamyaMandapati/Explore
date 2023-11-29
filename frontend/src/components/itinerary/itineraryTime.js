@@ -18,6 +18,7 @@ export const ItineraryTime = ({
   // startTimeRef.current.focus();
   useEffect(() => {
     validateTime();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [startTime, endTime]);
 
   const validateTime = () => {

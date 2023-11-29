@@ -4,7 +4,6 @@ import axios from "axios";
 import { useJsApiLoader } from "@react-google-maps/api";
 
 import TextField from "@mui/material/TextField";
-import dayjs from "dayjs";
 
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -13,7 +12,6 @@ import Stack from "@mui/material/Stack";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
-import Checkbox from "@mui/material/Checkbox";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemText from "@mui/material/ListItemText";
@@ -21,7 +19,6 @@ import InputAdornment from "@mui/material/InputAdornment";
 import styled from "styled-components";
 import { ITINERARY_PLAN_DETAILS } from "../../actions/types";
 import { useDispatch, useSelector } from "react-redux";
-import { FormControl } from "@mui/material";
 import { CustomCheckbox, StyledFormControl } from "./CustomComponents";
 import LoadingScreen from "react-loading-screen";
 import loading from "../../images/loading.gif";
@@ -106,7 +103,6 @@ export const ItinerarySelection = ({ history }) => {
   `;
   const dispatch = useDispatch();
 
-  const today = dayjs();
   const [errorLocation, setLocationError] = useState(false);
 
   // const autoCompleteRef = useRef(null);
@@ -163,6 +159,7 @@ export const ItinerarySelection = ({ history }) => {
     if (isLoaded) {
       handleScriptLoad(setLocation, autoCompleteRef);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded]);
 
   if (loadError) {
