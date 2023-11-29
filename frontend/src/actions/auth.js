@@ -19,7 +19,6 @@ export const loadUser = () => async (dispatch) => {
       payload: res.data.user,
     });
   } catch (err) {
-    const errors = err.response.data.errors;
     // alert(err.response.data.message);
     dispatch({
       type: AUTH_ERROR,
@@ -56,7 +55,6 @@ export const register =
         });
       }
     } catch (err) {
-      const errors = err.response.data.errors;
       alert("Error While Registering");
       dispatch({
         type: REGISTER_FAIL,

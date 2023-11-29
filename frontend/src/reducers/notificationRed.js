@@ -1,8 +1,3 @@
-import {
-  FETCH_NOTIFICATIONS_SUCCESS,
-  FETCH_NOTIFICATIONS_FAILURE,
-  UPDATE_NOTIFICATION,
-} from "../actions/types";
 const initialState = {
   messageNotifications: [],
   error: null,

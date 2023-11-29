@@ -25,9 +25,9 @@ export const ItineraryCalendarPage = ({ history }) => {
   const { user } = useSelector((state) => state.auth);
 
   const [placeImages, setPlaceImages] = useState({});
-  const [profileImage, setProfileImage] = useState(
-    "https://res.cloudinary.com/dylqg3itm/image/upload/v1701137748/explore/wp5553545-afternoon-venice-grand-canal-wallpapers_ghqvns.jpg"
-  );
+  // const [profileImage, setProfileImage] = useState(
+  //   "https://res.cloudinary.com/dylqg3itm/image/upload/v1701137748/explore/wp5553545-afternoon-venice-grand-canal-wallpapers_ghqvns.jpg"
+  // );
   const itinerarydet = useSelector((state) => state.itinerary.itinerarydet);
   const itineraryData = itinerarydet && itinerarydet.itineraryList;
 
@@ -140,14 +140,14 @@ export const ItineraryCalendarPage = ({ history }) => {
   };
 
   const timeToGridColumn = (time) => {
-    const [hours, minutes] = timeTo24HourFormat(time).split(":").map(Number);
+    const hours = timeTo24HourFormat(time).split(":").map(Number)[0];
     return hours + 2; // +2 because the first column is the day name
   };
 
   const renderedPlaces = new Set();
-  const timeSpanToGridColumns = (startTime, endTime) => {
-    return timeToGridColumn(endTime) - timeToGridColumn(startTime) + 1;
-  };
+  // const timeSpanToGridColumns = (startTime, endTime) => {
+  //   return timeToGridColumn(endTime) - timeToGridColumn(startTime) + 1;
+  // };
   const [rating, setRating] = useState(0);
   const handleStarClick = (starIndex) => {
     // Set the rating to the clicked star index + 1
@@ -275,16 +275,16 @@ export const ItineraryCalendarPage = ({ history }) => {
     }
   }
 
-  async function getProfileImage() {
-    const url = `https://pixabay.com/api/?key=40271680-2ccb695ef668215fefa858c10&q=man profile&image_type=photo&per_page=10&safesearch=True&category=people&editors_choice=True`;
-    const res = await axios.get(url);
-    if (res.data.hits && res.data.hits.length > 0) {
-      const ind = Math.floor(Math.random() * res.data.hits.length);
-      setProfileImage(res.data.hits[ind].webformatURL);
-    } else {
-      console.error("No images returned from Pixabay");
-    }
-  }
+  // async function getProfileImage() {
+  //   const url = `https://pixabay.com/api/?key=40271680-2ccb695ef668215fefa858c10&q=man profile&image_type=photo&per_page=10&safesearch=True&category=people&editors_choice=True`;
+  //   const res = await axios.get(url);
+  //   if (res.data.hits && res.data.hits.length > 0) {
+  //     const ind = Math.floor(Math.random() * res.data.hits.length);
+  //     setProfileImage(res.data.hits[ind].webformatURL);
+  //   } else {
+  //     console.error("No images returned from Pixabay");
+  //   }
+  // }
 
   const editItinerary = () => {
     history.push(`/itineraryedit/${itineraryId}`);
@@ -295,7 +295,8 @@ export const ItineraryCalendarPage = ({ history }) => {
     } else {
       getImage();
     }
-    getProfileImage();
+    // getProfileImage();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [itinerarydet]);
   const maxStars = 5;
   let fullStars = 0;
@@ -498,6 +499,7 @@ export const ItineraryCalendarPage = ({ history }) => {
                             member.profilePhoto ||
                             "https://res.cloudinary.com/dylqg3itm/image/upload/v1700327154/explore/default-avatar-profile-icon-of-social-media-user-vector_gqejru.jpg"
                           } // Use default image if profilePhoto is not available
+                          alt="profileimage"
                           style={{
                             borderRadius: "50%",
                             marginRight:
@@ -540,6 +542,7 @@ export const ItineraryCalendarPage = ({ history }) => {
                                 width: "50px",
                                 height: "50px",
                               }}
+                              alt="profileimage"
                             />
                             <div
                               className="a-tag"
@@ -573,6 +576,7 @@ export const ItineraryCalendarPage = ({ history }) => {
                                       width: "50px",
                                       height: "50px",
                                     }}
+                                    alt="profileimage"
                                   />
                                   <p style={{ fontWeight: 700 }}>{member}</p>
                                 </div>

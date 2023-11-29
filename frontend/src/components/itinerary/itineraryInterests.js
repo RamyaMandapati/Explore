@@ -22,11 +22,8 @@ import {
   faTransgender,
   faPerson,
   faBaby,
-  faAnchor,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-import * as Icons from "@fortawesome/free-solid-svg-icons";
 
 export const ItineraryInterests = ({ interests }) => {
   const availableInterests = {
