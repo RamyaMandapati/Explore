@@ -401,7 +401,8 @@ const getuserByUsername = async (req, res) => {
     });
     return res.status(200).json(users);
   } catch (error) {
-    throw new Error("Unable to find user by username: " + error.message);
+    res.status(500).json(error);
+    // throw new Error("Unable to find user by username: " + error.message);
   }
 };
 
@@ -453,7 +454,7 @@ const getuserById = async (req, res) => {
 
     return res.status(200).json(user);
   } catch (error) {
-    throw new Error("Unable to get user by ID: " + error.message);
+    res.status(500).json(error);
   }
 };
 
@@ -477,7 +478,9 @@ const getPastTripsByUserId = async (userId) => {
     return pastTrips;
   } catch (error) {
     // Handle any errors
-    throw new Error("Unable to fetch past trips: " + error.message);
+    res.status(500).json(error);
+
+    // throw new Error("Unable to fetch past trips: " + error.message);
   }
 };
 
@@ -508,7 +511,9 @@ const getUserByEmail = async (email) => {
     const user = await User.findOne({ email });
     return user;
   } catch (error) {
-    throw new Error("Unable to find user by username: " + error.message);
+    res.status(500).json(error);
+
+    // throw new Error("Unable to find user by username: " + error.message);
   }
 };
 
@@ -630,13 +635,15 @@ const saveUserReview = async (req, res) => {
     await userFound.save();
 
     const userAfterReview = await User.findById(profileId).populate(
-      'userReviews.user'
+      "userReviews.user"
     );
 
     return res.status(200).json(userAfterReview);
   } catch (error) {
     console.log(error);
-    throw new Error('Unable to find the user: ' + error.message);
+    res.status(500).json(error);
+
+    // throw new Error("Unable to find the user: " + error.message);
   }
 };
 
@@ -647,11 +654,11 @@ const followUser = async (req, res) => {
   try {
     const user = await User.findById(userId);
     const userToFollow = await User.findById(userToFollowId).populate(
-      'userReviews.user'
+      "userReviews.user"
     );
 
     if (!user || !userToFollow) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: "User not found" });
     }
 
     if (!user.following.includes(userToFollowId)) {
@@ -660,11 +667,11 @@ const followUser = async (req, res) => {
 
       let trips = await Itinerary.find({
         createdBy: userToFollow._id,
-      }).sort('-createdAt');
+      }).sort("-createdAt");
 
       let posts = await Post.find({
         user: userToFollow._id,
-      }).sort('-createdAt');
+      }).sort("-createdAt");
 
       userToFollow.postsCreated = posts;
       userToFollow.tripsCreated = trips;
@@ -674,11 +681,11 @@ const followUser = async (req, res) => {
 
       return res.status(200).json(userToFollow);
     } else {
-      return res.status(400).json({ message: 'User is already followed' });
+      return res.status(400).json({ message: "User is already followed" });
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -689,11 +696,11 @@ const unfollowUser = async (req, res) => {
   try {
     const user = await User.findById(userId);
     const userToUnfollow = await User.findById(userToUnfollowId).populate(
-      'userReviews.user'
+      "userReviews.user"
     );
 
     if (!user || !userToUnfollow) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: "User not found" });
     }
 
     if (user.following.includes(userToUnfollowId)) {
@@ -706,11 +713,11 @@ const unfollowUser = async (req, res) => {
 
       let trips = await Itinerary.find({
         createdBy: userToUnfollow._id,
-      }).sort('-createdAt');
+      }).sort("-createdAt");
 
       let posts = await Post.find({
         user: userToUnfollow._id,
-      }).sort('-createdAt');
+      }).sort("-createdAt");
 
       userToUnfollow.postsCreated = posts;
       userToUnfollow.tripsCreated = trips;
@@ -720,11 +727,11 @@ const unfollowUser = async (req, res) => {
 
       return res.status(200).json(userToUnfollow);
     } else {
-      return res.status(400).json({ message: 'User is not followed' });
+      return res.status(400).json({ message: "User is not followed" });
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
