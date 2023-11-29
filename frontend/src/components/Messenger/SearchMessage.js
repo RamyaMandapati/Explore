@@ -43,9 +43,12 @@ const SearchMessage = () => {
       let res = await axios.post(`/api/conversation`, data);
       if (res.data) {
         history.push(`/messenger/${res.data._id}`);
+        window.location.reload();
       }
     } catch (err) {
-      console.log(err);
+      console.log(err.response.data.message);
+
+      alert(err.response.data.message);
     }
     setQuery("");
   };

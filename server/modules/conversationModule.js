@@ -17,7 +17,15 @@ const Message = require("../models/message");
 const saveConversation = async (req, res) => {
   try {
     // Extract senderId and receiverId from the request body
+
     const { senderId, receiverId } = req.body;
+
+    if (!senderId || !receiverId || senderId === receiverId) {
+      return res.status(400).json({
+        message: "Invalid input data",
+        status: 400,
+      });
+    }
 
     // Check if a conversation between these two users already exists
     let conversation = await Conversation.findOne({
