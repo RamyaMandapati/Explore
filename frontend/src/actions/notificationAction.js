@@ -1,9 +1,5 @@
 import axios from "axios";
-import {
-  FETCH_NOTIFICATIONS_SUCCESS,
-  FETCH_NOTIFICATIONS_FAILURE,
-  UPDATE_NOTIFICATION,
-} from "./types";
+
 // Action to fetch notifications
 export const fetchNotifications = (userId) => async (dispatch) => {
   try {
