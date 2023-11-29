@@ -141,8 +141,8 @@ export const ItineraryCategory = ({ onSave, onCancel }) => {
             <option value="Male" class="px-3 py-2 Select__option">
               Male
             </option>
-            <option value="FeMale" class="px-3 py-2 Select__option">
-              FeMale
+            <option value="Female" class="px-3 py-2 Select__option">
+              Female
             </option>
             <option value="Baby-friendly" class="px-3 py-2 Select__option">
               Baby-friendly
