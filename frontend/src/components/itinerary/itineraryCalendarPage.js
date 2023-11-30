@@ -276,17 +276,6 @@ export const ItineraryCalendarPage = ({ history }) => {
     }
   }
 
-  // async function getProfileImage() {
-  //   const url = `https://pixabay.com/api/?key=40271680-2ccb695ef668215fefa858c10&q=man profile&image_type=photo&per_page=10&safesearch=True&category=people&editors_choice=True`;
-  //   const res = await axios.get(url);
-  //   if (res.data.hits && res.data.hits.length > 0) {
-  //     const ind = Math.floor(Math.random() * res.data.hits.length);
-  //     setProfileImage(res.data.hits[ind].webformatURL);
-  //   } else {
-  //     console.error("No images returned from Pixabay");
-  //   }
-  // }
-
   const editItinerary = () => {
     history.push(`/itineraryedit/${itineraryId}`);
   };
@@ -296,8 +285,6 @@ export const ItineraryCalendarPage = ({ history }) => {
     } else {
       getImage();
     }
-    // getProfileImage();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [itinerarydet]);
   const maxStars = 5;
   let fullStars = 0;

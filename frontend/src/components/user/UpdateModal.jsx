@@ -52,8 +52,6 @@ const UpdateModal = ({
           "https://api.cloudinary.com/v1_1/dylqg3itm/image/upload",
           formData
         );
-
-        // console.log(response1);
       }
       if (coverPhoto) {
         formData.append("file", coverPhoto);
@@ -63,8 +61,6 @@ const UpdateModal = ({
           "https://api.cloudinary.com/v1_1/dylqg3itm/image/upload",
           formData
         );
-
-        // console.log(response2);
       }
 
       let res;
@@ -112,15 +108,12 @@ const UpdateModal = ({
 
   useEffect(() => {
     const checkIfClickOuside = (e) => {
-      //   console.log(modalRef.current.contains(e.target));
-      // console.log(e.target.id);
       if (
         isModalOpen &&
         modalRef.current &&
         !modalRef.current.contains(e.target) &&
         e.target.id !== "edit-btn"
       ) {
-        // console.log('This ran...');
         setIsModalOpen(false);
       }
     };

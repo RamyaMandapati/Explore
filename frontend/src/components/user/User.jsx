@@ -56,7 +56,6 @@ export const Profile = ({ history }) => {
         { userToFollowId: profile._id }
       );
 
-      // console.log(res);
       if (res.status === 200) {
         dispatch(loadUser());
       }
@@ -72,7 +71,6 @@ export const Profile = ({ history }) => {
         { userToUnfollowId: profile._id }
       );
 
-      // console.log(res);
       if (res.status === 200) dispatch(loadUser());
     } catch (err) {
       console.log(err.response);
@@ -106,9 +104,7 @@ export const Profile = ({ history }) => {
   }, [id, loading, user]);
 
   useEffect(() => {
-    // console.log('rannnn');
     if (profile && user && id) {
-      // console.log(profile._id, user._id);
       if (profile._id === user._id) {
         setIsMyProfile(true);
       } else {

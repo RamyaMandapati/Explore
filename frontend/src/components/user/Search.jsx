@@ -13,7 +13,6 @@ const Search = () => {
   };
 
   useEffect(() => {
-    // setusers(data.filter((u) => u.name.toLowerCase().includes(query)));
 
     const searchUsers = async () => {
       try {
@@ -65,8 +64,7 @@ const Search = () => {
                 <img
                   className='w-8 h-8 aspect-square rounded-full'
                   src={
-                    u.profilePhoto ||
-                    'https://xsgames.co/randomusers/assets/avatars/male/63.jpg'
+                    u.profilePhoto || './user_profile_picture.avif'
                   }
                   alt=''
                 />
