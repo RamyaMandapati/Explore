@@ -78,7 +78,7 @@ export const ItineraryPlanEdit = ({ history }) => {
     "Camping",
     "Transgender",
     "Male",
-    "FeMale",
+    "Female",
     "Baby-friendly",
   ];
 

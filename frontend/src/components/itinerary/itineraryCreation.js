@@ -77,7 +77,7 @@ export const ItineraryCreation = ({ history }) => {
     "Camping",
     "Transgender",
     "Male",
-    "FeMale",
+    "Female",
     "Baby-friendly",
   ];
 

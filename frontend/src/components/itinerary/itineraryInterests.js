@@ -48,7 +48,7 @@ export const ItineraryInterests = ({ interests }) => {
     Camping: <FontAwesomeIcon icon={faCampground} />,
     Transgender: <FontAwesomeIcon icon={faTransgender} />,
     Male: <FontAwesomeIcon icon={faPerson} />,
-    FeMale: <FontAwesomeIcon icon={faPersonDress} />,
+    Female: <FontAwesomeIcon icon={faPersonDress} />,
     Sailing: <FontAwesomeIcon icon={faShip} />,
 
     "Baby-friendly": <FontAwesomeIcon icon={faBaby} />,

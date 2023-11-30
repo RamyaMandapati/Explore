@@ -29,7 +29,7 @@ export const Preferences = ({ history }) => {
     "Camping",
     "Transgender",
     "Male",
-    "FeMale",
+    "Female",
     "Baby-friendly",
   ];
   const [selectedPreferences, setSelectedPreferences] = useState([]);

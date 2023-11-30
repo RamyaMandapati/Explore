@@ -85,7 +85,7 @@ export const ItinerarySelection = ({ history }) => {
     "Camping",
     "Transgender",
     "Male",
-    "FeMale",
+    "Female",
     "Baby-friendly",
   ];
   const ITEM_HEIGHT = 48;
