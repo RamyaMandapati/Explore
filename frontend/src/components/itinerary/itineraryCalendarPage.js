@@ -247,18 +247,19 @@ export const ItineraryCalendarPage = ({ history }) => {
   );
   const dateArray = [];
   if (startDate && endDate) {
-    while (tempDate <= endDate) {
-      dateArray.push({
-        day: tempDate.format("dddd"),
-        date: tempDate.format("MMMM Do"),
-      });
-      tempDate.add(1, "days"); // Move to the next day
-    }
-    if (!startDate.isSame(endDate)) {
+    if (startDate.isSame(endDate)) {
       dateArray.push({
         day: endDate.format("dddd"),
         date: endDate.format("MMMM Do"),
       });
+    } else {
+      while (tempDate <= endDate) {
+        dateArray.push({
+          day: tempDate.format("dddd"),
+          date: tempDate.format("MMMM Do"),
+        });
+        tempDate.add(1, "days"); // Move to the next day
+      }
     }
   }
 
