@@ -383,6 +383,19 @@ const saveoreditProfile = async (req, res) => {
       const userModel = new User(userObject);
       savedUser = await userModel.save();
     }
+    savedUser = await User.findById(savedUser._id).populate('userReviews.user');
+
+    let trips = await Itinerary.find({
+      createdBy: savedUser._id,
+    }).sort('-createdAt');
+
+    let posts = await Post.find({
+      user: savedUser._id,
+    }).sort('-createdAt');
+
+    savedUser.postsCreated = posts;
+    savedUser.tripsCreated = trips;
+    
     res.status(200).send(savedUser);
   } catch (err) {
     console.log(err);

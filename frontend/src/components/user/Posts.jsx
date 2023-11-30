@@ -61,7 +61,7 @@ const Posts = ({ isLoading, profile }) => {
         {posts?.map((post) => (
           <div key={post._id}>
             <img
-              src={post.imageUrls[0]}
+              src={post?.imageUrls[0]}
               alt=''
               className='aspect-video w-full h-auto rounded-sm'
             />

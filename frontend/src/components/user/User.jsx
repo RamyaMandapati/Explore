@@ -139,8 +139,9 @@ export const Profile = ({ history }) => {
                     <img
                       src={
                         profile.profilePhoto
-                          ? profile.profilePhoto
-                          : "https://xsgames.co/randomusers/assets/avatars/male/63.jpg"
+                          ? profile.profilePhoto : 
+                          './user_profile_picture.avif'
+                         
                       }
                       alt=""
                       className="relative -top-[50%] aspect-square object-cover rounded-full border-[10px] border-white block"
