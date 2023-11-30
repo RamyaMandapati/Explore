@@ -485,6 +485,7 @@ export const ItineraryCreation = ({ history }) => {
   function calculateMarkerPositions(itineraryData) {
     const positions = [];
     if (itineraryData) {
+      console.log(itineraryData);
       itineraryData.forEach((day) => {
         day.places.forEach((place) => {
           if (place.lat && place.lng) {
@@ -1546,7 +1547,7 @@ export const ItineraryCreation = ({ history }) => {
           </button>
         </div>
       </div>
-      <div style={{width: "460px"}}>
+      <div style={{ width: "460px" }}>
         <div className="itinerarymap">
           {isLoaded ? (
             <GoogleMap

@@ -679,6 +679,8 @@ const followUser = async (req, res) => {
       await user.save();
       await userToFollow.save();
 
+      await followNotification(userId, userToFollowId, "FOLLOW");
+
       return res.status(200).json(userToFollow);
     } else {
       return res.status(400).json({ message: "User is already followed" });

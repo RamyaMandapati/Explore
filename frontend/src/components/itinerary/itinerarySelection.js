@@ -257,8 +257,7 @@ export const ItinerarySelection = ({ history }) => {
         })
         .catch((error) => {
           setLoading(true);
-
-          alert(error.response.data.message);
+          console.log(error);
         });
     }
   };
