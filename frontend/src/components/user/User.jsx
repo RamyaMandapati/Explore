@@ -10,6 +10,8 @@ import Trips from "./Trips";
 import Activities from "./Activities";
 import Posts from "./Posts";
 import Reviews from "./Reviews";
+import { loadUser } from "../../actions/auth";
+import { useDispatch } from "react-redux";
 
 const getAverageRatings = (reviews) => {
   return (
@@ -45,6 +47,7 @@ export const Profile = ({ history }) => {
   const [profile, setProfile] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isMyProfile, setIsMyProfile] = useState(false);
+  const dispatch = useDispatch();
 
   const followUser = async () => {
     try {
@@ -54,7 +57,9 @@ export const Profile = ({ history }) => {
       );
 
       // console.log(res);
-      if (res.status === 200) setProfile(res.data);
+      if (res.status === 200) {
+        dispatch(loadUser());
+      }
     } catch (err) {
       console.log(err.response);
     }
@@ -68,7 +73,7 @@ export const Profile = ({ history }) => {
       );
 
       // console.log(res);
-      if (res.status === 200) setProfile(res.data);
+      if (res.status === 200) dispatch(loadUser());
     } catch (err) {
       console.log(err.response);
     }
@@ -192,16 +197,16 @@ export const Profile = ({ history }) => {
                       {profile.userReviews.length === 0 ? (
                         <p className="pb-2 text-gray-500">0 Reviews</p>
                       ) : (
-                        <ul className='flex my-2 gap-4 items-center'>
-                          <div className='flex items-center text-lg'>
+                        <ul className="flex my-2 gap-4 items-center">
+                          <div className="flex items-center text-lg">
                             {Array.from({ length: 5 }).map((_, i) => (
                               <span
                                 key={i}
                                 className={
                                   i + 1 <=
                                   getAverageRatings(profile.userReviews)
-                                    ? 'star selected'
-                                    : 'star'
+                                    ? "star selected"
+                                    : "star"
                                 }
                               >
                                 &#9733;
@@ -209,10 +214,10 @@ export const Profile = ({ history }) => {
                             ))}
                           </div>
 
-                          <p className='font-bold'>
-                            {getAverageRatings(profile.userReviews).toFixed(1)}{' '}
-                            Ratings{' '}
-                            <span className='text-orange-600'>
+                          <p className="font-bold">
+                            {getAverageRatings(profile.userReviews).toFixed(1)}{" "}
+                            Ratings{" "}
+                            <span className="text-orange-600">
                               ({profile?.userReviews.length} reviews)
                             </span>
                           </p>

@@ -91,10 +91,11 @@ const generate = async (req, res) => {
     The response should be in JSON format which includes the following fields-  Response should be in JSON format as a list of dictionaries.
     Each dictionary will have 2 fields - "day"(in number) and "places". 
     The value places should be a list of dictionaries containing fields- "placeName", "lat", "lng", "description", "cost"(in USD), "startTime", "endTime", "category".
-    Variables startTime and endTime should be in 12 hour formats and also gap should be minimum 5 hours.for example: "startTime": "2:00 PM", "endTime": "7:00 PM".
-    The itinerary should be distance efficient with minimum travel time in a day. Arrange the places in order it should be visited.
+    Start each day at different times (e.g., Day 1 at 6:00 AM, Day 2 at 7:00 AM) but end all days by 8:00 PM maximum.
+    Variables startTime and endTime should be in 12 hour formats. For each place assign a minimum of 4 hours for traveller to explore.
+    Also leave a gap of minimum 1 hour between 2 places. 
     Reply with only the answer in JSON form and include no other commentary.
-    Limit the output to less than 1000 tokens.`;
+    The itinerary should be distance efficient with minimum travel time in a day. Arrange the places in order it should be visited.`;
 
     const itinerary = await openaiquery(prompt);
     console.log(itinerary);
