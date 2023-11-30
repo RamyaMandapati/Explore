@@ -35,17 +35,7 @@
   height: 40px;
   background-color: #f0f2f5; /* Facebook search bar background */
 }
-/* .dropdown {
-  position: absolute;
-  top: 60px;
-  right: 20px;
-  background-color: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border-radius: 4px;
-  display: none;
-  margin-right: 140px;
-} */
-/* Messenger icon styles */
+
 .messenger-icon {
   color: rgb(111, 107, 107);
   font-size: 20px;

@@ -31,12 +31,6 @@
   text-align: left !important;
 }
 
-/* .review-content:hover {
-  
-} */
-
-/* activity */
-
 .my-activity {
   position: static;
   padding: 2em;
@@ -47,8 +41,6 @@
 
 /* profile */
 .profile {
-  /* position: relative;
-    top: 0; */
   padding: 2em 0;
 }
 
