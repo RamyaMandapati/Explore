@@ -81,8 +81,8 @@ const SearchMessage = () => {
                 <img
                   className="w-8 h-8 aspect-square rounded-full"
                   src={
-                    u.profilePhoto ||
-                    "https://xsgames.co/randomusers/assets/avatars/male/63.jpg"
+                    u.profilePhoto || 
+                    "https://res.cloudinary.com/dylqg3itm/image/upload/v1700327154/explore/default-avatar-profile-icon-of-social-media-user-vector_gqejru.jpg"
                   }
                   alt=""
                 />
