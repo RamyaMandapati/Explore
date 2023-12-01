@@ -141,8 +141,7 @@ export const Profile = ({ history }) => {
                       src={
                         profile.profilePhoto
                           ? profile.profilePhoto : 
-                          './user_profile_picture.avif'
-                         
+                          "https://res.cloudinary.com/dylqg3itm/image/upload/v1700327154/explore/default-avatar-profile-icon-of-social-media-user-vector_gqejru.jpg"
                       }
                       alt=""
                       className="relative -top-[50%] aspect-square object-cover rounded-full border-[10px] border-white block"

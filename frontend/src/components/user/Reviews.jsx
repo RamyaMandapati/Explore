@@ -83,7 +83,8 @@ const Reviews = ({ profile, isMyProfile, setProfile, currentUser }) => {
                 <img
                   className='w-[60px] rounded-full aspect-square'
                   src={
-                    review.user.profilePhoto || './user_profile_picture.avif'
+                    review.user.profilePhoto || 
+                    "https://res.cloudinary.com/dylqg3itm/image/upload/v1700327154/explore/default-avatar-profile-icon-of-social-media-user-vector_gqejru.jpg"
                   }
                   style={{ height: "60px", width: "60px" }}
                   alt=""
