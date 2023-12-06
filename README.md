@@ -26,7 +26,7 @@ This project is built using the following technologies:
 ### Installation
 1. Clone the repo
    ```sh
-   git clone https://github.com/your-username/travel-companion-app.git
+   git clone [https://github.com/RamyaMandapati/Explore.git]
 
 2. Install NPM packages for frontend
   cd travel-companion-app/frontend
@@ -49,7 +49,7 @@ Distributed under the MIT License. See LICENSE for more information.
 
 
 
-Project Link: https://github.com/your-username/travel-companion-app
+Project Link:[https://github.com/RamyaMandapati/Explore.git](https://github.com/RamyaMandapati/Explore.git)
 
 
 Happy Traveling & Coding! 🌍✈️💻
